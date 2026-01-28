@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Hero from '../components/Hero'
 import Footer from '../components/Footer'
@@ -6,8 +7,8 @@ import './Home.css'
 export default function Home() {
   return (
     <div>
-      < Header />
-      < Hero />
+      <Header />
+      <Hero />
       <main className="home-main">
         <section className="section-what-we-do">
           <div className="section-content">
@@ -42,7 +43,7 @@ export default function Home() {
               </div>
             </div>
             <div className="section-cta">
-              <a href="/adopta" className="cta-primary">Ver animales en adopción</a>
+              <Link to="/animales-en-adopcion" className="cta-primary">Ver animales en adopción</Link>
             </div>
           </div>
         </section>

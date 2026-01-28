@@ -161,7 +161,7 @@ function Header() {
         </nav>
 
         <div className="header-right">
-          <Link to="/adopta" className="cta-primary">Ver animales en adopción</Link>
+          <Link to="/animales-en-adopcion" className="cta-primary">Ver animales en adopción</Link>
           <a href="/colabora" className="cta-secondary">Cómo colaborar</a>
         </div>
 
@@ -208,7 +208,7 @@ function Header() {
             <Link key={link.href} to={link.href} className="nav-link" onClick={closeMenu}>{link.label}</Link>
           )
         })}
-        <a href="/adopta" className="cta-primary-mobile" onClick={closeMenu}>Ver animales en adopción</a>
+        <Link to="/animales-en-adopcion" className="cta-primary-mobile" onClick={closeMenu}>Ver animales en adopción</Link>
       </nav>
     </header>
   )
