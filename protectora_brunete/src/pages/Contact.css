@@ -44,7 +44,7 @@
 .contact-info, .contact-locations {
   background-color: #ffffff;
   padding: 2rem;
-  border-radius: 12px;
+  border-radius: 8px;
   box-shadow: 0 2px 8px rgba(11, 60, 93, 0.08);
 }
 
@@ -125,7 +125,7 @@
 .contact-form-section {
   background-color: #ffffff;
   padding: 2.5rem;
-  border-radius: 12px;
+  border-radius: 8px;
   box-shadow: 0 2px 8px rgba(11, 60, 93, 0.08);
 }
 
