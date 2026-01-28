@@ -56,10 +56,11 @@
 }
 
 .logo-text {
-  font-size: 1.5rem;
-  font-weight: 500;
+  font-size: 1.25rem;
+  font-weight: 800;
   color: var(--blue-primary);
   letter-spacing: -0.01em;
+  text-transform: uppercase;
 }
 
 .nav-desktop {
@@ -104,6 +105,62 @@
 
 .nav-link:hover::after, .nav-link:focus-visible::after {
   width: 100%;
+}
+
+.nav-item-dropdown {
+  position: relative;
+}
+
+.nav-link-dropdown::after {
+  display: none;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: -23px;
+  background-color: var(--white-soft);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(11, 60, 93, 0.15);
+  min-width: 250px;
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+}
+
+.nav-item-dropdown:hover .dropdown-menu, .dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-item {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  color: var(--blue-primary);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(11, 60, 93, 0.1);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(11, 60, 93, 0.05);
+  color: var(--blue-secondary);
+}
+
+.dropdown-item:focus-visible {
+  outline: 2px solid var(--blue-primary);
+  outline-offset: -2px;
 }
 
 .header-right {
@@ -353,6 +410,29 @@
 
   .nav-mobile .nav-link::after {
     display: none;
+  }
+
+  .nav-mobile .nav-item-dropdown {
+    position: relative;
+  }
+
+  .nav-mobile .dropdown-menu {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    background-color: rgba(11, 60, 93, 0.03);
+    margin-top: 0;
+    margin-left: 1.5rem;
+    border-left: 2px solid var(--green-accent);
+    border-radius: 0;
+    padding: 0.5rem 0;
+  }
+
+  .nav-mobile .dropdown-item {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9375rem;
   }
 
   .cta-primary-mobile {
