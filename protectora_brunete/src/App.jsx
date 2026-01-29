@@ -12,6 +12,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/adopta" element={<WantToAdopt />} />
         <Route path="/animales-en-adopcion" element={<AnimalsInAdoption />} />
+        <Route path="/animales-en-adopcion/:animalType" element={<AnimalsInAdoption />} />
         <Route path="/contacto" element={<Contact />} />
       </Routes>
     </Router>

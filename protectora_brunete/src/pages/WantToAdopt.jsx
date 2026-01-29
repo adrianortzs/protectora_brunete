@@ -84,7 +84,6 @@ function WantToAdopt() {
               </ol>
             </section>
           </div>
-          
         </div>
       </main>
       <Footer />

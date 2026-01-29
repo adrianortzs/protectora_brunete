@@ -1,71 +1,171 @@
 .animals-page {
-  padding: 3rem 1.5rem;
-  background-color: var(--white-soft);
   min-height: calc(100vh - 200px);
+  padding: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 4vw, 1.5rem);
+  background-color: var(--white-soft);
 }
 
 .animals-container {
   margin: 0 auto;
-  max-width: 1250px;
+  max-width: 1200px;
 }
 
 .animals-header {
-  margin-bottom: 2.5rem;
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
 }
 
 .animals-title {
-  margin-bottom: 0.75rem;
-  font-size: 2.25rem;
+  margin: 0 0 0.6rem 0;
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
   font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
   color: var(--blue-primary);
-  letter-spacing: -0.03em;
 }
 
 .animals-subtitle {
-  max-width: 700px;
-  font-size: 1.05rem;
+  max-width: 720px;
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--gray-text);
+}
+
+.animals-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem 1.25rem;
+  margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
+  padding: clamp(1rem, 2.5vw, 1.35rem) clamp(1.25rem, 2.5vw, 1.5rem);
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(11, 60, 93, 0.06);
+  border: 1px solid rgba(11, 60, 93, 0.06);
+}
+
+.animals-filter-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--blue-primary);
+}
+
+.animals-filter-select {
+  min-width: 140px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9375rem;
+  color: var(--gray-text);
+  background-color: var(--white-soft);
+  border: 1px solid rgba(11, 60, 93, 0.15);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.animals-filter-select:hover {
+  border-color: rgba(11, 60, 93, 0.3);
+}
+
+.animals-filter-select:focus {
+  outline: none;
+  border-color: var(--blue-primary);
+  box-shadow: 0 0 0 2px rgba(11, 60, 93, 0.15);
+}
+
+.animals-filter-select:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+  background-color: rgba(11, 60, 93, 0.05);
+}
+
+.animals-filter-reset {
+  padding: 0.5rem 1rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--blue-primary);
+  background-color: transparent;
+  border: 2px solid rgba(11, 60, 93, 0.25);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.animals-filter-reset:hover {
+  background-color: rgba(11, 60, 93, 0.06);
+  border-color: var(--blue-primary);
+}
+
+.animals-filter-reset:focus-visible {
+  outline: 2px solid var(--blue-primary);
+  outline-offset: 2px;
+}
+
+.animals-status {
+  padding: clamp(1.25rem, 3vw, 1.5rem) clamp(1.25rem, 3vw, 1.5rem);
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(11, 60, 93, 0.06);
+  border: 1px solid rgba(11, 60, 93, 0.06);
+  font-size: 1rem;
   line-height: 1.6;
   color: var(--gray-text);
 }
 
-.animals-status {
-  padding: 1.25rem 1.5rem;
-  border-radius: 8px;
-  background-color: #ffffff;
-  box-shadow: 0 2px 8px rgba(11, 60, 93, 0.06);
-  font-size: 1rem;
-  color: var(--gray-text);
+.animals-status p {
+  margin: 0;
 }
 
 .animals-status-error {
-  border-left: 4px solid #e55353;
+  border-left: 4px solid #c62828;
+  background-color: rgba(198, 40, 40, 0.03);
+}
+
+.animals-status .loader {
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+  border: 3px solid rgba(11, 60, 93, 0.12);
+  border-top-color: var(--blue-primary);
+  border-radius: 50%;
+  animation: animals-spin 0.8s linear infinite;
+}
+
+@keyframes animals-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .animals-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: clamp(1.5rem, 3vw, 2.25rem);
 }
 
 .animal-card {
-  background-color: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 4px 14px rgba(11, 60, 93, 0.08);
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(11, 60, 93, 0.06);
+  border: 1px solid rgba(11, 60, 93, 0.06);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .animal-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 22px rgba(11, 60, 93, 0.12);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(11, 60, 93, 0.1);
 }
 
 .animal-image-wrapper {
   position: relative;
   padding-bottom: 70%;
   overflow: hidden;
+  background-color: rgba(11, 60, 93, 0.04);
 }
 
 .animal-image {
@@ -77,61 +177,476 @@
 }
 
 .animal-content {
-  padding: 1.5rem 1.6rem 1.75rem;
+  padding: clamp(1.25rem, 2.5vw, 1.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.animal-content-top, .animal-content-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .animal-name {
-  margin-bottom: 0.3rem;
-  font-size: 1.35rem;
+  margin: 0;
+  font-size: clamp(1.25rem, 2.5vw, 1.4rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--blue-primary);
+  text-transform: capitalize;
+  line-height: 1.25;
+}
+
+.animal-gender {
+  display: inline-flex;
+  align-items: center;
+  color: var(--blue-secondary);
+  flex-shrink: 0;
+}
+
+.animal-gender i {
+  font-size: 1.5rem;
+}
+
+.animal-age, .animal-size {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--gray-text);
+  text-transform: capitalize;
+}
+
+.more-info-button {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: center;
+}
+
+.more-info-button-text {
+  width: 100%;
+  max-width: 200px;
+  padding: 0.6rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--blue-primary);
+  background-color: transparent;
+  border: 2px solid var(--blue-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.more-info-button-text:hover {
+  background-color: var(--blue-primary);
+  color: #fff;
+}
+
+.more-info-button-text:focus-visible {
+  outline: 2px solid var(--blue-primary);
+  outline-offset: 2px;
+}
+
+.animal-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background-color: rgba(11, 60, 93, 0.4);
+  backdrop-filter: blur(4px);
+  animation: animal-modal-fade-in 0.2s ease;
+}
+
+@keyframes animal-modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animal-modal {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: 92vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 12px 40px rgba(11, 60, 93, 0.2);
+  border: 1px solid rgba(11, 60, 93, 0.1);
+  animation: animal-modal-slide-in 0.25s ease;
+}
+
+@keyframes animal-modal-slide-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animal-modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 10;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--gray-text);
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  box-shadow: 0 2px 8px rgba(11, 60, 93, 0.12);
+  opacity: 0.85;
+}
+
+.animal-modal-close:hover {
+  color: var(--blue-primary);
+  background-color: #fff;
+}
+
+.animal-modal-close:focus-visible {
+  outline: 2px solid var(--blue-primary);
+  outline-offset: 2px;
+}
+
+.animal-modal-carousel {
+  position: relative;
+  width: 100%;
+  flex-shrink: 0;
+  min-height: 280px;
+  aspect-ratio: 4 / 3;
+  max-height: 50vh;
+  overflow: hidden;
+  background-color: rgba(11, 60, 93, 0.06);
+}
+
+.animal-modal-carousel-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.35s ease;
+}
+
+.animal-modal-carousel-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.animal-modal-carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.animal-modal-carousel-prev, .animal-modal-carousel-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--blue-primary);
+  background-color: rgba(255, 255, 255, 0.92);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(11, 60, 93, 0.15);
+  transition: background-color 0.2s ease, color 0.2s ease;
+  opacity: 0.85;
+}
+
+.animal-modal-carousel-prev {
+  left: 0.75rem;
+}
+
+.animal-modal-carousel-next {
+  right: 0.75rem;
+}
+
+.animal-modal-carousel-prev:hover, .animal-modal-carousel-next:hover {
+  background-color: #fff;
+  color: var(--blue-secondary);
+}
+
+.animal-modal-carousel-prev:focus-visible, .animal-modal-carousel-next:focus-visible {
+  outline: 2px solid var(--blue-primary);
+  outline-offset: 2px;
+}
+
+.animal-modal-carousel-dots {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.animal-modal-carousel-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.animal-modal-carousel-dot:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.animal-modal-carousel-dot.is-active {
+  background-color: #fff;
+  transform: scale(1.2);
+  box-shadow: 0 1px 4px rgba(11, 60, 93, 0.2);
+}
+
+.animal-modal-carousel-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-text);
+  font-size: 1rem;
+}
+
+.animal-modal-content {
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.animal-modal-name {
+  margin: 0 0 1rem 0;
+  font-size: clamp(1.35rem, 2.5vw, 1.6rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--blue-primary);
+  text-transform: capitalize;
+  line-height: 1.25;
+}
+
+.animal-modal-details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem 1rem;
+  margin: 0 0 1.25rem 0;
+  padding: 0;
+}
+
+.animal-modal-detail {
+  margin: 0;
+}
+
+.animal-modal-detail dt {
+  margin: 0 0 0.2rem 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--gray-text);
+}
+
+.animal-modal-detail dd {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--blue-primary);
+  text-transform: capitalize;
+}
+
+.animal-modal-detail dd i {
+  margin-right: 0.25rem;
+  color: var(--blue-secondary);
+}
+
+.animal-modal-description {
+  padding-top: 1rem;
+  border-top: 1px solid rgba(11, 60, 93, 0.08);
+}
+
+.animal-modal-description h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--blue-primary);
 }
 
-.animal-meta {
-  margin: 0.15rem 0;
-  font-size: 0.95rem;
-  color: var(--blue-secondary);
-}
-
-.animal-description {
-  margin-top: 0.75rem;
-  font-size: 0.98rem;
-  line-height: 1.6;
+.animal-modal-description p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.65;
   color: var(--gray-text);
 }
 
-.animal-location {
-  margin-top: 0.75rem;
-  font-size: 0.9rem;
-  color: var(--gray-text);
+.animal-modal-cta {
+  display: inline-block;
+  margin-top: 1.25rem;
+  padding: 0.65rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: var(--blue-primary);
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.animal-location span {
-  font-weight: 500;
-  color: var(--blue-primary);
+.animal-modal-cta:hover {
+  background-color: var(--blue-secondary);
+}
+
+.animal-modal-cta:focus-visible {
+  outline: 2px solid var(--blue-primary);
+  outline-offset: 2px;
 }
 
 @media (max-width: 1024px) {
-  .animals-page {
-    padding: 2.5rem 1.5rem;
-  }
-
   .animals-title {
     font-size: 2rem;
+  }
+
+  .animals-grid {
+    gap: 1.75rem;
   }
 }
 
 @media (max-width: 768px) {
+  .animal-modal-backdrop {
+    padding: 1rem;
+  }
+
+  .animal-modal {
+    max-height: 90vh;
+  }
+
+  .animal-modal-carousel {
+    min-height: 220px;
+    max-height: 45vh;
+  }
+
+  .animal-modal-carousel-prev,
+  .animal-modal-carousel-next {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 1.25rem;
+  }
+
+  .animal-modal-carousel-prev {
+    left: 0.5rem;
+  }
+
+  .animal-modal-carousel-next {
+    right: 0.5rem;
+  }
+
+  .animal-modal-details {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .animal-modal-detail {
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+  }
+
+  .animal-modal-detail dt {
+    min-width: 4rem;
+    margin: 0;
+  }
+
   .animals-page {
-    padding: 2rem 1.25rem;
+    padding: 1.75rem 1.25rem;
   }
 
   .animals-title {
-    font-size: 1.8rem;
+    font-size: 1.65rem;
   }
 
   .animals-subtitle {
-    font-size: 0.98rem;
+    font-size: 1rem;
+  }
+
+  .animals-filters {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.25rem;
+    gap: 1rem;
+  }
+
+  .animals-filter-select {
+    min-width: 0;
+  }
+
+  .animals-grid {
+    gap: 1.5rem;
+  }
+
+  .animal-content {
+    padding: 1.25rem;
+  }
+
+  .animal-name {
+    font-size: 1.25rem;
+  }
+
+  .animal-age,
+  .animal-size {
+    font-size: 0.9375rem;
+  }
+
+  .more-info-button-text {
+    max-width: none;
+    padding: 0.65rem 1.25rem;
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .animal-card:hover {
+    transform: none;
+  }
+
+  .animal-modal-backdrop,
+  .animal-modal {
+    animation: none;
+  }
+
+  .animal-modal-carousel-track {
+    transition: none;
+  }
+
+  .animals-status .loader {
+    animation-duration: 1.2s;
+  }
+}

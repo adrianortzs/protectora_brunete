@@ -1,14 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import './Header.css'
 import aratLogo from '../assets/arat_logo.png'
+import './Header.css'
 
-const NAV_LINKS = [
-  { href: '/adopta', label: 'Adopta' },
-  { href: '/quienes-somos', label: 'Quiénes somos' },
-  { href: '/colabora', label: 'Colabora' },
-  { href: '/contacto', label: 'Contacto' }
-]
+const NAV_LINKS = [ { href: '/adopta', label: 'Adopta' }, { href: '/quienes-somos', label: 'Quiénes somos' }, { href: '/colabora', label: 'Colabora' }, { href: '/contacto', label: 'Contacto' } ]
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -21,22 +16,10 @@ function Header() {
   const adoptaDropdownRef = useRef(null)
   const colaboraDropdownRef = useRef(null)
 
-  const closeMenu = useCallback(() => {
-    setIsMenuOpen(false)
-  }, [])
-
-  const toggleMenu = useCallback(() => {
-    setIsMenuOpen(prev => !prev)
-  }, [])
-
-  const handleAdoptaMouseEnter = useCallback(() => {
-    setIsAdoptaDropdownOpen(true)
-  }, [])
-
-  const handleAdoptaMouseLeave = useCallback(() => {
-    if (!isAdoptaPinned) setIsAdoptaDropdownOpen(false)
-  }, [isAdoptaPinned])
-
+  const closeMenu = useCallback(() => { setIsMenuOpen(false) }, [])
+  const toggleMenu = useCallback(() => { setIsMenuOpen(prev => !prev) }, [])
+  const handleAdoptaMouseEnter = useCallback(() => { setIsAdoptaDropdownOpen(true) }, [])
+  const handleAdoptaMouseLeave = useCallback(() => { if (!isAdoptaPinned) setIsAdoptaDropdownOpen(false) }, [isAdoptaPinned])
   const handleAdoptaClick = useCallback((e) => {
     e.preventDefault()
     setIsAdoptaPinned(prev => !prev)
@@ -44,15 +27,8 @@ function Header() {
     setIsColaboraPinned(false)
     setIsColaboraDropdownOpen(false)
   }, [])
-
-  const handleColaboraMouseEnter = useCallback(() => {
-    setIsColaboraDropdownOpen(true)
-  }, [])
-
-  const handleColaboraMouseLeave = useCallback(() => {
-    if (!isColaboraPinned) setIsColaboraDropdownOpen(false)
-  }, [isColaboraPinned])
-
+  const handleColaboraMouseEnter = useCallback(() => { setIsColaboraDropdownOpen(true) }, [])
+  const handleColaboraMouseLeave = useCallback(() => { if (!isColaboraPinned) setIsColaboraDropdownOpen(false) }, [isColaboraPinned])
   const handleColaboraClick = useCallback((e) => {
     e.preventDefault()
     setIsColaboraPinned(prev => !prev)
@@ -60,12 +36,10 @@ function Header() {
     setIsAdoptaPinned(false)
     setIsAdoptaDropdownOpen(false)
   }, [])
-
   const toggleAdoptaDropdown = useCallback((e) => {
     e.preventDefault()
     setIsAdoptaDropdownOpen(prev => !prev)
   }, [])
-
   const toggleColaboraDropdown = useCallback((e) => {
     e.preventDefault()
     setIsColaboraDropdownOpen(prev => !prev)
@@ -73,18 +47,12 @@ function Header() {
 
   useEffect(() => {
     if (!isMenuOpen) return
-
     const handleClickOutside = (event) => {
       const isClickInsideMenu = menuRef.current?.contains(event.target)
       const isClickOnButton = buttonRef.current?.contains(event.target)
-      
       if (!isClickInsideMenu && !isClickOnButton) closeMenu()
     }
-
-    const handleEscape = (event) => {
-      if (event.key === 'Escape') closeMenu()
-    }
-
+    const handleEscape = (event) => { if (event.key === 'Escape') closeMenu() }
     document.addEventListener('mousedown', handleClickOutside)
     document.addEventListener('keydown', handleEscape)
     document.body.style.overflow = 'hidden'
@@ -100,7 +68,6 @@ function Header() {
     const handleClickOutsideDropdown = (event) => {
       const isClickInAdopta = adoptaDropdownRef.current?.contains(event.target)
       const isClickInColabora = colaboraDropdownRef.current?.contains(event.target)
-      
       if (!isClickInAdopta && !isClickInColabora) {
         setIsAdoptaPinned(false)
         setIsAdoptaDropdownOpen(false)
@@ -108,7 +75,6 @@ function Header() {
         setIsColaboraDropdownOpen(false)
       }
     }
-
     if (isAdoptaPinned || isColaboraPinned) document.addEventListener('mousedown', handleClickOutsideDropdown)
 
     return () => {
@@ -120,9 +86,9 @@ function Header() {
     <header className="header-container" role="banner">
       <div className="header">
         <div className="header-left">
-          <Link to="/" className="logo-link" aria-label="Arat Adopta - Inicio" onClick={closeMenu}>
+          <Link to="/" className="logo-link" aria-label="Arat Adopta - Inicio">
             <img src={aratLogo} alt="Arat Adopta" className="logo"/>
-            <span className="logo-text">Arat Adopta</span>
+            <span className="logo-text">Arat adopta</span>
           </Link>
         </div>
 
@@ -135,8 +101,8 @@ function Header() {
                   {(isAdoptaDropdownOpen || isAdoptaPinned) && (
                     <div className="dropdown-menu show">
                       <Link to="/adopta" className="dropdown-item">¿Quieres adoptar?</Link>
-                      <a href="/adopta/perros" className="dropdown-item">Perros en adopción</a>
-                      <a href="/adopta/gatos" className="dropdown-item">Gatos en adopción</a>
+                      <Link to="/animales-en-adopcion/perros" className="dropdown-item">Perros en adopción</Link>
+                      <Link to="/animales-en-adopcion/gatos" className="dropdown-item">Gatos en adopción</Link>
                     </div>
                   )}
                 </div>
@@ -183,8 +149,8 @@ function Header() {
                 {isAdoptaDropdownOpen && (
                   <div className="dropdown-menu">
                     <Link to="/adopta" className="dropdown-item" onClick={closeMenu}>¿Quieres adoptar?</Link>
-                    <a href="/adopta/perros" className="dropdown-item" onClick={closeMenu}>Perros en adopción</a>
-                    <a href="/adopta/gatos" className="dropdown-item" onClick={closeMenu}>Gatos en adopción</a>
+                    <Link to="/animales-en-adopcion/perros" className="dropdown-item" onClick={closeMenu}>Perros en adopción</Link>
+                    <Link to="/animales-en-adopcion/gatos" className="dropdown-item" onClick={closeMenu}>Gatos en adopción</Link>
                   </div>
                 )}
               </div>
