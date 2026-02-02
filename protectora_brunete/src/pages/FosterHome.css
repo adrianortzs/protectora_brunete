@@ -1,0 +1,203 @@
+.foster-home-page {
+  min-height: calc(100vh - 200px);
+  padding: 2.75rem 1.5rem;
+  background: linear-gradient(160deg, var(--white-soft) 0%, rgba(76, 175, 80, 0.04) 50%, var(--white-soft) 100%);
+}
+
+.foster-home-container {
+  margin: 0 auto;
+  max-width: 1100px;
+}
+
+.fh-intro {
+  position: relative;
+  padding: 2.5rem 2.5rem;
+  margin-bottom: 3rem;
+  background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.98) 100%);
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(11, 60, 93, 0.08), 0 0 0 1px rgba(11, 60, 93, 0.04);
+  border-left: 5px solid var(--green-accent);
+  overflow: hidden;
+}
+
+.fh-intro::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 60%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(76, 175, 80, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.fh-page-title {
+  position: relative;
+  margin: 0 0 1.5rem 0;
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--blue-primary);
+}
+
+.fh-text {
+  position: relative;
+  display: block;
+  margin: 0 0 1rem 0;
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: var(--gray-text);
+}
+
+.fh-intro .fh-text:first-of-type {
+  font-size: 1.1875rem;
+  color: var(--blue-primary);
+  font-weight: 500;
+}
+
+.fh-text:last-of-type {
+  margin-bottom: 0;
+}
+
+.fh-section {
+  margin-bottom: 2.5rem;
+}
+
+.fh-section-title {
+  margin: 0 0 1.25rem 0;
+  padding-bottom: 0.65rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--blue-primary);
+  border-bottom: 3px solid var(--green-accent);
+}
+
+.fh-block {
+  padding: 1.75rem 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(11, 60, 93, 0.06);
+  border: 1px solid rgba(11, 60, 93, 0.06);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.fh-block:hover {
+  box-shadow: 0 6px 24px rgba(11, 60, 93, 0.1);
+  border-color: rgba(76, 175, 80, 0.2);
+}
+
+.fh-block .fh-text {
+  margin-bottom: 0.85rem;
+}
+
+.fh-block .fh-text:last-of-type {
+  margin-bottom: 0;
+}
+
+.fh-list {
+  margin: 0;
+  padding: 0 0 0 1.5rem;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--gray-text);
+}
+
+.fh-list li {
+  margin-bottom: 0.6rem;
+  padding-left: 0.25rem;
+}
+
+.fh-list li::marker {
+  color: var(--green-accent);
+}
+
+.fh-list li:last-child {
+  margin-bottom: 0;
+}
+
+.fh-cta-wrap {
+  margin-top: 1.75rem;
+}
+
+.fh-cta {
+  display: inline-block;
+  padding: 0.85rem 1.75rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, var(--green-accent) 0%, #43a047 100%);
+  border: none;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(76, 175, 80, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.fh-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.45);
+  background: linear-gradient(135deg, #43a047 0%, var(--green-accent) 100%);
+}
+
+.fh-cta:focus-visible {
+  outline: 2px solid var(--green-accent);
+  outline-offset: 3px;
+}
+
+.fh-section:last-child .fh-block {
+  background: linear-gradient(180deg, #fff 0%, rgba(76, 175, 80, 0.03) 100%);
+  border-color: rgba(76, 175, 80, 0.15);
+}
+
+.fh-section:last-child .fh-cta-wrap {
+  border-top-color: rgba(76, 175, 80, 0.25);
+}
+
+@media (max-width: 768px) {
+  .foster-home-page {
+    padding: 2rem 1.75rem;
+  }
+
+  .fh-intro {
+    padding: 1.5rem 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .fh-page-title {
+    font-size: 1.7rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .fh-intro .fh-text:first-of-type {
+    font-size: 1.0625rem;
+  }
+
+  .fh-text, .fh-list {
+    font-size: 1rem;
+  }
+
+  .fh-block {
+    padding: 1.35rem 1.5rem;
+  }
+
+  .fh-section-title {
+    font-size: 1.4rem;
+  }
+
+  .fh-cta {
+    width: 35%;
+    text-align: center;
+    padding: 0.9rem 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fh-block:hover {
+    transform: none;
+  }
+
+  .fh-cta:hover {
+    transform: none;
+  }
+}

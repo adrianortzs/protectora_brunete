@@ -114,9 +114,9 @@ function Header() {
                   <a href={link.href} className="nav-link nav-link-dropdown" onClick={handleColaboraClick}>{link.label}</a>
                   {(isColaboraDropdownOpen || isColaboraPinned) && (
                     <div className="dropdown-menu show">
-                      <a href="/colabora/casa-acogida" className="dropdown-item">¿Eres casa de acogida?</a>
-                      <a href="/colabora/hazte-voluntario" className="dropdown-item">¿Quieres ser voluntario?</a>
-                      <a href="/colabora/realiza-donativo" className="dropdown-item">Donaciones materiales</a>
+                      <Link to="/colabora/casa-acogida" className="dropdown-item">¿Eres casa de acogida?</Link>
+                      <Link to="/colabora/hazte-voluntario" className="dropdown-item">¿Quieres ser voluntario?</Link>
+                      <Link to="/colabora/realiza-donativo" className="dropdown-item">Donaciones materiales</Link>
                     </div>
                   )}
                 </div>
@@ -162,9 +162,9 @@ function Header() {
                 <a href={link.href} className="nav-link nav-link-dropdown" onClick={toggleColaboraDropdown}>{link.label}</a>
                 {isColaboraDropdownOpen && (
                   <div className="dropdown-menu">
-                    <a href="/colabora/casa-acogida" className="dropdown-item" onClick={closeMenu}>¿Eres casa de acogida?</a>
-                    <a href="/colabora/hazte-voluntario" className="dropdown-item" onClick={closeMenu}>¿Quieres ser voluntario?</a>
-                    <a href="/colabora/realiza-donativo" className="dropdown-item" onClick={closeMenu}>Donaciones materiales</a>
+                    <Link to="/colabora/casa-acogida" className="dropdown-item" onClick={closeMenu}>¿Eres casa de acogida?</Link>
+                    <Link to="/colabora/hazte-voluntario" className="dropdown-item" onClick={closeMenu}>¿Quieres ser voluntario?</Link>
+                    <Link to="/colabora/realiza-donativo" className="dropdown-item" onClick={closeMenu}>Donaciones materiales</Link>
                   </div>
                 )}
               </div>

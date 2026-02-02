@@ -1,0 +1,180 @@
+.who-are-we-page {
+  min-height: calc(100vh - 200px);
+  padding: 2.75rem 1.5rem;
+  background-color: var(--white-soft);
+}
+
+.who-are-we-container {
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.who-are-we-intro {
+  padding: 2rem 2rem;
+  margin-bottom: 3rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(11, 60, 93, 0.06);
+  border-left: 4px solid var(--green-accent);
+}
+
+.who-are-we-page-title {
+  margin: 0 0 1.25rem 0;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--blue-primary);
+}
+
+.who-are-we-intro .who-are-we-text {
+  display: block;
+  margin: 0 0 1.25rem 0;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--gray-text);
+}
+
+.who-are-we-intro .who-are-we-text:last-of-type {
+  margin-bottom: 0;
+}
+
+.who-are-we-section {
+  margin-bottom: 2.5rem;
+}
+
+.who-are-we-section-title {
+  margin: 0 0 1.25rem 0;
+  padding-bottom: 0.6rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--blue-primary);
+  border-bottom: 3px solid var(--green-accent);
+}
+
+.who-are-we-block {
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(11, 60, 93, 0.06);
+  border: 1px solid rgba(11, 60, 93, 0.06);
+}
+
+.who-are-we-block:last-child {
+  margin-bottom: 0;
+}
+
+.who-are-we-block-title {
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--blue-primary);
+}
+
+.who-are-we-block .who-are-we-text {
+  display: block;
+  margin: 0 0 1rem 0;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--gray-text);
+}
+
+.who-are-we-block .who-are-we-text:last-of-type {
+  margin-bottom: 0;
+}
+
+.who-are-we-section > .who-are-we-text {
+  display: block;
+  margin: 0 0 1rem 0;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--gray-text);
+}
+
+.who-are-we-list {
+  margin: 0.75rem 0 1rem 0;
+  padding: 0 0 0 1.5rem;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--gray-text);
+}
+
+.who-are-we-list li {
+  margin-bottom: 0.5rem;
+}
+
+.who-are-we-list li:last-child {
+  margin-bottom: 0;
+}
+
+.who-are-we-team-list, .who-are-we-commitment-list {
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+.who-are-we-commitment .who-are-we-text {
+  margin-bottom: 1rem;
+}
+
+.who-are-we-block .who-are-we-list {
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+}
+
+.who-are-we-closing {
+  display: block;
+  margin: 1.5rem 0 0 0;
+  padding: 1.25rem;
+  background-color: rgba(11, 60, 93, 0.04);
+  border-radius: 8px;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 1.7;
+  color: var(--blue-primary);
+}
+
+@media (max-width: 768px) {
+  .who-are-we-page {
+    padding: 2rem 1.75rem;
+  }
+
+  .who-are-we-intro {
+    padding: 1.5rem 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .who-are-we-page-title {
+    font-size: 1.7rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .who-are-we-text, .who-are-we-list {
+    font-size: 1rem;
+  }
+
+  .who-are-we-block {
+    padding: 1.35rem 1.5rem;
+  }
+
+  .who-are-we-section-title {
+    font-size: 1.4rem;
+  }
+
+  .who-are-we-block-title {
+    font-size: 1.2rem;
+  }
+
+  .who-are-we-closing {
+    font-size: 1rem;
+    padding: 1.15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .who-are-we-page *,
+  .who-are-we-page *::before,
+  .who-are-we-page *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
