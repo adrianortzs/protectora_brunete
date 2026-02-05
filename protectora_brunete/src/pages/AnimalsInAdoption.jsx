@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import AnimalFilter from '../components/AnimalFilter'
+import AnimalCard from '../components/AnimalCard'
 import './AnimalsInAdoption.css'
 
 const ANIMAL_TYPE_FILTER = { perros: 'perro', gatos: 'gato' }
@@ -51,10 +53,28 @@ function AnimalsInAdoption() {
 
   const updateFilter = (key, value) => { setFilters(prev => ({ ...prev, [key]: value })) }
   const normalized = (v) => (v && String(v).trim().toLowerCase()) || ''
+  
+  const getAgeCategory = (ageMonths) => {
+    const m = parseInt(ageMonths)
+    if (isNaN(m)) return ''
+    if (m < 12) return 'cachorro'
+    if (m < 24) return 'joven'
+    if (m < 84) return 'adulto'
+    return 'senior'
+  }
+
+  const formatAge = (ageMonths) => {
+    const m = parseInt(ageMonths)
+    if (isNaN(m)) return '—'
+    if (m < 12) return `${m} ${m === 1 ? 'mes' : 'meses'}`
+    const years = Math.floor(m / 12)
+    return `${years} ${years === 1 ? 'año' : 'años'}`
+  }
+
   const filteredAnimals = animals.filter((a) => {
     const typeOk = !filters.animal_type || normalized(a.animal_type) === normalized(filters.animal_type)
     const genderOk = !filters.gender || normalized(a.gender) === normalized(filters.gender)
-    const ageOk = !filters.age || normalized(a.age) === normalized(filters.age)
+    const ageOk = !filters.age || getAgeCategory(a.age) === filters.age
     const sizeOk = !filters.size || normalized(a.size) === normalized(filters.size)
     return typeOk && genderOk && ageOk && sizeOk
   })
@@ -63,10 +83,6 @@ function AnimalsInAdoption() {
     if (filters.arrival_date === SORT_ARRIVAL.oldest) return (new Date(a.arrival_date || 0) - new Date(b.arrival_date || 0))
     return 0
   })
-  const unique = (arr, key) => [...new Set((arr || []).map((a) => a && a[key]).filter(Boolean))].sort()
-  const capitalize = (str) => (str && str.length) ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : ''
-  const ageOptions = unique(animals, 'age')
-  const sizeOptions = unique(animals, 'size')
 
   return (
     <div>
@@ -80,42 +96,12 @@ function AnimalsInAdoption() {
           {loading && (<div className="animals-status"><span className="loader"></span></div>)}
           {!loading && error && (<div className="animals-status animals-status-error"><p>{error}</p></div>)}
           {!loading && !error && animals.length > 0 && (
-            <div className="animals-filters">
-              <label className={`animals-filter-label ${filterValue ? 'animals-filter-label-locked' : ''}`}>Tipo de animal
-                <select className="animals-filter-select" value={filterValue || filters.animal_type} onChange={(e) => updateFilter('animal_type', e.target.value)} disabled={!!filterValue} aria-readonly={!!filterValue}>
-                  <option value="">Todos</option>
-                  <option value="perro">Perros</option>
-                  <option value="gato">Gatos</option>
-                </select>
-              </label>
-              <label className="animals-filter-label">Sexo
-                <select className="animals-filter-select" value={filters.gender} onChange={(e) => updateFilter('gender', e.target.value)}>
-                  <option value="">Cualquiera</option>
-                  <option value="macho">Macho</option>
-                  <option value="hembra">Hembra</option>
-                </select>
-              </label>
-              <label className="animals-filter-label">Edad
-                <select className="animals-filter-select" value={filters.age} onChange={(e) => updateFilter('age', e.target.value)}>
-                  <option value="">Cualquiera</option>
-                  {ageOptions.map((age) => (<option key={age} value={age}>{age}</option>))}
-                </select>
-              </label>
-              <label className="animals-filter-label">Tamaño
-                <select className="animals-filter-select" value={filters.size} onChange={(e) => updateFilter('size', e.target.value)}>
-                  <option value="">Cualquiera</option>
-                  {sizeOptions.map((size) => (<option key={size} value={size}>{capitalize(size)}</option>))}
-                </select>
-              </label>
-              <label className="animals-filter-label">Fecha de llegada
-                <select className="animals-filter-select" value={filters.arrival_date} onChange={(e) => updateFilter('arrival_date', e.target.value)}>
-                  <option value="">Sin orden</option>
-                  <option value={SORT_ARRIVAL.oldest}>Más antiguos primero</option>
-                  <option value={SORT_ARRIVAL.newest}>Más recientes primero</option>
-                </select>
-              </label>
-              <button type="button" className="animals-filter-reset" onClick={() => setFilters({ animal_type: filterValue || '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none })}>Limpiar filtros</button>
-            </div>
+            <AnimalFilter
+              filters={filters}
+              onFilterChange={updateFilter}
+              filterValue={filterValue}
+              onClear={() => setFilters({ animal_type: filterValue || '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none })}
+            />
           )}
           {!loading && !error && animals.length === 0 && (
             <div className="animals-status">
@@ -129,38 +115,9 @@ function AnimalsInAdoption() {
           )}
           {!loading && !error && animals.length > 0 && sortedAnimals.length > 0 && (
             <section className="animals-grid">
-              {sortedAnimals.map((animal) => {
-                return (
-                  <article key={animal.id} className="animal-card">
-                    <div className="animal-image-wrapper">
-                        <img src={getAnimalImages(animal)[0]} alt={animal.name} className="animal-image" />
-                    </div>
-                    <div className="animal-content">
-                        <div className='animal-content-top'>
-                            <h2 className="animal-name">{animal.name}</h2>
-                            {animal.gender && (
-                              <span className='animal-gender'>
-                                {animal.gender.toLowerCase() === 'macho' ? (
-                                  <i className="bi bi-gender-male"></i>
-                                ) : animal.gender.toLowerCase() === 'hembra' ? (
-                                  <i className="bi bi-gender-female"></i>
-                                ) : (
-                                  animal.gender
-                                )}
-                              </span>
-                            )}
-                        </div>
-                        <div className='animal-content-bottom'>
-                            <span className='animal-age'>Edad: {animal.age}</span>
-                            <span className='animal-size'>Tamaño: {animal.size}</span>
-                        </div>
-                        <div className='more-info-button'>
-                            <button type="button" className='more-info-button-text' onClick={() => setSelectedAnimal(animal)}>Conóceme</button>
-                        </div>
-                    </div>
-                  </article>
-                )
-              })}
+              {sortedAnimals.map((animal) => (
+                <AnimalCard key={animal.id} animal={animal} onSelect={setSelectedAnimal} formatAge={formatAge} />
+              ))}
             </section>
           )}
         </div>
@@ -214,7 +171,7 @@ function AnimalsInAdoption() {
                 </div>
                 <div className="animal-modal-detail">
                   <dt>Edad</dt>
-                  <dd>{selectedAnimal.age || '—'}</dd>
+                  <dd>{formatAge(selectedAnimal.age)}</dd>
                 </div>
                 <div className="animal-modal-detail">
                   <dt>Tamaño</dt>
