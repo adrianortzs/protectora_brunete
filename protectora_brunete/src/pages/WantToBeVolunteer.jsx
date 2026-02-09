@@ -53,7 +53,7 @@ function WantToBeVolunteer() {
               Si quieres colaborar como voluntario o voluntaria, ponte en contacto con nosotros. Te explicaremos el proceso, las tareas disponibles y los pasos para incorporarte al equipo.
             </span>
             <div className="collab-cta-wrap">
-              <Link to="/contacto#contact-form" className="collab-cta">Contactar para ser voluntario</Link>
+              <Link to="/contacto?asunto=Interés en ser voluntario&mensaje=Hola, me gustaría recibir información sobre cómo colaborar como voluntario.#contact-form" className="collab-cta">Contactar para ser voluntario</Link>
             </div>
           </section>
         </div>

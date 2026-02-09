@@ -47,7 +47,7 @@ function FosterHome() {
               Si te interesa ser casa de acogida, ponte en contacto con nosotros. Te explicaremos el proceso, resolveremos tus dudas y valoraremos contigo la opción más adecuada según tu disponibilidad y experiencia.
             </span>
             <div className="collab-cta-wrap">
-              <Link to="/contacto#contact-form" className="collab-cta">Contactar para ser casa de acogida</Link>
+              <Link to="/contacto?asunto=Interés en ser casa de acogida&mensaje=Hola, me gustaría recibir información sobre cómo colaborar como casa de acogida #contact-form" className="collab-cta">Contactar para ser casa de acogida</Link>
             </div>
           </section>
         </div>

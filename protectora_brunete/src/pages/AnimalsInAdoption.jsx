@@ -1,6 +1,6 @@
 import { supabase } from '../lib/supabase'
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import AnimalFilter from '../components/AnimalFilter'
@@ -18,6 +18,7 @@ function AnimalsInAdoption() {
   const [filters, setFilters] = useState({ animal_type: '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none })
   const [selectedAnimal, setSelectedAnimal] = useState(null)
   const [carouselIndex, setCarouselIndex] = useState(0)
+  const navigate = useNavigate()
 
   useEffect(() => { setCarouselIndex(0) }, [selectedAnimal?.id])
 
@@ -188,7 +189,15 @@ function AnimalsInAdoption() {
                   <p>{selectedAnimal.description}</p>
                 </div>
               )}
-              <Link to="/contacto#contact-form" className="animal-modal-cta" onClick={() => setSelectedAnimal(null)}>Solicitar adopción</Link>
+              <button type="button" className="animal-modal-cta" onClick={() => {
+                const name = selectedAnimal.name || 'animal'
+                const params = new URLSearchParams({
+                  asunto: `Solicitud de adopción – ${name}`,
+                  mensaje: `Hola, me gustaría solicitar información sobre la adopción de ${name}. He visto su ficha en la web y me gustaría conocerle en persona.`
+                })
+                setSelectedAnimal(null)
+                navigate(`/contacto?${params.toString()}#contact-form`)
+              }}>Solicitar adopción</button>
             </div>
           </div>
         </div>

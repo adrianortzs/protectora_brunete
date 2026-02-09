@@ -5,8 +5,16 @@ import Footer from '../components/Footer'
 import './pages.css'
 
 function Contact() {
-  const [formData, setFormData] = useState({ nombre: '', correo: '', telefono: '', asunto: '', mensaje: '' })
-  const { hash } = useLocation()
+  const { hash, search } = useLocation()
+  const params = new URLSearchParams(search)
+
+  const [formData, setFormData] = useState({
+    nombre: '',
+    correo: '',
+    telefono: '',
+    asunto: params.get('asunto') || '',
+    mensaje: params.get('mensaje') || ''
+  })
 
   useEffect(() => {
     if (hash) {

@@ -38,7 +38,7 @@ function MaterialDonations() {
               Si quieres colaborar con una donación de material, ponte en contacto con nosotros. Te indicaremos qué necesitamos en cada momento y cómo puedes entregarlo para que llegue directamente al centro de acogida.
             </span>
             <div className="collab-cta-wrap">
-              <Link to="/contacto#contact-form" className="collab-cta">Contactar para donar material</Link>
+              <Link to="/contacto?asunto=Donación de material&mensaje=Hola, me gustaría donar material para el centro de acogida. ¿Qué necesitáis actualmente? ¿Cómo puedo ayudaros? #contact-form" className="collab-cta">Contactar para donar material</Link>
             </div>
           </section>
         </div>
