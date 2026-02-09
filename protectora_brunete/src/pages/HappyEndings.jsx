@@ -1,21 +1,14 @@
 import { supabase } from '../lib/supabase'
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import AnimalFilter from '../components/AnimalFilter'
 import AnimalCard from '../components/AnimalCard'
 import './AnimalsInAdoption.css'
 
-const ANIMAL_TYPE_FILTER = { perros: 'perro', gatos: 'gato' }
-const SORT_ARRIVAL = { none: '', newest: 'newest', oldest: 'oldest' }
-
-function AnimalsInAdoption() {
-  const { animalType } = useParams()
+function HappyEndings() {
   const [animals, setAnimals] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [filters, setFilters] = useState({ animal_type: '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none })
   const [selectedAnimal, setSelectedAnimal] = useState(null)
   const [carouselIndex, setCarouselIndex] = useState(0)
 
@@ -27,16 +20,21 @@ function AnimalsInAdoption() {
     return list.filter(Boolean)
   }
 
-  const filterValue = animalType ? ANIMAL_TYPE_FILTER[animalType] : null
-  const title = filterValue === 'perro' ? 'Todos los perros en adopción' : filterValue === 'gato' ? 'Todos los gatos en adopción' : 'Todos los animales en adopción'
-  const subtitle = filterValue === 'perro' ? 'Estos son todos los perros que actualmente se encuentran en uno de nuestros centros de acogida y están buscando un hogar. Cada ficha se actualiza desde nuestro sistema en tiempo real para garantizar la información más actualizada.' : filterValue === 'gato' ? 'Estos son todos los gatos que actualmente se encuentran en uno de nuestros centros de acogida y están buscando un hogar. Cada ficha se actualiza desde nuestro sistema en tiempo real para garantizar la información más actualizada.' : 'Estos son todos los animales que actualmente se encuentran en uno de nuestros centros de acogida y están buscando un hogar. Cada ficha se actualiza desde nuestro sistema en tiempo real para garantizar la información más actualizada.'
+  const formatAge = (ageMonths) => {
+    const m = parseInt(ageMonths)
+    if (isNaN(m)) return '—'
+    if (m < 12) return `${m} ${m === 1 ? 'mes' : 'meses'}`
+    const years = Math.floor(m / 12)
+    return `${years} ${years === 1 ? 'año' : 'años'}`
+  }
 
   useEffect(() => {
     const fetchAnimals = async () => {
       try {
-        let query = supabase.from('animals').select('*')
-        if (filterValue) query = query.eq('animal_type', filterValue)
-        const { data, error: supabaseError } = await query
+        const { data, error: supabaseError } = await supabase
+          .from('animals')
+          .select('*')
+          .eq('animal_state', 'adoptado')
         if (supabaseError) throw supabaseError
         setAnimals(data || [])
       } catch (err) {
@@ -47,42 +45,7 @@ function AnimalsInAdoption() {
       }
     }
     fetchAnimals()
-  }, [filterValue])
-
-  useEffect(() => { if (filterValue) setFilters(prev => ({ ...prev, animal_type: filterValue })) }, [filterValue])
-
-  const updateFilter = (key, value) => { setFilters(prev => ({ ...prev, [key]: value })) }
-  const normalized = (v) => (v && String(v).trim().toLowerCase()) || ''
-  
-  const getAgeCategory = (ageMonths) => {
-    const m = parseInt(ageMonths)
-    if (isNaN(m)) return ''
-    if (m < 12) return 'cachorro'
-    if (m < 24) return 'joven'
-    if (m < 84) return 'adulto'
-    return 'senior'
-  }
-
-  const formatAge = (ageMonths) => {
-    const m = parseInt(ageMonths)
-    if (isNaN(m)) return '—'
-    if (m < 12) return `${m} ${m === 1 ? 'mes' : 'meses'}`
-    const years = Math.floor(m / 12)
-    return `${years} ${years === 1 ? 'año' : 'años'}`
-  }
-
-  const filteredAnimals = animals.filter((a) => {
-    const typeOk = !filters.animal_type || normalized(a.animal_type) === normalized(filters.animal_type)
-    const genderOk = !filters.gender || normalized(a.gender) === normalized(filters.gender)
-    const ageOk = !filters.age || getAgeCategory(a.age) === filters.age
-    const sizeOk = !filters.size || normalized(a.size) === normalized(filters.size)
-    return typeOk && genderOk && ageOk && sizeOk
-  })
-  const sortedAnimals = [...filteredAnimals].sort((a, b) => {
-    if (filters.arrival_date === SORT_ARRIVAL.newest) return (new Date(b.arrival_date || 0) - new Date(a.arrival_date || 0))
-    if (filters.arrival_date === SORT_ARRIVAL.oldest) return (new Date(a.arrival_date || 0) - new Date(b.arrival_date || 0))
-    return 0
-  })
+  }, [])
 
   return (
     <div>
@@ -90,32 +53,22 @@ function AnimalsInAdoption() {
       <main className="animals-page">
         <div className="animals-container">
           <header className="animals-header">
-            <h1 className="animals-title">{title}</h1>
-            <span className="animals-subtitle">{subtitle}</span>
+            <h1 className="animals-title">Finales felices</h1>
+            <span className="animals-subtitle">
+              Estos son algunos de los animales que han encontrado un hogar gracias a personas como tú. 
+              Cada adopción es una historia de amor y esperanza. ¡Gracias por formar parte de estos finales felices!
+            </span>
           </header>
           {loading && (<div className="animals-status"><span className="loader"></span></div>)}
           {!loading && error && (<div className="animals-status animals-status-error"><p>{error}</p></div>)}
-          {!loading && !error && animals.length > 0 && (
-            <AnimalFilter
-              filters={filters}
-              onFilterChange={updateFilter}
-              filterValue={filterValue}
-              onClear={() => setFilters({ animal_type: filterValue || '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none })}
-            />
-          )}
           {!loading && !error && animals.length === 0 && (
             <div className="animals-status">
-              <p>{filterValue === 'perro' ? 'Ahora mismo no hay perros disponibles en adopción. Estamos actualizando las fichas.' : filterValue === 'gato' ? 'Ahora mismo no hay gatos disponibles en adopción. Estamos actualizando las fichas.' : 'Ahora mismo no hay animales disponibles en adopción. Estamos actualizando las fichas.'}</p>
+              <p>Aún no hay animales adoptados para mostrar. ¡Pronto habrá muchos finales felices!</p>
             </div>
           )}
-          {!loading && !error && animals.length > 0 && sortedAnimals.length === 0 && (
-            <div className="animals-status">
-              <p>No hay resultados con los filtros seleccionados. Prueba a cambiar o limpiar los filtros.</p>
-            </div>
-          )}
-          {!loading && !error && animals.length > 0 && sortedAnimals.length > 0 && (
+          {!loading && !error && animals.length > 0 && (
             <section className="animals-grid">
-              {sortedAnimals.map((animal) => (
+              {animals.map((animal) => (
                 <AnimalCard key={animal.id} animal={animal} onSelect={setSelectedAnimal} formatAge={formatAge} />
               ))}
             </section>
@@ -153,6 +106,7 @@ function AnimalsInAdoption() {
               )}
             </div>
             <div className="animal-modal-content">
+              <span className="animal-modal-adopted-badge">🏠 ¡Adoptado!</span>
               <h2 id="animal-modal-title" className="animal-modal-name">{selectedAnimal.name}</h2>
               <dl className="animal-modal-details">
                 <div className="animal-modal-detail">
@@ -184,11 +138,10 @@ function AnimalsInAdoption() {
               </dl>
               {selectedAnimal.description && (
                 <div className="animal-modal-description">
-                  <h3>Descripción</h3>
+                  <h3>Su historia</h3>
                   <p>{selectedAnimal.description}</p>
                 </div>
               )}
-              <Link to="/contacto#contact-form" className="animal-modal-cta" onClick={() => setSelectedAnimal(null)}>Solicitar adopción</Link>
             </div>
           </div>
         </div>
@@ -198,4 +151,4 @@ function AnimalsInAdoption() {
   )
 }
 
-export default AnimalsInAdoption
+export default HappyEndings

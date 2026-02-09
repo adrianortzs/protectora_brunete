@@ -200,69 +200,89 @@
   }
   
   @media (max-width: 768px) {
+    .section-content {
+      padding: 0 1.25rem;
+    }
+
     .section-title {
       margin-bottom: 1.25rem;
-      font-size: 1.45rem;
+      font-size: 1.375rem;
     }
   
     .section-paragraph {
       margin-bottom: 1rem;
-      font-size: 1.05rem;
-      line-height: 1.6;
+      font-size: 0.9375rem;
+      line-height: 1.65;
+      text-align: left;
     }
   
     .highlight-text {
       margin-bottom: 0.75rem;
-      font-size: 1.15rem;
+      font-size: 1.0625rem;
     }
   
     .highlight-description {
-      font-size: 1.05rem;
-      line-height: 1.6;
+      font-size: 0.9375rem;
+      line-height: 1.65;
+      text-align: left;
     }
   
-    .section-what-we-do, .section-adoption, .section-collaborate {
-      padding: 3rem 0;
+    .section-what-we-do,
+    .section-adoption,
+    .section-collaborate {
+      padding: 2.5rem 0;
     }
   
     .section-what-we-do .section-content {
       grid-template-columns: 1fr;
-      gap: 2.25rem;
+      gap: 1.75rem;
     }
   
     .right-content {
       margin-top: 0;
       border-left: 3px solid var(--green-accent);
-      padding-left: 1.75rem;
+      padding-left: 1.25rem;
     }
   
     .adoption-grid {
       grid-template-columns: 1fr;
-      gap: 2.25rem;
+      gap: 1.25rem;
     }
   
     .adoption-item {
-      padding: 1.5rem 2rem;
+      padding: 1.25rem 1.25rem;
+      border-radius: 8px;
     }
   
     .adoption-item-title {
-      margin-bottom: 0.75rem;
-      font-size: 1.25rem;
+      margin-bottom: 0.625rem;
+      font-size: 1.125rem;
     }
   
     .adoption-item-text {
-      font-size: 1.05rem;
+      font-size: 0.9375rem;
       line-height: 1.6;
+      text-align: left;
     }
   
     .collaborate-list {
-      font-size: 1.05rem;
+      font-size: 0.9375rem;
+      line-height: 2.25;
+      padding-left: 1.5rem;
     }
   
-    .cta-primary, .cta-secondary {
-      padding: 12px 20px;
-      font-size: 0.95rem;
-      width: 33%;
+    .section-cta {
+      margin-top: 2rem;
+    }
+
+    .cta-primary,
+    .cta-secondary {
+      display: block;
+      width: 100%;
+      padding: 0.875rem 1.5rem;
+      font-size: 1rem;
+      text-align: center;
+      border-radius: 8px;
     }
   }
   

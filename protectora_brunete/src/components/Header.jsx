@@ -1,48 +1,49 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import aratLogo from '../assets/arat_logo.png'
-import './Header.css'
+import './components.css'
 
-const NAV_LINKS = [ { href: '/adopta', label: 'Adopta' }, { href: '/quienes-somos', label: 'Quiénes somos' }, { href: '/colabora', label: 'Colabora' }, { href: '/contacto', label: 'Contacto' } ]
+const NAV_LINKS = [ { href: '/adopción', label: 'Adopción' }, { href: '/finales-felices', label: 'Finales Felices' }, { href: '/colaboración', label: 'Colaboración' }, { href: '/quiénes-somos', label: 'Quiénes Somos' }, { href: '/contacto', label: 'Contacto' } ]
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isAdoptaDropdownOpen, setIsAdoptaDropdownOpen] = useState(false)
-  const [isColaboraDropdownOpen, setIsColaboraDropdownOpen] = useState(false)
-  const [isAdoptaPinned, setIsAdoptaPinned] = useState(false)
-  const [isColaboraPinned, setIsColaboraPinned] = useState(false)
+  const [isAdopcionDropdownOpen, setIsAdopcionDropdownOpen] = useState(false)
+  const [isColaboracionDropdownOpen, setIsColaboracionDropdownOpen] = useState(false)
+  const [isAdopcionPinned, setIsAdopcionPinned] = useState(false)
+  const [isColaboracionPinned, setIsColaboracionPinned] = useState(false)
+
   const menuRef = useRef(null)
   const buttonRef = useRef(null)
-  const adoptaDropdownRef = useRef(null)
-  const colaboraDropdownRef = useRef(null)
+  const adopcionDropdownRef = useRef(null)
+  const colaboracionDropdownRef = useRef(null)
 
   const closeMenu = useCallback(() => { setIsMenuOpen(false) }, [])
   const toggleMenu = useCallback(() => { setIsMenuOpen(prev => !prev) }, [])
-  const handleAdoptaMouseEnter = useCallback(() => { setIsAdoptaDropdownOpen(true) }, [])
-  const handleAdoptaMouseLeave = useCallback(() => { if (!isAdoptaPinned) setIsAdoptaDropdownOpen(false) }, [isAdoptaPinned])
-  const handleAdoptaClick = useCallback((e) => {
+  const handleAdopcionMouseEnter = useCallback(() => { setIsAdopcionDropdownOpen(true) }, [])
+  const handleAdopcionMouseLeave = useCallback(() => { if (!isAdopcionPinned) setIsAdopcionDropdownOpen(false) }, [isAdopcionPinned])
+  const handleAdopcionClick = useCallback((e) => {
     e.preventDefault()
-    setIsAdoptaPinned(prev => !prev)
-    setIsAdoptaDropdownOpen(prev => !prev)
-    setIsColaboraPinned(false)
-    setIsColaboraDropdownOpen(false)
+    setIsAdopcionPinned(prev => !prev)
+    setIsAdopcionDropdownOpen(prev => !prev)
+    setIsColaboracionPinned(false)
+    setIsColaboracionDropdownOpen(false)
   }, [])
-  const handleColaboraMouseEnter = useCallback(() => { setIsColaboraDropdownOpen(true) }, [])
-  const handleColaboraMouseLeave = useCallback(() => { if (!isColaboraPinned) setIsColaboraDropdownOpen(false) }, [isColaboraPinned])
-  const handleColaboraClick = useCallback((e) => {
+  const handleColaboracionMouseEnter = useCallback(() => { setIsColaboracionDropdownOpen(true) }, [])
+  const handleColaboracionMouseLeave = useCallback(() => { if (!isColaboracionPinned) setIsColaboracionDropdownOpen(false) }, [isColaboracionPinned])
+  const handleColaboracionClick = useCallback((e) => {
     e.preventDefault()
-    setIsColaboraPinned(prev => !prev)
-    setIsColaboraDropdownOpen(prev => !prev)
-    setIsAdoptaPinned(false)
-    setIsAdoptaDropdownOpen(false)
+    setIsColaboracionPinned(prev => !prev)
+    setIsColaboracionDropdownOpen(prev => !prev)
+    setIsAdopcionPinned(false)
+    setIsAdopcionDropdownOpen(false)
   }, [])
-  const toggleAdoptaDropdown = useCallback((e) => {
+  const toggleAdopcionDropdown = useCallback((e) => {
     e.preventDefault()
-    setIsAdoptaDropdownOpen(prev => !prev)
+    setIsAdopcionDropdownOpen(prev => !prev)
   }, [])
-  const toggleColaboraDropdown = useCallback((e) => {
+  const toggleColaboracionDropdown = useCallback((e) => {
     e.preventDefault()
-    setIsColaboraDropdownOpen(prev => !prev)
+    setIsColaboracionDropdownOpen(prev => !prev)
   }, [])
 
   useEffect(() => {
@@ -66,21 +67,21 @@ function Header() {
 
   useEffect(() => {
     const handleClickOutsideDropdown = (event) => {
-      const isClickInAdopta = adoptaDropdownRef.current?.contains(event.target)
-      const isClickInColabora = colaboraDropdownRef.current?.contains(event.target)
-      if (!isClickInAdopta && !isClickInColabora) {
-        setIsAdoptaPinned(false)
-        setIsAdoptaDropdownOpen(false)
-        setIsColaboraPinned(false)
-        setIsColaboraDropdownOpen(false)
+      const isClickInAdopcion = adopcionDropdownRef.current?.contains(event.target)
+      const isClickInColaboracion = colaboracionDropdownRef.current?.contains(event.target)
+      if (!isClickInAdopcion && !isClickInColaboracion) {
+        setIsAdopcionPinned(false)
+        setIsAdopcionDropdownOpen(false)
+        setIsColaboracionPinned(false)
+        setIsColaboracionDropdownOpen(false)
       }
     }
-    if (isAdoptaPinned || isColaboraPinned) document.addEventListener('mousedown', handleClickOutsideDropdown)
+    if (isAdopcionPinned || isColaboracionPinned) document.addEventListener('mousedown', handleClickOutsideDropdown)
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutsideDropdown)
     }
-  }, [isAdoptaPinned, isColaboraPinned])
+  }, [isAdopcionPinned, isColaboracionPinned])
 
   return (
     <header className="header-container" role="banner">
@@ -88,35 +89,35 @@ function Header() {
         <div className="header-left">
           <Link to="/" className="logo-link" aria-label="Arat Adopta - Inicio">
             <img src={aratLogo} alt="Arat Adopta" className="logo"/>
-            <span className="logo-text">Arat adopta</span>
+            <span className="logo-text">Arat Adopta</span>
           </Link>
         </div>
 
         <nav className="nav nav-desktop" aria-label="Navegación principal">
           {NAV_LINKS.map((link) => {
-            if (link.href === '/adopta') {
+            if (link.href === '/adopción') {
               return (
-                <div key={link.href} className={`nav-item-dropdown ${isAdoptaPinned ? 'dropdown-pinned' : ''}`} onMouseEnter={handleAdoptaMouseEnter} onMouseLeave={handleAdoptaMouseLeave} ref={adoptaDropdownRef}>
-                  <a href={link.href} className="nav-link nav-link-dropdown" onClick={handleAdoptaClick}>{link.label}</a>
-                  {(isAdoptaDropdownOpen || isAdoptaPinned) && (
+                <div key={link.href} className={`nav-item-dropdown ${isAdopcionPinned ? 'dropdown-pinned' : ''}`} onMouseEnter={handleAdopcionMouseEnter} onMouseLeave={handleAdopcionMouseLeave} ref={adopcionDropdownRef}>
+                  <a href={link.href} className="nav-link nav-link-dropdown" onClick={handleAdopcionClick}>{link.label}</a>
+                  {(isAdopcionDropdownOpen || isAdopcionPinned) && (
                     <div className="dropdown-menu show">
-                      <Link to="/adopta" className="dropdown-item">¿Quieres adoptar?</Link>
-                      <Link to="/animales-en-adopcion/perros" className="dropdown-item">Perros en adopción</Link>
-                      <Link to="/animales-en-adopcion/gatos" className="dropdown-item">Gatos en adopción</Link>
+                      <Link to="/adopción" className="dropdown-item">¿Quieres adoptar?</Link>
+                      <Link to="/animales-en-adopción/perros" className="dropdown-item">Perros en adopción</Link>
+                      <Link to="/animales-en-adopción/gatos" className="dropdown-item">Gatos en adopción</Link>
                     </div>
                   )}
                 </div>
               )
             }
-            if (link.href === '/colabora') {
+            if (link.href === '/colaboración') {
               return (
-                <div key={link.href} className={`nav-item-dropdown ${isColaboraPinned ? 'dropdown-pinned' : ''}`} onMouseEnter={handleColaboraMouseEnter} onMouseLeave={handleColaboraMouseLeave} ref={colaboraDropdownRef}>
-                  <a href={link.href} className="nav-link nav-link-dropdown" onClick={handleColaboraClick}>{link.label}</a>
-                  {(isColaboraDropdownOpen || isColaboraPinned) && (
+                <div key={link.href} className={`nav-item-dropdown ${isColaboracionPinned ? 'dropdown-pinned' : ''}`} onMouseEnter={handleColaboracionMouseEnter} onMouseLeave={handleColaboracionMouseLeave} ref={colaboracionDropdownRef}>
+                  <a href={link.href} className="nav-link nav-link-dropdown" onClick={handleColaboracionClick}>{link.label}</a>
+                  {(isColaboracionDropdownOpen || isColaboracionPinned) && (
                     <div className="dropdown-menu show">
-                      <Link to="/colabora/casa-acogida" className="dropdown-item">¿Eres casa de acogida?</Link>
-                      <Link to="/colabora/hazte-voluntario" className="dropdown-item">¿Quieres ser voluntario?</Link>
-                      <Link to="/colabora/realiza-donativo" className="dropdown-item">Donaciones materiales</Link>
+                      <Link to="/colaboración/casa-de-acogida" className="dropdown-item">Casa de acogida</Link>
+                      <Link to="/colaboración/voluntariado" className="dropdown-item">Voluntariado</Link>
+                      <Link to="/colaboración/donaciones" className="dropdown-item">Donaciones</Link>
                     </div>
                   )}
                 </div>
@@ -127,8 +128,7 @@ function Header() {
         </nav>
 
         <div className="header-right">
-          <Link to="/animales-en-adopcion" className="cta-primary">Ver animales en adopción</Link>
-          <a href="/colabora" className="cta-secondary">Cómo colaborar</a>
+          <Link to="/animales-en-adopción" className="cta-primary">Ver animales en adopción</Link>
         </div>
 
         <button ref={buttonRef} className="menu-toggle" onClick={toggleMenu} aria-label={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'} aria-expanded={isMenuOpen} aria-controls="mobile-menu" type="button">
@@ -142,29 +142,29 @@ function Header() {
 
       <nav ref={menuRef} id="mobile-menu" className={`nav nav-mobile ${isMenuOpen ? 'nav-open' : ''}`} aria-label="Navegación móvil" aria-hidden={!isMenuOpen}>
         {NAV_LINKS.map((link) => {
-          if (link.href === '/adopta') {
+          if (link.href === '/adopción') {
             return (
               <div key={link.href} className="nav-item-dropdown">
-                <a href={link.href} className="nav-link nav-link-dropdown" onClick={toggleAdoptaDropdown}>{link.label}</a>
-                {isAdoptaDropdownOpen && (
+                <a href={link.href} className="nav-link nav-link-dropdown" onClick={toggleAdopcionDropdown}>{link.label}</a>
+                {isAdopcionDropdownOpen && (
                   <div className="dropdown-menu">
-                    <Link to="/adopta" className="dropdown-item" onClick={closeMenu}>¿Quieres adoptar?</Link>
-                    <Link to="/animales-en-adopcion/perros" className="dropdown-item" onClick={closeMenu}>Perros en adopción</Link>
-                    <Link to="/animales-en-adopcion/gatos" className="dropdown-item" onClick={closeMenu}>Gatos en adopción</Link>
+                    <Link to="/adopción" className="dropdown-item" onClick={closeMenu}>¿Quieres adoptar?</Link>
+                    <Link to="/animales-en-adopción/perros" className="dropdown-item" onClick={closeMenu}>Perros en adopción</Link>
+                    <Link to="/animales-en-adopción/gatos" className="dropdown-item" onClick={closeMenu}>Gatos en adopción</Link>
                   </div>
                 )}
               </div>
             )
           }
-          if (link.href === '/colabora') {
+          if (link.href === '/colaboración') {
             return (
               <div key={link.href} className="nav-item-dropdown">
-                <a href={link.href} className="nav-link nav-link-dropdown" onClick={toggleColaboraDropdown}>{link.label}</a>
-                {isColaboraDropdownOpen && (
+                <a href={link.href} className="nav-link nav-link-dropdown" onClick={toggleColaboracionDropdown}>{link.label}</a>
+                {isColaboracionDropdownOpen && (
                   <div className="dropdown-menu">
-                    <Link to="/colabora/casa-acogida" className="dropdown-item" onClick={closeMenu}>¿Eres casa de acogida?</Link>
-                    <Link to="/colabora/hazte-voluntario" className="dropdown-item" onClick={closeMenu}>¿Quieres ser voluntario?</Link>
-                    <Link to="/colabora/realiza-donativo" className="dropdown-item" onClick={closeMenu}>Donaciones materiales</Link>
+                    <Link to="/colaboración/casa-de-acogida" className="dropdown-item" onClick={closeMenu}>Casa de acogida</Link>
+                    <Link to="/colaboración/voluntariado" className="dropdown-item" onClick={closeMenu}>Voluntariado</Link>
+                    <Link to="/colaboración/donaciones" className="dropdown-item" onClick={closeMenu}>Donaciones</Link>
                   </div>
                 )}
               </div>
@@ -174,7 +174,7 @@ function Header() {
             <Link key={link.href} to={link.href} className="nav-link" onClick={closeMenu}>{link.label}</Link>
           )
         })}
-        <Link to="/animales-en-adopcion" className="cta-primary-mobile" onClick={closeMenu}>Ver animales en adopción</Link>
+        <Link to="/animales-en-adopción" className="cta-primary-mobile" onClick={closeMenu}>Ver animales en adopción</Link>
       </nav>
     </header>
   )
