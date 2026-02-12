@@ -2,6 +2,7 @@ import { supabase } from '../lib/supabase'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AnimalFilter from '../components/AnimalFilter'
+import { Pagination, paginate } from '../components/Pagination'
 import './pages.css'
 
 const SORT_ARRIVAL = { none: '', newest: 'newest', oldest: 'oldest' }
@@ -17,14 +18,17 @@ function AdminPanel() {
   const [adopting, setAdopting] = useState(null)
   const [isNewAnimal, setIsNewAnimal] = useState(false)
   const [filters, setFilters] = useState({ animal_type: '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none })
+  const [currentPage, setCurrentPage] = useState(1)
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (sessionStorage.getItem('admin_auth') !== 'true') {
-      navigate('/admin/login', { replace: true })
-      return
-    }
-    fetchAnimals()
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
+        navigate('/admin/login', { replace: true })
+      } else {
+        fetchAnimals()
+      }
+    })
   }, [navigate])
 
   const fetchAnimals = async () => {
@@ -55,12 +59,12 @@ function AdminPanel() {
     return list.filter(Boolean)[0] || null
   }
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('admin_auth')
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
     navigate('/admin/login')
   }
 
-  const updateFilter = (key, value) => { setFilters(prev => ({ ...prev, [key]: value })) }
+  const updateFilter = (key, value) => { setFilters(prev => ({ ...prev, [key]: value })); setCurrentPage(1) }
   const normalized = (v) => (v && String(v).trim().toLowerCase()) || ''
 
   const getAgeCategory = (ageMonths) => {
@@ -85,6 +89,8 @@ function AdminPanel() {
     if (filters.arrival_date === SORT_ARRIVAL.oldest) return (new Date(a.arrival_date || 0) - new Date(b.arrival_date || 0))
     return 0
   })
+
+  const { paginated: paginatedAnimals, totalPages, safePage } = paginate(sortedAnimals, currentPage)
 
   const emptyForm = { name: '', animal_type: '', gender: '', age: '', size: '', description: '', img_url: '', arrival_date: '' }
 
@@ -256,7 +262,7 @@ function AdminPanel() {
             filters={filters}
             onFilterChange={updateFilter}
             filterValue={null}
-            onClear={() => setFilters({ animal_type: '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none })}
+            onClear={() => { setFilters({ animal_type: '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none }); setCurrentPage(1) }}
           />
         )}
 
@@ -267,57 +273,61 @@ function AdminPanel() {
         )}
 
         {!loading && !error && sortedAnimals.length > 0 && (
-          <div className="admin-grid">
-            {sortedAnimals.map((animal) => (
-              <article key={animal.id} className="admin-card">
-                <div className="admin-card-image-wrapper">
-                  {getFirstImage(animal) ? (
-                    <img src={getFirstImage(animal)} alt={animal.name} className="admin-card-image" />
-                  ) : (
-                    <div className="admin-card-image-placeholder">
-                      <i className="bi bi-image"></i>
-                    </div>
-                  )}
-                </div>
-                <div className="admin-card-body">
-                  <div className="admin-card-top">
-                    <h2 className="admin-card-name">{animal.name}</h2>
-                    {animal.gender && (
-                      <span className="admin-card-gender">
-                        {animal.gender.toLowerCase() === 'macho' ? (<i className="bi bi-gender-male"></i>) : animal.gender.toLowerCase() === 'hembra' ? (<i className="bi bi-gender-female"></i>) : (animal.gender)}
-                      </span>
+          <>
+            <div className="admin-grid">
+              {paginatedAnimals.map((animal) => (
+                <article key={animal.id} className="admin-card">
+                  <div className="admin-card-image-wrapper">
+                    {getFirstImage(animal) ? (
+                      <img src={getFirstImage(animal)} alt={animal.name} className="admin-card-image" />
+                    ) : (
+                      <div className="admin-card-image-placeholder">
+                        <i className="bi bi-image"></i>
+                      </div>
                     )}
                   </div>
-                  <div className="admin-card-info">
-                    <span>Edad: {formatAge(animal.age)}</span>
-                    <span>Tamaño: {animal.size || '—'}</span>
-                    <span>Tipo: {animal.animal_type || '—'}</span>
+                  <div className="admin-card-body">
+                    <div className="admin-card-top">
+                      <h2 className="admin-card-name">{animal.name}</h2>
+                      {animal.gender && (
+                        <span className="admin-card-gender">
+                          {animal.gender.toLowerCase() === 'macho' ? (<i className="bi bi-gender-male"></i>) : animal.gender.toLowerCase() === 'hembra' ? (<i className="bi bi-gender-female"></i>) : (animal.gender)}
+                        </span>
+                      )}
+                    </div>
+                    <div className="admin-card-info">
+                      <span>Edad: {formatAge(animal.age)}</span>
+                      <span>Tamaño: {animal.size || '—'}</span>
+                      <span>Tipo: {animal.animal_type || '—'}</span>
+                    </div>
+                    <div className="admin-card-actions">
+                      <button type="button" className="admin-card-btn admin-card-btn--edit" onClick={() => openEdit(animal)}>
+                        <i className="bi bi-pencil"></i> Editar
+                      </button>
+                      <button
+                        type="button"
+                        className={`admin-card-btn ${animal.animal_state === 'adoptado' ? 'admin-card-btn--adopted' : 'admin-card-btn--adopt'}`}
+                        onClick={() => handleAdopt(animal)}
+                        disabled={adopting === animal.id}
+                      >
+                        {adopting === animal.id
+                          ? <span className="admin-login-spinner admin-login-spinner--small"></span>
+                          : animal.animal_state === 'adoptado'
+                            ? <><i className="bi bi-heart-fill"></i> Adoptado</>
+                            : <><i className="bi bi-heart"></i> Adoptado</>
+                        }
+                      </button>
+                      <button type="button" className="admin-card-btn admin-card-btn--delete" onClick={() => handleDelete(animal)} disabled={deleting === animal.id}>
+                        {deleting === animal.id ? <span className="admin-login-spinner admin-login-spinner--small"></span> : <><i className="bi bi-trash"></i> Eliminar</>}
+                      </button>
+                    </div>
                   </div>
-                  <div className="admin-card-actions">
-                    <button type="button" className="admin-card-btn admin-card-btn--edit" onClick={() => openEdit(animal)}>
-                      <i className="bi bi-pencil"></i> Editar
-                    </button>
-                    <button
-                      type="button"
-                      className={`admin-card-btn ${animal.animal_state === 'adoptado' ? 'admin-card-btn--adopted' : 'admin-card-btn--adopt'}`}
-                      onClick={() => handleAdopt(animal)}
-                      disabled={adopting === animal.id}
-                    >
-                      {adopting === animal.id
-                        ? <span className="admin-login-spinner admin-login-spinner--small"></span>
-                        : animal.animal_state === 'adoptado'
-                          ? <><i className="bi bi-heart-fill"></i> Adoptado</>
-                          : <><i className="bi bi-heart"></i> Adoptado</>
-                      }
-                    </button>
-                    <button type="button" className="admin-card-btn admin-card-btn--delete" onClick={() => handleDelete(animal)} disabled={deleting === animal.id}>
-                      {deleting === animal.id ? <span className="admin-login-spinner admin-login-spinner--small"></span> : <><i className="bi bi-trash"></i> Eliminar</>}
-                    </button>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+                </article>
+              ))}
+            </div>
+
+            <Pagination currentPage={safePage} totalPages={totalPages} onPageChange={setCurrentPage} />
+          </>
         )}
       </main>
 

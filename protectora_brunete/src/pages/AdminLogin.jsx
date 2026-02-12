@@ -1,31 +1,31 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
 import './pages.css'
 
-const ADMIN_USER = 'admin'
-const ADMIN_PASS = 'protectora2026'
-
 function AdminLogin() {
-  const [user, setUser] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
     setLoading(true)
 
-    setTimeout(() => {
-      if (user === ADMIN_USER && password === ADMIN_PASS) {
-        sessionStorage.setItem('admin_auth', 'true')
-        navigate('/admin/panel')
-      } else {
-        setError('Usuario o contraseña incorrectos.')
-        setLoading(false)
-      }
-    }, 600)
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+
+    if (authError) {
+      setError('Email o contraseña incorrectos.')
+      setLoading(false)
+    } else {
+      navigate('/admin/panel')
+    }
   }
 
   return (
@@ -41,14 +41,14 @@ function AdminLogin() {
 
         <form className="admin-login-form" onSubmit={handleSubmit}>
           <div className="admin-login-field">
-            <label htmlFor="admin-user">Usuario</label>
+            <label htmlFor="admin-email">Email</label>
             <input
-              id="admin-user"
-              type="text"
-              value={user}
-              onChange={(e) => setUser(e.target.value)}
-              placeholder="Usuario"
-              autoComplete="username"
+              id="admin-email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              autoComplete="email"
               required
             />
           </div>

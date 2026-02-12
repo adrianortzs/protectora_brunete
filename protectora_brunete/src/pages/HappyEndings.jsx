@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import AnimalCard from '../components/AnimalCard'
+import { Pagination, paginate } from '../components/Pagination'
 import './pages.css'
 
 function HappyEndings() {
@@ -11,6 +12,7 @@ function HappyEndings() {
   const [error, setError] = useState(null)
   const [selectedAnimal, setSelectedAnimal] = useState(null)
   const [carouselIndex, setCarouselIndex] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => { setCarouselIndex(0) }, [selectedAnimal?.id])
 
@@ -47,6 +49,8 @@ function HappyEndings() {
     fetchAnimals()
   }, [])
 
+  const { paginated: paginatedAnimals, totalPages, safePage } = paginate(animals, currentPage)
+
   return (
     <div>
       <Header />
@@ -67,11 +71,14 @@ function HappyEndings() {
             </div>
           )}
           {!loading && !error && animals.length > 0 && (
-            <section className="animals-grid">
-              {animals.map((animal) => (
-                <AnimalCard key={animal.id} animal={animal} onSelect={setSelectedAnimal} formatAge={formatAge} />
-              ))}
-            </section>
+            <>
+              <section className="animals-grid">
+                {paginatedAnimals.map((animal) => (
+                  <AnimalCard key={animal.id} animal={animal} onSelect={setSelectedAnimal} formatAge={formatAge} />
+                ))}
+              </section>
+              <Pagination currentPage={safePage} totalPages={totalPages} onPageChange={setCurrentPage} />
+            </>
           )}
         </div>
       </main>

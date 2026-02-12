@@ -13,7 +13,6 @@ import AdminPanel from './pages/AdminPanel'
 import LegalNotice from './pages/LegalNotice'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import CookiesPolicy from './pages/CookiesPolicy'
-import './App.css'
 
 function App() {
   return (

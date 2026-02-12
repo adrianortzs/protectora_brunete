@@ -97,7 +97,7 @@ function Header() {
           {NAV_LINKS.map((link) => {
             if (link.href === '/adopción') {
               return (
-                <div key={link.href} className={`nav-item-dropdown ${isAdopcionPinned ? 'dropdown-pinned' : ''}`} onMouseEnter={handleAdopcionMouseEnter} onMouseLeave={handleAdopcionMouseLeave} ref={adopcionDropdownRef}>
+                <div key={link.href} className="nav-item-dropdown" onMouseEnter={handleAdopcionMouseEnter} onMouseLeave={handleAdopcionMouseLeave} ref={adopcionDropdownRef}>
                   <a href={link.href} className="nav-link nav-link-dropdown" onClick={handleAdopcionClick}>{link.label}</a>
                   {(isAdopcionDropdownOpen || isAdopcionPinned) && (
                     <div className="dropdown-menu show">
@@ -111,7 +111,7 @@ function Header() {
             }
             if (link.href === '/colaboración') {
               return (
-                <div key={link.href} className={`nav-item-dropdown ${isColaboracionPinned ? 'dropdown-pinned' : ''}`} onMouseEnter={handleColaboracionMouseEnter} onMouseLeave={handleColaboracionMouseLeave} ref={colaboracionDropdownRef}>
+                <div key={link.href} className="nav-item-dropdown" onMouseEnter={handleColaboracionMouseEnter} onMouseLeave={handleColaboracionMouseLeave} ref={colaboracionDropdownRef}>
                   <a href={link.href} className="nav-link nav-link-dropdown" onClick={handleColaboracionClick}>{link.label}</a>
                   {(isColaboracionDropdownOpen || isColaboracionPinned) && (
                     <div className="dropdown-menu show">

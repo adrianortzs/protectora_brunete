@@ -5,6 +5,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import AnimalFilter from '../components/AnimalFilter'
 import AnimalCard from '../components/AnimalCard'
+import { Pagination, paginate } from '../components/Pagination'
 import './pages.css'
 
 const ANIMAL_TYPE_FILTER = { perros: 'perro', gatos: 'gato' }
@@ -18,6 +19,7 @@ function AnimalsInAdoption() {
   const [filters, setFilters] = useState({ animal_type: '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none })
   const [selectedAnimal, setSelectedAnimal] = useState(null)
   const [carouselIndex, setCarouselIndex] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
   const navigate = useNavigate()
 
   useEffect(() => { setCarouselIndex(0) }, [selectedAnimal?.id])
@@ -52,7 +54,7 @@ function AnimalsInAdoption() {
 
   useEffect(() => { if (filterValue) setFilters(prev => ({ ...prev, animal_type: filterValue })) }, [filterValue])
 
-  const updateFilter = (key, value) => { setFilters(prev => ({ ...prev, [key]: value })) }
+  const updateFilter = (key, value) => { setFilters(prev => ({ ...prev, [key]: value })); setCurrentPage(1) }
   const normalized = (v) => (v && String(v).trim().toLowerCase()) || ''
   
   const getAgeCategory = (ageMonths) => {
@@ -85,6 +87,8 @@ function AnimalsInAdoption() {
     return 0
   })
 
+  const { paginated: paginatedAnimals, totalPages, safePage } = paginate(sortedAnimals, currentPage)
+
   return (
     <div>
       <Header />
@@ -101,7 +105,7 @@ function AnimalsInAdoption() {
               filters={filters}
               onFilterChange={updateFilter}
               filterValue={filterValue}
-              onClear={() => setFilters({ animal_type: filterValue || '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none })}
+              onClear={() => { setFilters({ animal_type: filterValue || '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none }); setCurrentPage(1) }}
             />
           )}
           {!loading && !error && animals.length === 0 && (
@@ -115,11 +119,14 @@ function AnimalsInAdoption() {
             </div>
           )}
           {!loading && !error && animals.length > 0 && sortedAnimals.length > 0 && (
-            <section className="animals-grid">
-              {sortedAnimals.map((animal) => (
-                <AnimalCard key={animal.id} animal={animal} onSelect={setSelectedAnimal} formatAge={formatAge} />
-              ))}
-            </section>
+            <>
+              <section className="animals-grid">
+                {paginatedAnimals.map((animal) => (
+                  <AnimalCard key={animal.id} animal={animal} onSelect={setSelectedAnimal} formatAge={formatAge} />
+                ))}
+              </section>
+              <Pagination currentPage={safePage} totalPages={totalPages} onPageChange={setCurrentPage} />
+            </>
           )}
         </div>
       </main>
