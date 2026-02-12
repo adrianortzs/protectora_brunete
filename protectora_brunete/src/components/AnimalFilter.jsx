@@ -9,9 +9,18 @@ const SIZE_OPTIONS = [ { value: 'toy', label: 'Toy' }, { value: 'pequeño', labe
 
 function AnimalFilter({ filters, onFilterChange, filterValue, onClear }) {
   const [openDropdown, setOpenDropdown] = useState(null)
+  const [isMobileOpen, setIsMobileOpen] = useState(false)
   const toggleDropdown = (name) => { setOpenDropdown(prev => prev === name ? null : name) }
   const closeDropdowns = () => { setOpenDropdown(null) }
   const selectOption = (key, value) => { onFilterChange(key, value); closeDropdowns() }
+
+  const activeCount = [
+    filters.animal_type && !filterValue,
+    filters.gender,
+    filters.age,
+    filters.size,
+    filters.arrival_date
+  ].filter(Boolean).length
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -28,6 +37,12 @@ function AnimalFilter({ filters, onFilterChange, filterValue, onClear }) {
 
   return (
     <div className="af-container">
+      <button type="button" className="af-mobile-toggle" onClick={() => setIsMobileOpen(prev => !prev)}>
+        <i className={`bi ${isMobileOpen ? 'bi-x-lg' : 'bi-funnel'}`}></i>
+        <span>Filtros</span>
+        {activeCount > 0 && <span className="af-mobile-badge">{activeCount}</span>}
+      </button>
+      <div className={`af-filters ${isMobileOpen ? 'af-filters--open' : ''}`}>
       <div className={`filter-dropdown ${filterValue ? 'filter-dropdown-locked' : ''}`}>
         <span className="filter-dropdown-label">Tipo de animal</span>
         <button type="button" className={`filter-dropdown-btn ${openDropdown === 'animal_type' ? 'is-open' : ''}`} onClick={() => !filterValue && toggleDropdown('animal_type')} disabled={!!filterValue}>
@@ -106,6 +121,7 @@ function AnimalFilter({ filters, onFilterChange, filterValue, onClear }) {
       </div>
 
       <button type="button" className="animals-filter-reset" onClick={handleClear}>Limpiar filtros</button>
+      </div>
     </div>
   )
 }

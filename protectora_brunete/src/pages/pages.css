@@ -83,8 +83,6 @@
 }
 
 .collab-intro-centered .collab-text {
-  font-size: 1.1rem;
-  line-height: 1.7;
   margin-bottom: 1.5rem;
 }
 
@@ -722,6 +720,11 @@
 
   .collab-container {
     padding: 3.5rem 2rem 4rem;
+  }
+
+  .collab-intro-centered .collab-text {
+    font-size: 1.1rem;
+    line-height: 1.7;
   }
 
   .collab-section {
