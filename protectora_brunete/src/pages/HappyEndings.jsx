@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import AnimalCard from '../components/AnimalCard'
-import './AnimalsInAdoption.css'
+import './pages.css'
 
 function HappyEndings() {
   const [animals, setAnimals] = useState([])
@@ -106,7 +106,7 @@ function HappyEndings() {
               )}
             </div>
             <div className="animal-modal-content">
-              <span className="animal-modal-adopted-badge">🏠 ¡Adoptado!</span>
+              <span className="animal-modal-adopted-badge">¡Adoptado!</span>
               <h2 id="animal-modal-title" className="animal-modal-name">{selectedAnimal.name}</h2>
               <dl className="animal-modal-details">
                 <div className="animal-modal-detail">

@@ -10,18 +10,24 @@ function WhoAreWe() {
         <section className="collab-hero">
           <div className="collab-hero-content">
             <h1 className="collab-hero-title">¿Quiénes somos?</h1>
-            <span className="collab-hero-text">Protección animal con criterio, transparencia y compromiso real.</span>
-            <span className="collab-hero-highlight">Cada decisión que tomamos tiene un único objetivo: el bienestar real de cada animal.</span>
+            <span className="collab-hero-text">Protección animal con criterio propio.</span>
+            <span className="collab-hero-text">Colaboramos con la administración, pero nuestras decisiones responden a un principio claro: el bienestar real de cada animal por encima de la gestión automática.</span>
           </div>
         </section>
 
         <div className="collab-container collab-container--wide">
           <section className="collab-intro-centered">
             <span className="collab-text">
-              Somos la entidad responsable del servicio de <strong>Protección y Bienestar de los Animales Domésticos</strong> en el municipio de Boadilla del Monte, trabajando en colaboración directa con su Ayuntamiento.
+              Somos la entidad que presta el servicio de <strong>Protección y Bienestar de los Animales Domésticos</strong> en el municipio de Boadilla del Monte, en colaboración con su Ayuntamiento.
             </span>
             <span className="collab-text">
-              Nuestro trabajo se centra en la atención, protección y gestión responsable de animales domésticos, tomando siempre decisiones basadas en un criterio claro: el bienestar real de cada animal, no solo su gestión.
+              Gestionamos nuestro propio centro de acogida y trabajamos con estructura, protocolos y equipo profesional.
+            </span>
+            <span className="collab-text">
+              No somos un recurso improvisado ni un espacio de tránsito. Somos un proyecto con responsabilidad técnica y capacidad de decisión.
+            </span>
+            <span className="collab-text">
+              Cada actuación se valora caso por caso. No gestionamos números. Protegemos individuos.
             </span>
           </section>
 
@@ -29,30 +35,42 @@ function WhoAreWe() {
             <h2 className="collab-section-title">¿Qué hacemos?</h2>
             <div className="collab-cards-grid">
               <article className="collab-mini-card">
-                <h3 className="collab-mini-card-title">Protección y recogida</h3>
+                <h3 className="collab-mini-card-title">Protección y atención</h3>
                 <span className="collab-mini-card-text">
-                  Atendemos a animales domésticos perdidos, abandonados o heridos que aparecen en el municipio, proporcionándoles los cuidados necesarios y la atención veterinaria que requiera cada caso.
+                  Intervenimos ante animales domésticos perdidos, abandonados o heridos dentro del municipio. Evaluamos cada situación y proporcionamos la atención veterinaria y el seguimiento que requiera.
+                </span>
+                <span className="collab-mini-card-text">
+                  Actuar no es recoger sin criterio. Es intervenir con responsabilidad.
                 </span>
               </article>
 
               <article className="collab-mini-card">
                 <h3 className="collab-mini-card-title">Adopción responsable</h3>
                 <span className="collab-mini-card-text">
-                  Promovemos la adopción responsable de los perros y gatos acogidos. Nuestro objetivo es que cada animal encuentre un hogar adecuado, estable y seguro.
+                  Buscamos hogares adecuados, estables y coherentes con las necesidades de cada animal.
+                </span>
+                <span className="collab-mini-card-text">
+                  La adopción no es una salida rápida. Es una decisión meditada que debe garantizar convivencia y bienestar a largo plazo.
                 </span>
               </article>
 
               <article className="collab-mini-card">
                 <h3 className="collab-mini-card-title">Control de colonias felinas</h3>
                 <span className="collab-mini-card-text">
-                  Gestionamos las colonias de gatos mediante el protocolo C.E.R. (captura, esterilización y retorno), una medida eficaz, ética y respetuosa para el control poblacional.
+                  Aplicamos el protocolo C.E.R. (captura, esterilización y retorno) como método ético y eficaz de control poblacional.
+                </span>
+                <span className="collab-mini-card-text">
+                  Trabajamos desde la planificación y la coordinación, no desde la improvisación.
                 </span>
               </article>
 
               <article className="collab-mini-card">
                 <h3 className="collab-mini-card-title">Servicio 24 horas</h3>
                 <span className="collab-mini-card-text">
-                  El servicio está operativo los 365 días del año, las 24 horas, para atender cualquier necesidad que pueda surgir en el municipio.
+                  El servicio está operativo los 365 días del año, las 24 horas, para atender incidencias dentro del municipio.
+                </span>
+                <span className="collab-mini-card-text">
+                  Disponibilidad no significa saturación. Significa organización.
                 </span>
               </article>
             </div>
@@ -61,64 +79,58 @@ function WhoAreWe() {
           <section className="collab-card collab-card--accent">
             <h2 className="collab-card-title">Centro de acogida</h2>
             <span className="collab-text">
-              Disponemos de un centro de acogida animal autorizado por la Comunidad de Madrid, donde cada animal recibe la atención que necesita.
+              Contamos con un centro de acogida autorizado por la Comunidad de Madrid.
+            </span>
+            <span className="collab-text">
+              Cada animal recibe:
             </span>
             <ul className="collab-icon-list">
-              <li>
-                <span className="collab-icon-badge">
-                  <i className="fa-solid fa-stethoscope"></i>
-                </span>
-                <span>Atención veterinaria completa</span>
-              </li>
-              <li>
-                <span className="collab-icon-badge">
-                  <i className="fa-solid fa-id-card"></i>
-                </span>
-                <span>Identificación y registro oficial</span>
-              </li>
-              <li>
-                <span className="collab-icon-badge">
-                  <i className="fa-solid fa-scissors"></i>
-                </span>
-                <span>Vacunación, desparasitación y esterilización</span>
-              </li>
-              <li>
-                <span className="collab-icon-badge">
-                  <i className="fa-solid fa-graduation-cap"></i>
-                </span>
-                <span>Educación y adaptación para una convivencia equilibrada</span>
-              </li>
+              <li>Atención veterinaria completa.</li>
+              <li>Identificación y registro oficial.</li>
+              <li>Vacunación, desparasitación y esterilización.</li>
+              <li>Evaluación conductual y trabajo de adaptación para favorecer una convivencia equilibrada.</li>
             </ul>
-            <span className="collab-registry">
-              <span className="collab-registry-label">Número de registro:</span>
-              <span className="collab-registry-number">ES280261000001</span>
+            <span className="collab-text">
+              Número de registro: ES280261000001
+            </span>
+            <span className="collab-text">
+              Nuestro centro no es un depósito. Es un espacio de recuperación y preparación para una nueva etapa.
             </span>
           </section>
 
           <section className="collab-section">
             <h2 className="collab-section-title">Nuestro equipo</h2>
             <span className="collab-text">
-              El servicio está formado por profesionales con experiencia y vocación:
+              El servicio está formado por profesionales con experiencia acreditada:
             </span>
-            <ul className="collab-pills">
+            <ul className="collab-list">
               <li>Cuidadores de animales</li>
               <li>Auxiliares veterinarios</li>
               <li>Veterinarios especialistas en etología y medicina médico-quirúrgica</li>
               <li>Personal administrativo</li>
             </ul>
+            <span className="collab-text">
+              La vocación es importante. La formación también.
+            </span>
           </section>
 
-          <section className="collab-manifesto">
-            <h2 className="collab-manifesto-title">Nuestro compromiso</h2>
-            <ul className="collab-manifesto-list">
-              <li>Fomentar la tenencia responsable</li>
-              <li>Prevenir el abandono y el maltrato animal</li>
-              <li>Impulsar la adopción responsable</li>
-              <li>Gestionar de forma ética las colonias felinas</li>
-              <li>Garantizar atención veterinaria integral</li>
+          <section className="collab-section">
+            <h2 className="collab-section-title">Nuestro compromiso</h2>
+            <span className="collab-text">
+              Trabajamos con objetivos concretos:
+            </span>
+            <ul className="collab-list">
+              <li>Fomentar la tenencia responsable.</li>
+              <li>Prevenir el abandono y el maltrato animal.</li>
+              <li>Impulsar adoppciones coherentes y estables.</li>
+              <li>Gestionar colonias felinas de forma ética.</li>
+              <li>Garantizar atención veterinaria integral.</li>
             </ul>
-            <span className="collab-manifesto-closing">
-              Creemos en un modelo de protección animal eficaz, responsable y orientado al bienestar, no solo a la gestión.
+            <span className="collab-text">
+              Creemos en un modelo de protección animal eficaz, estructurado y sostenible.
+            </span>
+            <span className="collab-text">
+              La sensibilidad es necesaria. El criterio, imprescindible.
             </span>
           </section>
         </div>

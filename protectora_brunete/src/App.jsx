@@ -8,6 +8,11 @@ import WhoAreWe from './pages/WhoAreWe'
 import FosterHome from './pages/FosterHome'
 import WantToBeVolunteer from './pages/WantToBeVolunteer'
 import MaterialDonations from './pages/MaterialDonations'
+import AdminLogin from './pages/AdminLogin'
+import AdminPanel from './pages/AdminPanel'
+import LegalNotice from './pages/LegalNotice'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import CookiesPolicy from './pages/CookiesPolicy'
 import './App.css'
 
 function App() {
@@ -24,6 +29,11 @@ function App() {
         <Route path="/colaboración/voluntariado" element={<WantToBeVolunteer />} />
         <Route path="/colaboración/donaciones" element={<MaterialDonations />} />
         <Route path="/contacto" element={<Contact />} />
+        <Route path="/aviso-legal" element={<LegalNotice />} />
+        <Route path="/política-de-privacidad" element={<PrivacyPolicy />} />
+        <Route path="/política-de-cookies" element={<CookiesPolicy />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/panel" element={<AdminPanel />} />
       </Routes>
     </Router>
   )

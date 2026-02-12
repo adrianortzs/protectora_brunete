@@ -9,15 +9,18 @@ function WantToAdopt() {
       <main className="collab-page">
         <section className="collab-hero">
           <div className="collab-hero-content">
-            <h1 className="collab-hero-title">Antes de adoptar, ten en cuenta...</h1>
+            <h1 className="collab-hero-title">Antes de adoptar, detente un momento</h1>
             <span className="collab-hero-text">
-              Adoptar un perro o un gato es una decisión importante, tanto para la persona que adopta como, sobre todo, para el animal.
+              Adoptar no es un gesto puntual. Es una decisión estructural en tu vida y en la del animal.
             </span>
             <span className="collab-hero-text">
-              La adopción implica cambios reales en la rutina, el hogar y las prioridades. Por eso, antes de dar el paso, es fundamental informarse sobre el carácter, las necesidades y el momento vital de cada animal.
+              Implica tiempo, estabilidad y responsabilidad real.
             </span>
             <span className="collab-hero-text">
-              Adoptar no es un gesto puntual: es un compromiso responsable durante toda la vida del animal.
+              Antes de dar el paso, es necesario valorar con honestidad si puedes asumir ese compromiso durante toda su vida.
+            </span>
+            <span className="collab-hero-text">
+              Un animal no se adapta a una etapa. Se integra en un proyecto de vida.
             </span>
           </div>
         </section>
@@ -27,23 +30,32 @@ function WantToAdopt() {
             <section className="collab-section">
               <h2 className="collab-section-title">¿Qué implica adoptar?</h2>
               <span className="collab-text">
-                Adoptar un animal significa ofrecerle un hogar estable y asumir un compromiso real a largo plazo. Al hacerlo, no solo cambias la vida de tu nuevo compañero, sino que también permites que otro animal rescatado pueda ocupar su lugar en nuestro centro de acogida.
+                Adoptar significa ofrecer un entorno estable y asumir un compromiso a largo plazo.
               </span>
               <span className="collab-text">
-                Los animales que atendemos se encuentran de forma temporal en el centro. Su destino ideal es un entorno familiar donde puedan integrarse, desarrollar vínculos y vivir con estabilidad.
+                No se trata solo de cambiar la vida de un animal. Se trata de sostener esa decisión en el tiempo, incluso cuando las circunstancias personales cambian.
               </span>
               <span className="collab-text">
-                La fase de adopción comienza una vez transcurrido el plazo legal correspondiente, tras confirmar su estado de salud y evaluar su comportamiento. Desde ese momento, los animales permanecen con nosotros el tiempo necesario hasta encontrar una familia adecuada para ellos.
+                Los animales que atendemos permanecen de forma temporal en el centro. Su destino no es el refugio, es un hogar equilibrado donde puedan vincularse y desarrollarse con seguridad.
               </span>
               <span className="collab-text">
-                Para favorecer una adopción responsable, realizamos un seguimiento y acompañamiento antes y después de la adopción, asegurando una correcta adaptación tanto del animal como de su nueva familia.
+                La fase de adopción comienza una vez cumplido el plazo legal correspondiente, tras confirmar su estado sanitario y realizar la valoración conductual.
+              </span>
+              <span className="collab-text">
+                Desde ese momento, permanecen con nosotros el tiempo necesario hasta encontrar una familia adecuada. No aceleramos procesos. Priorizamos compatibilidad.
+              </span>
+              <span className="collab-text">
+                Realizamos acompañamiento antes y después de la adopción. La integración no termina el día que el animal sale del centro.
               </span>
             </section>
 
             <section className="collab-section">
               <h2 className="collab-section-title">Proceso de adopción</h2>
               <span className="collab-text">
-                La adopción comienza solicitando una cita previa por correo electrónico. A partir de ese momento, el proceso se desarrolla en varias fases:
+                La adopción comienza solicitando cita previa por correo electrónico.
+              </span>
+              <span className="collab-text">
+                El proceso se desarrolla en varias fases:
               </span>
               <ol className="collab-steps">
                 <li className="collab-step">
@@ -51,7 +63,10 @@ function WantToAdopt() {
                   <div>
                     <h4 className="collab-step-title">Primer contacto</h4>
                     <span className="collab-step-text">
-                      La familia interesada acude al centro para conocer a los animales y valorar la adopción. Es importante que asistan todas las personas que convivirán con el animal.
+                      La familia interesada acude al centro para conocer a los animales.
+                    </span>
+                    <span className="collab-step-text">
+                      Es importante que asistan todas las personas que convivirán con él. La decisión debe ser compartida.
                     </span>
                   </div>
                 </li>
@@ -60,7 +75,16 @@ function WantToAdopt() {
                   <div>
                     <h4 className="collab-step-title">Entrevista</h4>
                     <span className="collab-step-text">
-                      Una persona del equipo realiza una entrevista para conocer la experiencia previa con animales, el entorno y las condiciones de la vivienda, así como la disponibilidad y expectativas de la familia.
+                      Un miembro del equipo realiza una entrevista para valorar:
+                    </span>
+                    <ul className="collab-list">
+                      <li>Experiencia previa.</li>
+                      <li>Entorno y condiciones de la vivienda.</li>
+                      <li>Disponibilidad real.</li>
+                      <li>Expectativas.</li>
+                    </ul>
+                    <span className="collab-step-text">
+                      No evaluamos por desconfianza. Evaluamos para garantizar bienestar.
                     </span>
                   </div>
                 </li>
@@ -69,16 +93,22 @@ function WantToAdopt() {
                   <div>
                     <h4 className="collab-step-title">Compatibilidad</h4>
                     <span className="collab-step-text">
-                      Si ya convive otro perro en el hogar, es necesario que también acuda al centro para valorar la compatibilidad entre ambos animales.
+                      Si ya convive otro perro en el hogar, es imprescindible realizar una valoración conjunta para comprobar la adaptación entre ambos.
+                    </span>
+                    <span className="collab-step-text">
+                      Forzar convivencias genera problemas. Prevenirlos es parte del proceso.
                     </span>
                   </div>
                 </li>
                 <li className="collab-step">
                   <h3 className="collab-step-number">4</h3>
                   <div>
-                    <h4 className="collab-step-title">Adopción y seguimiento</h4>
+                    <h4 className="collab-step-title">Formalización y seguimiento</h4>
                     <span className="collab-step-text">
-                      Una vez formalizada la adopción, realizamos un seguimiento para acompañar la adaptación del animal y su nueva familia.
+                      Una vez formalizada la adopción, realizamos seguimiento para acompañar la adaptación.
+                    </span>
+                    <span className="collab-step-text">
+                      La responsabilidad no termina con la firma del contrato.
                     </span>
                   </div>
                 </li>
@@ -88,34 +118,47 @@ function WantToAdopt() {
 
           <div className="collab-grid-2col">
             <section className="collab-card">
-              <h2 className="collab-card-title">Algunas cuestiones clave</h2>
+              <h2 className="collab-card-title">Cuestiones clave antes de decidir</h2>
+              <span className="collab-text">
+                Antes de adoptar, conviene considerar:
+              </span>
               <ul className="collab-list">
-                <li>La adopción debe ser una decisión consensuada por todas las personas que conviven en el hogar.</li>
-                <li>Perros y gatos viven, de media, alrededor de 15 años. Las circunstancias cambian, y el animal también puede necesitar cuidados específicos.</li>
-                <li>Adoptar implica disponer de tiempo y estabilidad para atender sus necesidades diarias: paseos, atención, educación y acompañamiento.</li>
-                <li>Adoptar significa ofrecer un hogar estable para siempre, no solo en momentos puntuales.</li>
+                <li>La decisión debe ser consensuada por todas las personas del hogar.</li>
+                <li>Perros y gatos pueden vivir alrededor de 15 años.</li>
+                <li>Las circunstancias personales cambian; el compromiso debe mantenerse.</li>
+                <li>Implica tiempo diario: paseos, atención, educación, acompañamiento.</li>
+                <li>No es una solución temporal ni una respuesta emocional.</li>
               </ul>
+              <span className="collab-text">
+                Adoptar es asumir estabilidad para otro ser vivo
+              </span>
             </section>
 
             <section className="collab-card">
               <h2 className="collab-card-title">Requisitos para adoptar</h2>
               <span className="collab-text">
-                La adopción se realiza conforme a la Ley 4/2016 de Protección de los Animales de Compañía de la Comunidad de Madrid:
+                La adopción se realiza conforme a la Ley 4/2016 de Protección de los Animales de Compañía de la Comunidad de Madrid.
               </span>
-              <ul className="collab-list collab-list--inline">
+              <span className="collab-text">
+                Requisitos básicos:
+              </span>
+              <ul className="collab-list">
                 <li>Ser mayor de edad.</li>
-                <li>Presentar DNI y/o pasaporte en vigor.</li>
+                <li>Presentar DNI o pasaporte en vigor.</li>
                 <li>Firmar el contrato de adopción.</li>
                 <li>En el caso de animales potencialmente peligrosos, disponer de la licencia correspondiente.</li>
               </ul>
               <span className="collab-text">
-                La adopción implica aceptar las condiciones del contrato, que incluyen:
+                El contrato incluye:
               </span>
-              <ul className="collab-list collab-list--inline">
-                <li>Información detallada sobre el estado sanitario del animal.</li>
-                <li>Asunción de los costes de tratamientos, identificación y esterilización.</li>
+              <ul className="collab-list">
+                <li>Información detallada sobre el estado sanitario.</li>
+                <li>Asunción de costes de identificación, esterilización y tratamientos.</li>
                 <li>Registro del animal en el censo municipal correspondiente.</li>
               </ul>
+              <span className="collab-text">
+                La adopción no es un trámite rápido. Es una decisión formal y responsable.
+              </span>
             </section>
           </div>
         </div>

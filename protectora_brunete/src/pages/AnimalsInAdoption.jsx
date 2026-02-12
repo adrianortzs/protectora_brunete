@@ -5,7 +5,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import AnimalFilter from '../components/AnimalFilter'
 import AnimalCard from '../components/AnimalCard'
-import './AnimalsInAdoption.css'
+import './pages.css'
 
 const ANIMAL_TYPE_FILTER = { perros: 'perro', gatos: 'gato' }
 const SORT_ARRIVAL = { none: '', newest: 'newest', oldest: 'oldest' }
@@ -35,7 +35,7 @@ function AnimalsInAdoption() {
   useEffect(() => {
     const fetchAnimals = async () => {
       try {
-        let query = supabase.from('animals').select('*')
+        let query = supabase.from('animals').select('*').eq('animal_state', 'en adopcion')
         if (filterValue) query = query.eq('animal_type', filterValue)
         const { data, error: supabaseError } = await query
         if (supabaseError) throw supabaseError

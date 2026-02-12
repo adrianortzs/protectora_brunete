@@ -12,10 +12,13 @@ function FosterHome() {
           <div className="collab-hero-content">
             <h1 className="collab-hero-title">¿Te gustaría ser casa de acogida?</h1>
             <span className="collab-hero-text">
-              Las casas de acogida son una parte esencial del proceso de protección animal. Ofrecen un entorno familiar temporal donde perros y gatos pueden recuperarse, socializar y prepararse para una adopción responsable.
+              Las casas de acogida forman parte esencial de nuestro trabajo.
             </span>
             <span className="collab-hero-text">
-              Si dispones de espacio, tiempo y estabilidad para acoger temporalmente a un animal, tu colaboración marca una diferencia real.
+              No son una solución improvisada: son un entorno temporal, estable y responsable donde cada animal puede recuperarse, adaptarse y prepararse para una adopción definitiva.
+            </span>
+            <span className="collab-hero-text">
+              Si cuentas con tiempo, equilibrio y compromiso real, tu hogar puede ser una transición segura mientras encontramos el definitivo.
             </span>
           </div>
         </section>
@@ -24,27 +27,58 @@ function FosterHome() {
           <section className="collab-section">
             <h2 className="collab-section-title">¿Qué implica ser casa de acogida?</h2>
             <span className="collab-text">
-              Como casa de acogida te encargas del cuidado diario del animal en tu hogar: alimentación, paseos, atención y un entorno estable. Desde la protectora nos ocupamos de los gastos veterinarios, la identificación y la gestión del proceso de adopción.
+              Ser casa de acogida significa asumir el cuidado diario del animal en tu propio entorno: alimentación, paseos, descanso y estabilidad emocional.
             </span>
             <span className="collab-text">
-              El periodo de acogida puede variar, desde algunas semanas hasta varios meses, según el animal y su situación. El objetivo es garantizar su bienestar hasta que encuentre un hogar definitivo.
+              Desde Arat Adopta nos encargamos de los gastos veterinarios, identificación y gestión completa del proceso de adopción. Trabajamos en coordinación contigo en todo momento.
+            </span>
+            <span className="collab-text">
+              El periodo de acogida puede durar semanas o meses, según las necesidades del animal. La prioridad siempre es su bienestar, no la rapidez del proceso.
+            </span>
+            <span className="collab-text">
+              La acogida no es una adopción anticipada. Es un compromiso temporal, acordado y acompañado por el equipo.
             </span>
           </section>
 
           <section className="collab-card">
             <h2 className="collab-card-title">Requisitos habituales</h2>
+            <span className="collab-text">
+              Para garantizar una experiencia adecuada tanto para el animal como para la familia de acogida, valoramos:
+            </span>
             <ul className="collab-list">
               <li>Residir en la zona de actuación o alrededores (Boadilla del Monte y entorno).</li>
-              <li>Compromiso para acoger al animal durante el tiempo acordado.</li>
+              <li>Compromiso para mantener la acogida durante el tiempo acordado.</li>
               <li>Disponibilidad para revisiones veterinarias y posibles visitas de adoptantes.</li>
-              <li>Disponer de un entorno adecuado y seguro, según la especie y el tamaño del animal.</li>
+              <li>Un entorno adecuado y seguro, adaptado a la especie y tamaño del animal.</li>
+              <li>Capacidad para asumir el proceso con responsabilidad, incluso si se prolonga más de lo previsto.</li>
             </ul>
+            <span className="collab-text">
+              No buscamos soluciones puntuales. Buscamos estabilidad.
+            </span>
+          </section>
+
+          <section className='collab-section'>
+            <h2 className="collab-section-title">Lo que no es una casa de acogida</h2>
+            <span className="collab-text">
+              Para evitar malentendidos:
+            </span>
+            <ul className="collab-list">
+              <li>No es una prueba antes de adoptar.</li>
+              <li>No es una solución de fin de semana.</li>
+              <li>No es una decisión impulsiva.</li>
+            </ul>
+            <span className="collab-text">
+              Es una colaboración responsable dentro de un proyecto estructurado.
+            </span>
           </section>
 
           <section className="collab-section">
             <h2 className="collab-section-title">¿Cómo empezar?</h2>
             <span className="collab-text">
-              Si te interesa ser casa de acogida, ponte en contacto con nosotros. Te explicaremos el proceso, resolveremos tus dudas y valoraremos contigo la opción más adecuada según tu disponibilidad y experiencia.
+              Si consideras que puedes asumir una acogida con compromiso real, ponte en contacto con nosotros.
+            </span>
+            <span className="collab-text">
+              Te explicaremos el proceso, resolveremos tus dudas y valoraremos contigo si encaja con tu situación actual.
             </span>
             <div className="collab-cta-wrap">
               <Link to="/contacto?asunto=Interés en ser casa de acogida&mensaje=Hola, me gustaría recibir información sobre cómo colaborar como casa de acogida #contact-form" className="collab-cta">Contactar para ser casa de acogida</Link>

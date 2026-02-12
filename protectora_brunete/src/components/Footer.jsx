@@ -1,14 +1,15 @@
+import { Link } from 'react-router-dom'
 import './components.css'
 
 function Footer() {
     return (
       <footer>
         <section className="legal-information">
-          <a href="/aviso-legal">Aviso Legal</a>
-          <a href="/política-de-privacidad">Política de Privacidad</a>
-          <a href="/política-de-cookies">Política de Cookies</a>
+          <Link to="/aviso-legal">Aviso Legal</Link>
+          <Link to="/política-de-privacidad">Política de Privacidad</Link>
+          <Link to="/política-de-cookies">Política de Cookies</Link>
         </section>
-        <span className="copyright">&copy; 2026 ARAT VETERINARIOS TORRELODONES S.L. Todos los derechos reservados.</span>
+        <span className="copyright">&copy; 2026 <Link to="/admin/login" className="copyright-admin-link">ARAT VETERINARIOS TORRELODONES S.L.</Link> Todos los derechos reservados.</span>
       </footer>
     )
   }
