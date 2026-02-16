@@ -12,20 +12,32 @@ function WantToBeVolunteer() {
           <div className="collab-hero-content">
             <h1 className="collab-hero-title">¿Quieres ser voluntario?</h1>
             <span className="collab-hero-text">
-              El voluntariado en Arat Adopta no es simbólico. Es trabajo real dentro de un centro de acogida activo.
-            </span>
-            <span className="collab-hero-text">
-              Las personas voluntarias forman parte del funcionamiento diario del refugio. Su compromiso impacta directamente en el bienestar y equilibrio de los animales mientras esperan adopción.
-            </span>
-            <span className="collab-hero-text">
-              Si buscas implicarte de forma constante y responsable, puedes formar parte del equipo.
+              Los voluntarios son imprescindibles para el funcionamiento del refugio. Únete y forma parte del equipo.
             </span>
           </div>
         </section>
 
         <div className="collab-container">
           <section className="collab-section">
-            <h2 className="collab-section-title">¿Cuál es tu función como voluntario?</h2>
+            <span className="collab-text">
+              El voluntariado en Arat Adopta no es simbólico. Es trabajo real dentro de un centro de acogida activo.
+            </span>
+            <span className="collab-text">
+              Las personas voluntarias forman parte del funcionamiento diario del refugio. Su compromiso impacta directamente en el bienestar y equilibrio de los animales mientras esperan adopción.
+            </span>
+            <span className="collab-text">
+              Puedes venir a ayudarnos desde una vez por semana, hasta varios días a la semana. La frecuencia la pones tú.
+            </span>
+            <span className="collab-text">
+              Si buscas implicarte de forma constante y responsable, únete y forma parte de nuestro equipo.
+            </span>
+          </section>
+
+          <section className="collab-section">
+            <h2 className="collab-section-title">
+              <i className="bi bi-people collab-section-icon"></i>
+              ¿Cuál es tu función como voluntario?
+            </h2>
             <span className="collab-text">
               El voluntariado implica colaboración directa en el cuidado diario de los animales, siempre bajo nuestros protocolos de trabajo y bienestar.
             </span>
@@ -47,7 +59,10 @@ function WantToBeVolunteer() {
           </section>
 
           <section className="collab-card">
-            <h2 className="collab-card-title">Requisitos habituales</h2>
+            <h2 className="collab-card-title">
+              <i className="bi bi-card-checklist collab-card-icon"></i>
+              Requisitos habituales
+            </h2>
             <span className="collab-text">
               Para mantener una organización estable y coherente, solicitamos:
             </span>
@@ -91,7 +106,7 @@ function WantToBeVolunteer() {
               Valoramos el compromiso antes que la cantidad.
             </span>
             <div className="collab-cta-wrap">
-              <Link to="/contacto?asunto=Interés en ser voluntario&mensaje=Hola, me gustaría recibir información sobre cómo colaborar como voluntario.#contact-form" className="collab-cta">Contactar para ser voluntario</Link>
+              <Link to="/contacto?asunto=Interés en ser voluntario&mensaje=Hola, me gustaría recibir información sobre cómo colaborar como voluntario.#contact-form" className="collab-cta">Quiero ser voluntario</Link>
             </div>
           </section>
         </div>

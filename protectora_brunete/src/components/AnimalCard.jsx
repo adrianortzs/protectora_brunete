@@ -36,14 +36,14 @@ function AnimalCard({ animal, onSelect, formatAge }) {
           </span>
         </div>
         {animal.animal_state === 'en adopcion' && (
-          <span className="animal-state-badge">¡Disponible!</span>
+          <span className="animal-state-badge">¡Buscando familia!</span>
         )}
         {animal.animal_state === 'adoptado' && (
           <span className="animal-state-badge">¡Adoptado!</span>
         )}
         <div className="animal-card-action">
           <button type="button" className="animal-card-btn" onClick={() => onSelect(animal)}>
-            Conoce mi historia
+            Conóceme
           </button>
         </div>
       </div>

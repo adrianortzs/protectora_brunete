@@ -67,7 +67,7 @@ function HappyEndings() {
           {!loading && error && (<div className="animals-status animals-status-error"><p>{error}</p></div>)}
           {!loading && !error && animals.length === 0 && (
             <div className="animals-status">
-              <p>Aún no hay animales adoptados para mostrar. ¡Pronto habrá muchos finales felices!</p>
+              <p>Finales felices (próximamente)</p>
             </div>
           )}
           {!loading && !error && animals.length > 0 && (

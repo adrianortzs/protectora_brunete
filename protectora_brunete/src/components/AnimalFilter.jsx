@@ -3,24 +3,15 @@ import './components.css'
 
 const SORT_ARRIVAL = { none: '', newest: 'newest', oldest: 'oldest' }
 
-const AGE_OPTIONS = [ { value: 'cachorro', label: 'Cachorro' }, { value: 'joven', label: 'Joven' }, { value: 'adulto', label: 'Adulto' }, { value: 'senior', label: 'Senior' } ]
+const AGE_OPTIONS = [ { value: 'cachorro', label: 'Cachorro' }, { value: 'adulto', label: 'Adulto' }, { value: 'senior', label: 'Senior' } ]
 
-const SIZE_OPTIONS = [ { value: 'toy', label: 'Toy' }, { value: 'pequeño', label: 'Pequeño' }, { value: 'mediano', label: 'Mediano' }, { value: 'grande', label: 'Grande' } ]
+const SIZE_OPTIONS = [ { value: 'pequeño', label: 'Pequeño' }, { value: 'mediano', label: 'Mediano' }, { value: 'grande', label: 'Grande' } ]
 
 function AnimalFilter({ filters, onFilterChange, filterValue, onClear }) {
   const [openDropdown, setOpenDropdown] = useState(null)
-  const [isMobileOpen, setIsMobileOpen] = useState(false)
   const toggleDropdown = (name) => { setOpenDropdown(prev => prev === name ? null : name) }
   const closeDropdowns = () => { setOpenDropdown(null) }
   const selectOption = (key, value) => { onFilterChange(key, value); closeDropdowns() }
-
-  const activeCount = [
-    filters.animal_type && !filterValue,
-    filters.gender,
-    filters.age,
-    filters.size,
-    filters.arrival_date
-  ].filter(Boolean).length
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -37,19 +28,13 @@ function AnimalFilter({ filters, onFilterChange, filterValue, onClear }) {
 
   return (
     <div className="af-container">
-      <button type="button" className="af-mobile-toggle" onClick={() => setIsMobileOpen(prev => !prev)}>
-        <i className={`bi ${isMobileOpen ? 'bi-x-lg' : 'bi-funnel'}`}></i>
-        <span>Filtros</span>
-        {activeCount > 0 && <span className="af-mobile-badge">{activeCount}</span>}
-      </button>
-      <div className={`af-filters ${isMobileOpen ? 'af-filters--open' : ''}`}>
-      <div className={`filter-dropdown ${filterValue ? 'filter-dropdown-locked' : ''}`}>
+      <div className="filter-dropdown">
         <span className="filter-dropdown-label">Tipo de animal</span>
-        <button type="button" className={`filter-dropdown-btn ${openDropdown === 'animal_type' ? 'is-open' : ''}`} onClick={() => !filterValue && toggleDropdown('animal_type')} disabled={!!filterValue}>
+        <button type="button" className={`filter-dropdown-btn ${openDropdown === 'animal_type' ? 'is-open' : ''}`} onClick={() => toggleDropdown('animal_type')}>
           <span>{filters.animal_type === 'perro' ? 'Perro' : filters.animal_type === 'gato' ? 'Gato' : 'Cualquiera'}</span>
           <i className="bi bi-chevron-down"></i>
         </button>
-        {openDropdown === 'animal_type' && !filterValue && (
+        {openDropdown === 'animal_type' && (
           <div className="filter-dropdown-menu">
             <button type="button" className={`filter-dropdown-item ${filters.animal_type === '' ? 'is-selected' : ''}`} onClick={() => selectOption('animal_type', '')}>Cualquiera</button>
             <button type="button" className={`filter-dropdown-item ${filters.animal_type === 'perro' ? 'is-selected' : ''}`} onClick={() => selectOption('animal_type', 'perro')}>Perro</button>
@@ -121,7 +106,6 @@ function AnimalFilter({ filters, onFilterChange, filterValue, onClear }) {
       </div>
 
       <button type="button" className="animals-filter-reset" onClick={handleClear}>Limpiar filtros</button>
-      </div>
     </div>
   )
 }

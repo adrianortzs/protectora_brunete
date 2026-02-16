@@ -24,7 +24,7 @@ function AdminPanel() {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) {
-        navigate('/admin/login', { replace: true })
+        navigate('/hsdkadmin/login', { replace: true })
       } else {
         fetchAnimals()
       }
@@ -61,7 +61,7 @@ function AdminPanel() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
-    navigate('/admin/login')
+    navigate('/hsdkadmin/login')
   }
 
   const updateFilter = (key, value) => { setFilters(prev => ({ ...prev, [key]: value })); setCurrentPage(1) }

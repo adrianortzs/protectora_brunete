@@ -24,7 +24,7 @@ function AdminLogin() {
       setError('Email o contraseña incorrectos.')
       setLoading(false)
     } else {
-      navigate('/admin/panel')
+      navigate('/hsdkadmin/panel')
     }
   }
 

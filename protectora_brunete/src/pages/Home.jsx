@@ -13,12 +13,9 @@ export default function Home() {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const { data } = await supabase
-          .from('animals')
-          .select('id, name, age, img_url, animal_type, gender')
-          .eq('animal_state', 'en adopcion')
-          .limit(4)
-        setFeaturedAnimals(data || [])
+        const { data } = await supabase.from('animals').select('id, name, age, img_url, animal_type, gender').eq('animal_state', 'en adopcion')
+        const shuffled = (data || []).sort(() => Math.random() - 0.5).slice(0, 4)
+        setFeaturedAnimals(shuffled)
       } catch (err) {
         console.error(err)
       } finally {
@@ -46,28 +43,35 @@ export default function Home() {
       <Header />
       <Hero />
       <main className="home-main">
-
         <section className="section-pillars">
           <div className="section-content">
             <h2 className="section-title">Tres principios, un mismo criterio</h2>
             <div className="pillars-grid">
               <article className="pillar-card">
                 <span className="pillar-number">01</span>
-                <h3 className="pillar-heading">Protección real</h3>
-                <span className="pillar-text">Atendemos animales domésticos perdidos, abandonados o heridos. Cada intervención se valora individualmente, con atención veterinaria completa y seguimiento profesional.</span>
-                <Link to="/quiénes-somos" className="pillar-link">Conocer el proyecto</Link>
+                <h3 className="pillar-heading">Bienestar animal</h3>
+                <span className="pillar-text">
+                  Atendemos animales domésticos perdidos, abandonados o heridos. Cada intervención se valora individualmente, con atención veterinaria completa y seguimiento profesional.
+                </span>
+                <Link to="/quiénes-somos" className="pillar-link">Nuestro proyecto</Link>
               </article>
+
               <article className="pillar-card">
                 <span className="pillar-number">02</span>
-                <h3 className="pillar-heading">Adopción con criterio</h3>
-                <span className="pillar-text">No buscamos salidas rápidas. Evaluamos compatibilidad, realizamos entrevistas y acompañamos todo el proceso para garantizar bienestar a largo plazo.</span>
-                <Link to="/adopción" className="pillar-link">Proceso de adopción</Link>
+                <h3 className="pillar-heading">Adopción responsable</h3>
+                <span className="pillar-text">
+                  No buscamos salidas rápidas. Evaluamos compatibilidad, realizamos entrevistas y supervisamos todo el proceso para garantizar el bienestar de las mascotas a largo plazo y la idoneidad de la familia.
+                </span>
+                <Link to="/en-adopción" className="pillar-link">Proceso de adopción</Link>
               </article>
+
               <article className="pillar-card">
                 <span className="pillar-number">03</span>
                 <h3 className="pillar-heading">Colaboración estructurada</h3>
-                <span className="pillar-text">Voluntariado, acogida temporal y donaciones materiales. Cada forma de colaborar tiene criterios claros y un impacto directo en el día a día del centro.</span>
-                <Link to="/colaboración/voluntariado" className="pillar-link">Formas de colaborar</Link>
+                <span className="pillar-text">
+                  Tenemos varias formas de colaboración en nuestros centros. Desde voluntariados hasta acogidas temporales y donaciones materiales. Cada forma de colaborar nos ayuda en el día a día del centro.
+                </span>
+                <Link to="/colabora/voluntariado" className="pillar-link">Formas de colaborar</Link>
               </article>
             </div>
           </div>
@@ -86,7 +90,7 @@ export default function Home() {
             ) : featuredAnimals.length > 0 ? (
               <div className="featured-grid">
                 {featuredAnimals.map((animal) => (
-                  <Link to="/animales-en-adopción" key={animal.id} className="featured-card">
+                  <Link to={`/animales-en-adopción?animal=${animal.id}`} key={animal.id} className="featured-card">
                     <div className="featured-card-img-wrap">
                       {getFirstImage(animal) ? (
                         <img src={getFirstImage(animal)} alt={animal.name} className="featured-card-img" />
@@ -95,10 +99,20 @@ export default function Home() {
                       )}
                     </div>
                     <div className="featured-card-body">
-                      <h3 className="featured-card-name">{animal.name}</h3>
-                      <span className="featured-card-meta">
-                        {animal.animal_type === 'perro' ? 'Perro' : animal.animal_type === 'gato' ? 'Gato' : animal.animal_type} · {formatAge(animal.age)}
-                      </span>
+                      <div className="featured-card-info">
+                        <h3 className="featured-card-name">{animal.name}</h3>
+                        <span className="featured-card-sep">·</span>
+                        <span className="featured-card-age">{formatAge(animal.age)}</span>
+                        {animal.gender && (
+                          <span className="featured-card-gender">
+                            {animal.gender.toLowerCase() === 'macho' ? (
+                              <i className="bi bi-gender-male"></i>
+                            ) : animal.gender.toLowerCase() === 'hembra' ? (
+                              <i className="bi bi-gender-female"></i>
+                            ) : null}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </Link>
                 ))}
@@ -113,20 +127,26 @@ export default function Home() {
           <div className="section-content">
             <h2 className="section-title">¿Cómo puedes ayudar?</h2>
             <div className="help-grid">
-              <Link to="/colaboración/voluntariado" className="help-card">
+              <Link to="/colabora/voluntariado" className="help-card">
                 <i className="bi bi-people help-card-icon"></i>
-                <h3 className="help-card-title">Voluntariado</h3>
-                <span className="help-card-text">Colaboración directa en el cuidado diario: paseos, socialización y acompañamiento.</span>
+                <h3 className="help-card-title">Hazte voluntario</h3>
+                <span className="help-card-text">
+                  Colabora directamente en el cuidado diario de nuestros animales: paséales, ayuda con su socialización y hazles compañía.
+                </span>
               </Link>
-              <Link to="/colaboración/casa-de-acogida" className="help-card">
+              <Link to="/colabora/casa-de-acogida" className="help-card">
                 <i className="bi bi-house-heart help-card-icon"></i>
-                <h3 className="help-card-title">Casa de acogida</h3>
-                <span className="help-card-text">Tu hogar como transición segura mientras encontramos una familia definitiva.</span>
+                <h3 className="help-card-title">Sé casa de acogida</h3>
+                <span className="help-card-text">
+                  Dale refugio a uno de nuestros animales mientras encontramos una familia definitiva.
+                </span>
               </Link>
-              <Link to="/colaboración/donaciones" className="help-card">
+              <Link to="/colabora/donaciones" className="help-card">
                 <i className="bi bi-box-seam help-card-icon"></i>
-                <h3 className="help-card-title">Donaciones materiales</h3>
-                <span className="help-card-text">Mantas, comida, material veterinario. No aceptamos dinero, solo lo que se usa a diario.</span>
+                <h3 className="help-card-title">Dona recursos</h3>
+                <span className="help-card-text">
+                  Mantas, comida, abrigos, camas, material veterinario (vendas, collarines…) Cualquier ayuda es bienvenida.
+                </span>
               </Link>
             </div>
           </div>
@@ -136,14 +156,15 @@ export default function Home() {
           <div className="section-content">
             <div className="contact-cta-inner">
               <div className="contact-cta-text">
-                <h2 className="contact-cta-title">¿Tienes dudas o quieres colaborar?</h2>
-                <span className="contact-cta-description">Escríbenos y te responderemos lo antes posible. Sin compromisos, con claridad.</span>
+                <h2 className="contact-cta-title">¿Tienes dudas o quieres colaborar con nosotros?</h2>
+                <span className="contact-cta-description">
+                  Escríbenos sin compromiso y te responderemos lo antes posible.
+                </span>
               </div>
-              <Link to="/contacto" className="contact-cta-btn">Contactar</Link>
+              <Link to="/contacto" className="contact-cta-btn">Contáctanos</Link>
             </div>
           </div>
         </section>
-
       </main>
       <Footer />
     </div>

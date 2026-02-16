@@ -1,6 +1,6 @@
 import { supabase } from '../lib/supabase'
 import { useEffect, useState } from 'react'
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import AnimalFilter from '../components/AnimalFilter'
@@ -13,6 +13,7 @@ const SORT_ARRIVAL = { none: '', newest: 'newest', oldest: 'oldest' }
 
 function AnimalsInAdoption() {
   const { animalType } = useParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [animals, setAnimals] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -23,6 +24,35 @@ function AnimalsInAdoption() {
   const navigate = useNavigate()
 
   useEffect(() => { setCarouselIndex(0) }, [selectedAnimal?.id])
+
+  // Bloquear scroll del body cuando el modal está abierto
+  useEffect(() => {
+    if (selectedAnimal) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [selectedAnimal])
+
+  // Abrir modal automáticamente si hay un animalId en la URL
+  const animalIdFromUrl = searchParams.get('animal')
+  useEffect(() => {
+    if (animalIdFromUrl && animals.length > 0) {
+      const animal = animals.find(a => a.id.toString() === animalIdFromUrl.toString())
+      if (animal) {
+        setSelectedAnimal(animal)
+      }
+    }
+  }, [animalIdFromUrl, animals])
+
+  // Limpiar URL cuando se cierra el modal
+  const handleCloseModal = () => {
+    setSelectedAnimal(null)
+    const newSearchParams = new URLSearchParams(searchParams)
+    newSearchParams.delete('animal')
+    setSearchParams(newSearchParams, { replace: true })
+  }
 
   const getAnimalImages = (animal) => {
     if (!animal) return []
@@ -131,9 +161,9 @@ function AnimalsInAdoption() {
         </div>
       </main>
       {selectedAnimal && (
-        <div className="animal-modal-backdrop" onClick={() => setSelectedAnimal(null)}>
+        <div className="animal-modal-backdrop" onClick={handleCloseModal}>
           <div className="animal-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="animal-modal-title">
-            <button type="button" className="animal-modal-close" onClick={() => setSelectedAnimal(null)} aria-label="Cerrar ficha">×</button>
+            <button type="button" className="animal-modal-close" onClick={handleCloseModal} aria-label="Cerrar ficha">×</button>
             <div className="animal-modal-carousel">
               <div className="animal-modal-carousel-track" style={{ transform: `translateX(-${carouselIndex * 100}%)` }}>
                 {getAnimalImages(selectedAnimal).length > 0 ? (
@@ -202,7 +232,7 @@ function AnimalsInAdoption() {
                   asunto: `Solicitud de adopción – ${name}`,
                   mensaje: `Hola, me gustaría solicitar información sobre la adopción de ${name}. He visto su ficha en la web y me gustaría conocerle en persona.`
                 })
-                setSelectedAnimal(null)
+                handleCloseModal()
                 navigate(`/contacto?${params.toString()}#contact-form`)
               }}>Solicitar adopción</button>
             </div>

@@ -10,27 +10,36 @@ function MaterialDonations() {
       <main className="collab-page">
         <section className="collab-hero">
           <div className="collab-hero-content">
-            <h1 className="collab-hero-title">Donaciones materiales</h1>
+            <h1 className="collab-hero-title">Donaciones de recursos</h1>
             <span className="collab-hero-text">
-              En Arat Adopta no aceptamos donaciones económicas.
-            </span>
-            <span className="collab-hero-text">
-              Elegimos trabajar exclusivamente con donaciones materiales porque nos permiten cubrir necesidades reales, concretas y verificables dentro del centro de acogida.
-            </span>
-            <span className="collab-hero-text">
-              Cada aportación tiene un destino claro y un impacto directo en el bienestar diario de los animales.
+              Mantas, camas, pienso, material veterinario… Toda ayuda aporta.
             </span>
           </div>
         </section>
 
         <div className="collab-container">
           <section className="collab-section">
-            <h2 className="collab-section-title">¿Por qué solo donaciones materiales?</h2>
+            <span className="collab-text">
+              En Arat Adopta no aceptamos donaciones económicas.
+            </span>
+            <span className="collab-text">
+              Elegimos trabajar exclusivamente con donaciones de recursos porque nos permiten cubrir necesidades reales, concretas y verificables dentro del centro de acogida.
+            </span>
+            <span className="collab-text">
+              Cada aportación tiene un destino claro y un impacto directo en el bienestar diario de los animales.
+            </span>
+          </section>
+
+          <section className="collab-section">
+            <h2 className="collab-section-title">
+              <i className="bi bi-box-seam collab-section-icon"></i>
+              ¿Por qué solo donaciones de recursos?
+            </h2>
             <span className="collab-text">
               Gestionamos nuestro propio centro y priorizamos una estructura sencilla y transparente.
             </span>
             <span className="collab-text">
-              Las donaciones materiales nos permiten:
+              Las donaciones de recursos nos permiten:
             </span>
             <ul className="collab-list collab-list--highlight">
               <li>Responder a necesidades específicas.</li>
@@ -43,7 +52,10 @@ function MaterialDonations() {
           </section>
 
           <section className="collab-card">
-            <h2 className="collab-card-title">¿Qué necesitamos?</h2>
+            <h2 className="collab-card-title">
+              <i className="bi bi-card-checklist collab-card-icon"></i>
+              ¿Qué necesitamos?
+            </h2>
             <span className="collab-text">
               El material que utilizamos de forma habitual incluye:
             </span>
@@ -87,7 +99,7 @@ function MaterialDonations() {
               Valoramos las donaciones útiles, no acumulativas.
             </span>
             <div className="collab-cta-wrap">
-              <Link to="/contacto?asunto=Donación de material&mensaje=Hola, me gustaría donar material para el centro de acogida. ¿Qué necesitáis actualmente? ¿Cómo puedo ayudaros? #contact-form" className="collab-cta">Contactar para donar material</Link>
+              <Link to="/contacto?asunto=Donación de material&mensaje=Hola, me gustaría donar material para el centro de acogida. ¿Qué necesitáis actualmente? ¿Cómo puedo ayudaros? #contact-form" className="collab-cta">Quiero donar recursos</Link>
             </div>
           </section>
         </div>
