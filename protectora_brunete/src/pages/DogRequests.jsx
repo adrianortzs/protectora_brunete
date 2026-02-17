@@ -1,5 +1,6 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import dogImg from '../assets/3.png'
 import './pages.css'
 
 const REQUESTS = [
@@ -38,6 +39,9 @@ function DogRequests() {
               </li>
             ))}
           </ol>
+          <div className="collab-section-img-wrap" style={{ marginTop: '2rem' }}>
+            <img src={dogImg} alt="10 peticiones de un perro" className="collab-section-img" />
+          </div>
         </div>
       </main>
       <Footer />

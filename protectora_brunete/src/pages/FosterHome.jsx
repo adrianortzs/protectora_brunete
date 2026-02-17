@@ -12,7 +12,7 @@ function FosterHome() {
           <div className="collab-hero-content">
             <h1 className="collab-hero-title">¿Te gustaría ser casa de acogida?</h1>
             <span className="collab-hero-text">
-            Las casas de acogida son esenciales para ofrecer un entorno estable a los animales. Si cuenta con tiempo y compromiso, tu hogar puede ser esa transición segura..
+            Las casas de acogida son esenciales para ofrecer un entorno estable a los animales. Si cuentas con tiempo y compromiso, tu hogar puede ser esa transición segura.
             </span>
           </div>
         </section>

@@ -10,9 +10,9 @@ function WhoAreWe() {
         <section className="collab-hero">
           <div className="collab-hero-content">
             <h1 className="collab-hero-title">¿Quiénes somos?</h1>
-            <span className="collab-hero-text">Arat Adopta nace en 20XX con el compromiso de luchar por los animales y su bienestar. Somos una protectora independiente con centros de acogida propios. </span>
-            <span className="collab-hero-text">Colaboramos con la administración pero nuestras decisiones responden a un principio claro: el bienestar de cada animal por encima de la gestión automática.</span>
-            <span className="collab-hero-text">Buscamos familias responsables que quieran darles una segunda oportunidad.</span>
+            <span className="collab-hero-text">
+              Arat Adopta nace en 20XX con el compromiso de luchar por los animales y su bienestar. Somos una protectora independiente con centros de acogida propios.  
+            </span>
           </div>
         </section>
 
@@ -25,10 +25,13 @@ function WhoAreWe() {
               Gestionamos nuestro propio centro de acogida y trabajamos con estructura, protocolos y equipo profesional.
             </span>
             <span className="collab-text">
+              Colaboramos con la administración pero nuestras decisiones responden a un principio claro: el bienestar de cada animal por encima de la gestión automática.
+            </span>
+            <span className="collab-text">
               No somos un recurso improvisado ni un espacio de tránsito. Somos un proyecto con responsabilidad técnica y capacidad de decisión.
             </span>
             <span className="collab-text">
-              Cada actuación se valora caso por caso. No gestionamos números. Protegemos individuos.
+              Cada actuación se valora caso por caso. No gestionamos números. Protegemos individuos. Buscamos familias responsables que quieran darles una segunda oportunidad.
             </span>
           </section>
 

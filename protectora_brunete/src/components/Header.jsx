@@ -177,22 +177,22 @@ function Header() {
 
       <nav ref={menuRef} id="mobile-menu" className={`nav nav-mobile ${isMenuOpen ? 'nav-open' : ''}`} aria-label="Navegación móvil" aria-hidden={!isMenuOpen}>
         {NAV_LINKS.map((link) => {
-          if (link.href === '/adopción' || link.href === '/en-adopción') {
+          if (link.href === '/en-adopción') {
             return (
               <div key={link.href} className="nav-item-dropdown">
                 <a href={link.href} className="nav-link nav-link-dropdown" onClick={toggleAdopcionDropdown}>{link.label}</a>
                 {isAdopcionDropdownOpen && (
                   <div className="dropdown-menu">
-                    <Link to="/adopción" className="dropdown-item" onClick={closeMenu}>¿Quieres adoptar?</Link>
+                    <Link to="/en-adopción" className="dropdown-item" onClick={closeMenu}>¿Quieres adoptar?</Link>
+                    <Link to="/10-peticiones-de-un-perro" className="dropdown-item" onClick={closeMenu}>Peticiones de un perro</Link>
                     <Link to="/animales-en-adopción/perros" className="dropdown-item" onClick={closeMenu}>Perros en adopción</Link>
                     <Link to="/animales-en-adopción/gatos" className="dropdown-item" onClick={closeMenu}>Gatos en adopción</Link>
-                    <Link to="/10-peticiones-de-un-perro" className="dropdown-item" onClick={closeMenu}>10 peticiones de un perro</Link>
                   </div>
                 )}
               </div>
             )
           }
-          if (link.href === '/colaboración' || link.href === '/colabora') {
+          if (link.href === '/colabora') {
             return (
               <div key={link.href} className="nav-item-dropdown">
                 <a href={link.href} className="nav-link nav-link-dropdown" onClick={toggleColaboracionDropdown}>{link.label}</a>

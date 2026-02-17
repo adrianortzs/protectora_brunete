@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import volunteerImg from '../assets/4.png'
 import './pages.css'
 
 function WantToBeVolunteer() {
@@ -56,6 +57,9 @@ function WantToBeVolunteer() {
             <span className="collab-text">
               El voluntariado no sustituye al equipo. Lo refuerza.
             </span>
+            <div className="collab-section-img-wrap">
+              <img src={volunteerImg} alt="Voluntariado en Arat Adopta" className="collab-section-img" />
+            </div>
           </section>
 
           <section className="collab-card">

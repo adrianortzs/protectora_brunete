@@ -1,5 +1,6 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import adoptImg from '../assets/1.png'
 import './pages.css'
 
 function WantToAdopt() {
@@ -47,6 +48,9 @@ function WantToAdopt() {
               <span className="collab-text">
                 Realizamos acompañamiento antes y después de la adopción. La integración no termina el día que el animal sale del centro.
               </span>
+              <div className="collab-section-img-wrap">
+                <img src={adoptImg} alt="Adopción responsable" className="collab-section-img" />
+              </div>
             </section>
 
             <section className="collab-section">

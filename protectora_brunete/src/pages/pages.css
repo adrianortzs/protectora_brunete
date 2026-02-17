@@ -83,7 +83,7 @@
 }
 
 .collab-intro-centered .collab-text {
-  font-size: 1.1rem;
+  font-size: 0.875rem;
   line-height: 1.7;
   margin-bottom: 1.5rem;
 }
@@ -163,6 +163,23 @@
 
 .collab-list li a:hover {
   color: var(--terracotta);
+}
+
+.collab-section-img-wrap {
+  margin-top: 1.25rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(14, 47, 79, 0.08);
+  border: 2px solid rgba(14, 47, 79, 0.06);
+  max-width: 280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.collab-section-img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .collab-card {
@@ -491,6 +508,17 @@
   padding-top: 0.25rem;
 }
 
+@media (min-width: 481px) {
+  .dog-request-item {
+    padding: 1.5rem 1.25rem;
+    gap: 1.125rem;
+  }
+
+  .dog-request-text {
+    font-size: 1rem;
+  }
+}
+
 @media (min-width: 769px) {
   .dog-requests-list {
     gap: 1.25rem;
@@ -770,6 +798,10 @@
     text-align: justify;
   }
 
+  .collab-intro-centered .collab-text {
+    font-size: 0.9375rem;
+  }
+
   .collab-hero-highlight {
     font-size: 0.9375rem;
     padding: 0.75rem 1rem;
@@ -872,6 +904,10 @@
     margin-bottom: 1.25rem;
   }
 
+  .collab-intro-centered .collab-text {
+    font-size: 1.1rem;
+  }
+
   .collab-hero-highlight {
     font-size: 1.05rem;
     padding: 1rem 1.5rem;
@@ -911,6 +947,12 @@
     width: 8px;
     height: 8px;
     top: 0.75rem;
+  }
+
+  .collab-section-img-wrap {
+    margin-top: 2rem;
+    border-radius: 16px;
+    max-width: 340px;
   }
 
   .collab-card {
@@ -1074,6 +1116,32 @@
     width: auto;
     margin-top: 0.5rem;
     min-height: auto;
+  }
+}
+
+@media (min-width: 1025px) {
+  .collab-hero {
+    padding: 4.5rem 2.5rem 3.5rem;
+  }
+
+  .collab-hero-title {
+    font-size: 3.25rem;
+  }
+
+  .collab-hero-text {
+    font-size: 1.15rem;
+  }
+
+  .collab-container {
+    padding: 4rem 2rem 5rem;
+  }
+
+  .collab-section-title {
+    font-size: 2.25rem;
+  }
+
+  .collab-card-title {
+    font-size: 2.25rem;
   }
 }
 
@@ -1290,14 +1358,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.featured-card-gender {
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-  font-size: 0.9375rem;
-  color: var(--terracotta);
 }
 
 .featured-card-sep {
@@ -1656,6 +1716,18 @@
     font-size: 1.25rem;
   }
 
+  .featured-card-age {
+    font-size: 1rem;
+  }
+
+  .featured-card-sep {
+    font-size: 0.875rem;
+  }
+
+  .featured-card-gender {
+    font-size: 1.125rem;
+  }
+
   .featured-card-meta {
     font-size: 0.875rem;
   }
@@ -1687,7 +1759,7 @@
   }
 
   .help-card-text {
-    font-size: 0.9375rem;
+    font-size: 1rem;
   }
 
   .section-contact-cta {

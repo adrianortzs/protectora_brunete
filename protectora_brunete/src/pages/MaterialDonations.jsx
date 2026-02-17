@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import donationsImg from '../assets/2.png'
 import './pages.css'
 
 function MaterialDonations() {
@@ -85,6 +86,9 @@ function MaterialDonations() {
             <span className="collab-text">
               Esto nos permite gestionar el espacio y los recursos con criterio.
             </span>
+            <div className="collab-section-img-wrap">
+              <img src={donationsImg} alt="Donaciones de recursos" className="collab-section-img" />
+            </div>
           </section>
 
           <section className="collab-section">
