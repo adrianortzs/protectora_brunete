@@ -4,9 +4,11 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import AnimalCard from '../components/AnimalCard'
 import { Pagination, paginate } from '../components/Pagination'
+import usePageTitle from '../hooks/usePageTitle'
 import './pages.css'
 
 function HappyEndings() {
+  usePageTitle('Finales felices')
   const [animals, setAnimals] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -15,6 +17,17 @@ function HappyEndings() {
   const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => { setCarouselIndex(0) }, [selectedAnimal?.id])
+
+  useEffect(() => {
+    if (selectedAnimal) {
+      document.body.style.overflow = 'hidden'
+      const onKey = (e) => { if (e.key === 'Escape') setSelectedAnimal(null) }
+      document.addEventListener('keydown', onKey)
+      return () => { document.body.style.overflow = ''; document.removeEventListener('keydown', onKey) }
+    } else {
+      document.body.style.overflow = ''
+    }
+  }, [selectedAnimal])
 
   const getAnimalImages = (animal) => {
     if (!animal) return []

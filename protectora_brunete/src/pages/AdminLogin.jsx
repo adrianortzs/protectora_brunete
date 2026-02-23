@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import usePageTitle from '../hooks/usePageTitle'
 import './pages.css'
 
 function AdminLogin() {
+  usePageTitle('Iniciar sesión')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')

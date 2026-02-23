@@ -4,9 +4,11 @@ import { supabase } from '../lib/supabase'
 import Header from '../components/Header'
 import Hero from '../components/Hero'
 import Footer from '../components/Footer'
+import usePageTitle from '../hooks/usePageTitle'
 import './pages.css'
 
 export default function Home() {
+  usePageTitle(null)
   const [featuredAnimals, setFeaturedAnimals] = useState([])
   const [loadingAnimals, setLoadingAnimals] = useState(true)
 
@@ -16,8 +18,8 @@ export default function Home() {
         const { data } = await supabase.from('animals').select('id, name, age, img_url, animal_type, gender').eq('animal_state', 'en adopcion')
         const shuffled = (data || []).sort(() => Math.random() - 0.5).slice(0, 4)
         setFeaturedAnimals(shuffled)
-      } catch (err) {
-        console.error(err)
+      } catch {
+        setFeaturedAnimals([])
       } finally {
         setLoadingAnimals(false)
       }

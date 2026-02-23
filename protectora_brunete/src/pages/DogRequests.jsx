@@ -1,5 +1,6 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import usePageTitle from '../hooks/usePageTitle'
 import dogImg from '../assets/3.png'
 import './pages.css'
 
@@ -17,20 +18,21 @@ const REQUESTS = [
 ]
 
 function DogRequests() {
+  usePageTitle('10 peticiones de un perro')
   return (
     <div>
       <Header />
-      <main className="collab-page">
-        <section className="collab-hero">
-          <div className="collab-hero-content">
-            <h1 className="collab-hero-title">10 peticiones de un perro</h1>
-            <span className="collab-hero-text">
+      <main className="page">
+        <section className="page-hero">
+          <div className="page-hero-content">
+            <h1 className="page-hero-title">10 peticiones de un perro</h1>
+            <span className="page-hero-text">
               Antes de adoptar, escucha lo que un perro te pediría si pudiera hablar.
             </span>
           </div>
         </section>
 
-        <div className="collab-container">
+        <div className="page-container">
           <ol className="dog-requests-list">
             {REQUESTS.map((text, i) => (
               <li key={i} className="dog-request-item">
@@ -39,9 +41,6 @@ function DogRequests() {
               </li>
             ))}
           </ol>
-          <div className="collab-section-img-wrap" style={{ marginTop: '2rem' }}>
-            <img src={dogImg} alt="10 peticiones de un perro" className="collab-section-img" />
-          </div>
         </div>
       </main>
       <Footer />

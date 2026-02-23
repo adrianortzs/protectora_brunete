@@ -1,26 +1,28 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import usePageTitle from '../hooks/usePageTitle'
 import './pages.css'
 
 function WhereAreWe() {
+  usePageTitle('Dónde estamos')
   return (
     <div>
       <Header />
-      <main className="collab-page">
-        <section className="collab-hero">
-          <div className="collab-hero-content">
-            <h1 className="collab-hero-title">¿Dónde nos encontramos?</h1>
-            <span className="collab-hero-text">
+      <main className="page">
+        <section className="page-hero">
+          <div className="page-hero-content">
+            <h1 className="page-hero-title">¿Dónde nos encontramos?</h1>
+            <span className="page-hero-text">
               Tenemos dos centros de acogida ubicados en la Comunidad de Madrid. Puedes visitarnos o contactarnos en cualquiera de nuestras ubicaciones.
             </span>
           </div>
         </section>
 
-        <div className="collab-container">
+        <div className="page-container">
           <section className="location-row">
             <div className="location-info">
-              <h2 className="collab-section-title">
-                <i className="bi bi-geo-alt-fill collab-section-icon"></i>
+              <h2 className="page-section-title">
+                <i className="bi bi-geo-alt-fill page-section-icon"></i>
                 Brunete
               </h2>
               <div className="contact-detail">
@@ -37,7 +39,7 @@ function WhereAreWe() {
                   href="https://www.google.com/maps/search/?api=1&query=Carretera+M513+km+14.900,+28690+Brunete,+Madrid"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="collab-cta"
+                  className="page-cta"
                 >
                   <i className="bi bi-map"></i> Abrir en Google Maps
                 </a>
@@ -59,8 +61,8 @@ function WhereAreWe() {
 
           <section className="location-row">
             <div className="location-info">
-              <h2 className="collab-section-title">
-                <i className="bi bi-geo-alt-fill collab-section-icon"></i>
+              <h2 className="page-section-title">
+                <i className="bi bi-geo-alt-fill page-section-icon"></i>
                 Torrelodones
               </h2>
               <div className="contact-detail">
@@ -77,7 +79,7 @@ function WhereAreWe() {
                   href="https://www.google.com/maps/search/?api=1&query=Paseo+Joaquín+Ruiz+Gimenez+30,+28250+Torrelodones,+Madrid"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="collab-cta"
+                  className="page-cta"
                 >
                   <i className="bi bi-map"></i> Abrir en Google Maps
                 </a>

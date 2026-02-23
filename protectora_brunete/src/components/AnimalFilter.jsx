@@ -3,18 +3,18 @@ import './components.css'
 
 const SORT_ARRIVAL = { none: '', newest: 'newest', oldest: 'oldest' }
 
-const AGE_OPTIONS = [ { value: 'cachorro', label: 'Cachorro' }, { value: 'adulto', label: 'Adulto' }, { value: 'senior', label: 'Senior' } ]
+const AGE_OPTIONS = [ { value: 'cachorro', label: 'Cachorro' }, { value: 'joven', label: 'Joven' }, { value: 'adulto', label: 'Adulto' }, { value: 'senior', label: 'Senior' } ]
 
-const SIZE_OPTIONS = [ { value: 'pequeño', label: 'Pequeño' }, { value: 'mediano', label: 'Mediano' }, { value: 'grande', label: 'Grande' } ]
+const SIZE_OPTIONS = [ { value: 'toy', label: 'Toy' }, { value: 'pequeño', label: 'Pequeño' }, { value: 'mediano', label: 'Mediano' }, { value: 'grande', label: 'Grande' } ]
 
-function AnimalFilter({ filters, onFilterChange, filterValue, onClear }) {
+function AnimalFilter({ filters, onFilterChange, filterValue, onClear, showNameSearch, nameSearch, onNameSearchChange }) {
   const [openDropdown, setOpenDropdown] = useState(null)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const toggleDropdown = (name) => { setOpenDropdown(prev => prev === name ? null : name) }
   const closeDropdowns = () => { setOpenDropdown(null) }
   const selectOption = (key, value) => { onFilterChange(key, value); closeDropdowns() }
 
-  const hasActiveFilters = filters.animal_type || filters.gender || filters.age || filters.size || filters.arrival_date
+  const hasActiveFilters = filters.animal_type || filters.gender || filters.age || filters.size || filters.arrival_date || (showNameSearch && nameSearch)
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -27,6 +27,7 @@ function AnimalFilter({ filters, onFilterChange, filterValue, onClear }) {
   const handleClear = () => {
     onClear()
     closeDropdowns()
+    if (showNameSearch && onNameSearchChange) onNameSearchChange('')
   }
 
   return (
@@ -37,6 +38,26 @@ function AnimalFilter({ filters, onFilterChange, filterValue, onClear }) {
         {hasActiveFilters && !isFilterOpen && <span className="af-toggle-badge"></span>}
       </button>
       <div className={`af-container ${isFilterOpen ? 'af-container--open' : ''}`}>
+      {showNameSearch && (
+        <div className="filter-dropdown af-name-search">
+          <span className="filter-dropdown-label">Buscar por nombre</span>
+          <div className="af-name-input-wrap">
+            <i className="bi bi-search af-name-icon"></i>
+            <input
+              type="text"
+              className="af-name-input"
+              placeholder="Nombre del animal…"
+              value={nameSearch || ''}
+              onChange={(e) => onNameSearchChange(e.target.value)}
+            />
+            {nameSearch && (
+              <button type="button" className="af-name-clear" onClick={() => onNameSearchChange('')} aria-label="Limpiar búsqueda">
+                <i className="bi bi-x-lg"></i>
+              </button>
+            )}
+          </div>
+        </div>
+      )}
       <div className="filter-dropdown">
         <span className="filter-dropdown-label">Tipo de animal</span>
         <button type="button" className={`filter-dropdown-btn ${openDropdown === 'animal_type' ? 'is-open' : ''}`} onClick={() => toggleDropdown('animal_type')}>

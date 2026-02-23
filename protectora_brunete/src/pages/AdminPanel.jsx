@@ -1,13 +1,17 @@
 import { supabase } from '../lib/supabase'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AnimalFilter from '../components/AnimalFilter'
 import { Pagination, paginate } from '../components/Pagination'
+import usePageTitle from '../hooks/usePageTitle'
 import './pages.css'
 
+const BUCKET = 'animals'
 const SORT_ARRIVAL = { none: '', newest: 'newest', oldest: 'oldest' }
+const TOAST_DURATION = 4000
 
 function AdminPanel() {
+  usePageTitle('Panel de administración')
   const [animals, setAnimals] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -18,8 +22,42 @@ function AdminPanel() {
   const [adopting, setAdopting] = useState(null)
   const [isNewAnimal, setIsNewAnimal] = useState(false)
   const [filters, setFilters] = useState({ animal_type: '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none })
+  const [nameSearch, setNameSearch] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
+  const [existingImages, setExistingImages] = useState([])
+  const [pendingFiles, setPendingFiles] = useState([])
+  const [uploading, setUploading] = useState(false)
+  const [toasts, setToasts] = useState([])
+  const [confirmDialog, setConfirmDialog] = useState(null)
+  const fileInputRef = useRef(null)
+  const toastIdRef = useRef(0)
+  const confirmResolveRef = useRef(null)
   const navigate = useNavigate()
+
+  const pushToast = useCallback((message, type = 'success') => {
+    const id = ++toastIdRef.current
+    setToasts(prev => [...prev, { id, message, type, exiting: false }])
+    setTimeout(() => setToasts(prev => prev.map(t => t.id === id ? { ...t, exiting: true } : t)), TOAST_DURATION - 400)
+    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), TOAST_DURATION)
+  }, [])
+
+  const dismissToast = useCallback((id) => {
+    setToasts(prev => prev.map(t => t.id === id ? { ...t, exiting: true } : t))
+    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 400)
+  }, [])
+
+  const requestConfirm = useCallback((message, description) => {
+    return new Promise((resolve) => {
+      confirmResolveRef.current = resolve
+      setConfirmDialog({ message, description })
+    })
+  }, [])
+
+  const resolveConfirm = (accepted) => {
+    if (confirmResolveRef.current) confirmResolveRef.current(accepted)
+    confirmResolveRef.current = null
+    setConfirmDialog(null)
+  }
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -71,17 +109,19 @@ function AdminPanel() {
     const m = parseInt(ageMonths)
     if (isNaN(m)) return ''
     if (m < 12) return 'cachorro'
-    if (m < 24) return 'joven'
-    if (m < 84) return 'adulto'
+    if (m < 24) return 'adulto'
     return 'senior'
   }
+
+  const handleNameSearch = (value) => { setNameSearch(value); setCurrentPage(1) }
 
   const filteredAnimals = animals.filter((a) => {
     const typeOk = !filters.animal_type || normalized(a.animal_type) === normalized(filters.animal_type)
     const genderOk = !filters.gender || normalized(a.gender) === normalized(filters.gender)
     const ageOk = !filters.age || getAgeCategory(a.age) === filters.age
     const sizeOk = !filters.size || normalized(a.size) === normalized(filters.size)
-    return typeOk && genderOk && ageOk && sizeOk
+    const nameOk = !nameSearch || normalized(a.name).includes(normalized(nameSearch))
+    return typeOk && genderOk && ageOk && sizeOk && nameOk
   })
 
   const sortedAnimals = [...filteredAnimals].sort((a, b) => {
@@ -92,17 +132,22 @@ function AdminPanel() {
 
   const { paginated: paginatedAnimals, totalPages, safePage } = paginate(sortedAnimals, currentPage)
 
-  const emptyForm = { name: '', animal_type: '', gender: '', age: '', size: '', description: '', img_url: '', arrival_date: '' }
+  const emptyForm = { name: '', animal_type: '', gender: '', age: '', size: '', description: '', arrival_date: '' }
 
   const openNew = () => {
     setIsNewAnimal(true)
     setEditAnimal({})
     setEditForm({ ...emptyForm })
+    setExistingImages([])
+    setPendingFiles([])
   }
 
   const openEdit = (animal) => {
     setIsNewAnimal(false)
     setEditAnimal(animal)
+    const urls = Array.isArray(animal.img_url) ? animal.img_url.filter(Boolean) : animal.img_url ? [animal.img_url] : []
+    setExistingImages(urls)
+    setPendingFiles([])
     setEditForm({
       name: animal.name || '',
       animal_type: animal.animal_type || '',
@@ -110,16 +155,44 @@ function AdminPanel() {
       age: animal.age || '',
       size: animal.size || '',
       description: animal.description || '',
-      img_url: Array.isArray(animal.img_url) ? animal.img_url.join('\n') : animal.img_url || '',
       arrival_date: animal.arrival_date || ''
     })
   }
 
   const closeModal = () => {
-    if (!saving) {
+    if (!saving && !uploading) {
       setEditAnimal(null)
       setIsNewAnimal(false)
+      setPendingFiles([])
+      setExistingImages([])
     }
+  }
+
+  const handleFilesSelected = (files) => {
+    const valid = Array.from(files).filter(f => f.type.startsWith('image/'))
+    if (valid.length === 0) return
+    setPendingFiles(prev => [...prev, ...valid])
+  }
+
+  const removeExistingImage = (index) => {
+    setExistingImages(prev => prev.filter((_, i) => i !== index))
+  }
+
+  const removePendingFile = (index) => {
+    setPendingFiles(prev => prev.filter((_, i) => i !== index))
+  }
+
+  const uploadFiles = async (files) => {
+    const urls = []
+    for (const file of files) {
+      const ext = file.name.split('.').pop()
+      const path = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`
+      const { error: uploadError } = await supabase.storage.from(BUCKET).upload(path, file, { cacheControl: '31536000', upsert: false })
+      if (uploadError) throw uploadError
+      const { data: { publicUrl } } = supabase.storage.from(BUCKET).getPublicUrl(path)
+      urls.push(publicUrl)
+    }
+    return urls
   }
 
   const handleEditChange = (key, value) => {
@@ -128,12 +201,17 @@ function AdminPanel() {
 
   const handleSave = async () => {
     if (!editAnimal) return
+    const wasNew = isNewAnimal
     setSaving(true)
+    setUploading(pendingFiles.length > 0)
     try {
-      const imgUrls = editForm.img_url
-        .split('\n')
-        .map(u => u.trim())
-        .filter(Boolean)
+      let newUrls = []
+      if (pendingFiles.length > 0) {
+        newUrls = await uploadFiles(pendingFiles)
+      }
+      setUploading(false)
+
+      const imgUrls = [...existingImages, ...newUrls]
 
       const payload = {
         name: editForm.name.trim(),
@@ -165,11 +243,16 @@ function AdminPanel() {
         setAnimals(prev => prev.map(a => a.id === editAnimal.id ? { ...a, ...payload } : a))
       }
 
+      const savedName = editForm.name.trim() || 'Animal'
       setEditAnimal(null)
       setIsNewAnimal(false)
+      setPendingFiles([])
+      setExistingImages([])
+      pushToast(wasNew ? `"${savedName}" creado correctamente` : `"${savedName}" actualizado correctamente`)
     } catch (err) {
       console.error(err)
-      alert(isNewAnimal ? 'Error al crear el animal.' : 'Error al guardar los cambios.')
+      setUploading(false)
+      pushToast(wasNew ? 'Error al crear el animal.' : 'Error al guardar los cambios.', 'error')
     } finally {
       setSaving(false)
     }
@@ -187,16 +270,25 @@ function AdminPanel() {
 
       if (supabaseError) throw supabaseError
       setAnimals(prev => prev.map(a => a.id === animal.id ? { ...a, animal_state: newState } : a))
+      pushToast(
+        newState === 'adoptado'
+          ? `"${animal.name}" marcado como adoptado`
+          : `"${animal.name}" marcado como en adopción`
+      )
     } catch (err) {
       console.error(err)
-      alert('Error al actualizar el estado del animal.')
+      pushToast('Error al actualizar el estado del animal.', 'error')
     } finally {
       setAdopting(null)
     }
   }
 
   const handleDelete = async (animal) => {
-    if (!window.confirm(`¿Estás seguro de que quieres eliminar a "${animal.name}"? Esta acción no se puede deshacer.`)) return
+    const confirmed = await requestConfirm(
+      `¿Eliminar a "${animal.name}"?`,
+      'Esta acción no se puede deshacer. Se eliminará toda la información del animal.'
+    )
+    if (!confirmed) return
     setDeleting(animal.id)
     try {
       const { error: supabaseError } = await supabase
@@ -206,9 +298,10 @@ function AdminPanel() {
 
       if (supabaseError) throw supabaseError
       setAnimals(prev => prev.filter(a => a.id !== animal.id))
+      pushToast(`"${animal.name}" eliminado correctamente`)
     } catch (err) {
       console.error(err)
-      alert('Error al eliminar el animal.')
+      pushToast('Error al eliminar el animal.', 'error')
     } finally {
       setDeleting(null)
     }
@@ -262,7 +355,10 @@ function AdminPanel() {
             filters={filters}
             onFilterChange={updateFilter}
             filterValue={null}
-            onClear={() => { setFilters({ animal_type: '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none }); setCurrentPage(1) }}
+            onClear={() => { setFilters({ animal_type: '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none }); setNameSearch(''); setCurrentPage(1) }}
+            showNameSearch
+            nameSearch={nameSearch}
+            onNameSearchChange={handleNameSearch}
           />
         )}
 
@@ -331,6 +427,36 @@ function AdminPanel() {
         )}
       </main>
 
+      {toasts.length > 0 && (
+        <div className="admin-toast-container" aria-live="polite">
+          {toasts.map((t) => (
+            <div key={t.id} className={`admin-toast admin-toast--${t.type}${t.exiting ? ' admin-toast--exit' : ''}`}>
+              <i className={`bi ${t.type === 'error' ? 'bi-exclamation-circle' : 'bi-check-circle'}`}></i>
+              <span className="admin-toast-msg">{t.message}</span>
+              <button type="button" className="admin-toast-close" onClick={() => dismissToast(t.id)} aria-label="Cerrar">
+                <i className="bi bi-x-lg"></i>
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {confirmDialog && (
+        <div className="admin-confirm-backdrop" onClick={() => resolveConfirm(false)}>
+          <div className="admin-confirm" onClick={(e) => e.stopPropagation()} role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby={confirmDialog.description ? 'confirm-desc' : undefined}>
+            <div className="admin-confirm-icon">
+              <i className="bi bi-exclamation-triangle"></i>
+            </div>
+            <h3 id="confirm-title" className="admin-confirm-title">{confirmDialog.message}</h3>
+            {confirmDialog.description && <p id="confirm-desc" className="admin-confirm-desc">{confirmDialog.description}</p>}
+            <div className="admin-confirm-actions">
+              <button type="button" className="admin-confirm-btn admin-confirm-btn--cancel" onClick={() => resolveConfirm(false)}>Cancelar</button>
+              <button type="button" className="admin-confirm-btn admin-confirm-btn--danger" onClick={() => resolveConfirm(true)}>Eliminar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {editAnimal && (
         <div className="admin-modal-backdrop" onClick={closeModal}>
           <div className="admin-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
@@ -386,8 +512,49 @@ function AdminPanel() {
                 <textarea rows="4" value={editForm.description} onChange={(e) => handleEditChange('description', e.target.value)} />
               </div>
               <div className="admin-edit-field">
-                <label>URLs de imágenes (una por línea)</label>
-                <textarea rows="3" value={editForm.img_url} onChange={(e) => handleEditChange('img_url', e.target.value)} placeholder="https://ejemplo.com/imagen1.jpg&#10;https://ejemplo.com/imagen2.jpg" />
+                <label>Imágenes</label>
+                {(existingImages.length > 0 || pendingFiles.length > 0) && (
+                  <div className="admin-img-grid">
+                    {existingImages.map((url, i) => (
+                      <div key={`existing-${i}`} className="admin-img-thumb">
+                        <img src={url} alt={`Imagen ${i + 1}`} />
+                        <button type="button" className="admin-img-remove" onClick={() => removeExistingImage(i)} aria-label="Eliminar imagen">
+                          <i className="bi bi-x-lg"></i>
+                        </button>
+                      </div>
+                    ))}
+                    {pendingFiles.map((file, i) => (
+                      <div key={`pending-${i}`} className="admin-img-thumb admin-img-thumb--pending">
+                        <img src={URL.createObjectURL(file)} alt={file.name} />
+                        <span className="admin-img-badge">Nueva</span>
+                        <button type="button" className="admin-img-remove" onClick={() => removePendingFile(i)} aria-label="Eliminar imagen">
+                          <i className="bi bi-x-lg"></i>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div
+                  className="admin-img-dropzone"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => fileInputRef.current?.click()}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInputRef.current?.click() } }}
+                  onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add('admin-img-dropzone--active') }}
+                  onDragLeave={(e) => { e.currentTarget.classList.remove('admin-img-dropzone--active') }}
+                  onDrop={(e) => { e.preventDefault(); e.currentTarget.classList.remove('admin-img-dropzone--active'); handleFilesSelected(e.dataTransfer.files) }}
+                >
+                  <i className="bi bi-cloud-arrow-up"></i>
+                  <span>Arrastra imágenes aquí o haz clic para seleccionar</span>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="admin-img-input-hidden"
+                    onChange={(e) => { handleFilesSelected(e.target.files); e.target.value = '' }}
+                  />
+                </div>
               </div>
             </div>
             <div className="admin-modal-footer">
@@ -395,7 +562,12 @@ function AdminPanel() {
                 Cancelar
               </button>
               <button type="button" className="admin-modal-btn admin-modal-btn--save" onClick={handleSave} disabled={saving}>
-                {saving ? <span className="admin-login-spinner admin-login-spinner--small"></span> : isNewAnimal ? 'Crear animal' : 'Guardar cambios'}
+                {saving
+                  ? uploading
+                    ? <><span className="admin-login-spinner admin-login-spinner--small"></span> Subiendo imágenes…</>
+                    : <><span className="admin-login-spinner admin-login-spinner--small"></span> Guardando…</>
+                  : isNewAnimal ? 'Crear animal' : 'Guardar cambios'
+                }
               </button>
             </div>
           </div>

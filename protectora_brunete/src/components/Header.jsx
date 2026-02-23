@@ -39,8 +39,7 @@ function Header() {
   }, [])
   const handleColaboracionMouseEnter = useCallback(() => { setIsColaboracionDropdownOpen(true) }, [])
   const handleColaboracionMouseLeave = useCallback(() => { if (!isColaboracionPinned) setIsColaboracionDropdownOpen(false) }, [isColaboracionPinned])
-  const handleColaboracionClick = useCallback((e) => {
-    e.preventDefault()
+  const handleColaboracionClick = useCallback(() => {
     setIsColaboracionPinned(prev => !prev)
     setIsColaboracionDropdownOpen(prev => !prev)
     setIsAdopcionPinned(false); setIsAdopcionDropdownOpen(false)
@@ -48,8 +47,7 @@ function Header() {
   }, [])
   const handleFelinaMouseEnter = useCallback(() => { setIsFelinaDropdownOpen(true) }, [])
   const handleFelinaMouseLeave = useCallback(() => { if (!isFelinaPinned) setIsFelinaDropdownOpen(false) }, [isFelinaPinned])
-  const handleFelinaClick = useCallback((e) => {
-    e.preventDefault()
+  const handleFelinaClick = useCallback(() => {
     setIsFelinaPinned(prev => !prev)
     setIsFelinaDropdownOpen(prev => !prev)
     setIsAdopcionPinned(false); setIsAdopcionDropdownOpen(false)
@@ -59,12 +57,10 @@ function Header() {
     e.preventDefault()
     setIsAdopcionDropdownOpen(prev => !prev)
   }, [])
-  const toggleColaboracionDropdown = useCallback((e) => {
-    e.preventDefault()
+  const toggleColaboracionDropdown = useCallback(() => {
     setIsColaboracionDropdownOpen(prev => !prev)
   }, [])
-  const toggleFelinaDropdown = useCallback((e) => {
-    e.preventDefault()
+  const toggleFelinaDropdown = useCallback(() => {
     setIsFelinaDropdownOpen(prev => !prev)
   }, [])
 
@@ -133,7 +129,7 @@ function Header() {
             if (link.href === '/colabora') {
               return (
                 <div key={link.href} className="nav-item-dropdown" onMouseEnter={handleColaboracionMouseEnter} onMouseLeave={handleColaboracionMouseLeave} ref={colaboracionDropdownRef}>
-                  <a href={link.href} className="nav-link nav-link-dropdown" onClick={handleColaboracionClick}>{link.label}</a>
+                  <button type="button" className="nav-link nav-link-dropdown" onClick={handleColaboracionClick}>{link.label}</button>
                   {(isColaboracionDropdownOpen || isColaboracionPinned) && (
                     <div className="dropdown-menu show">
                       <Link to="/colabora/casa-de-acogida" className="dropdown-item">Casa de acogida</Link>
@@ -147,7 +143,7 @@ function Header() {
             if (link.href === '/gestión-felina') {
               return (
                 <div key={link.href} className="nav-item-dropdown" onMouseEnter={handleFelinaMouseEnter} onMouseLeave={handleFelinaMouseLeave} ref={felinaDropdownRef}>
-                  <a href={link.href} className="nav-link nav-link-dropdown" onClick={handleFelinaClick}>{link.label}</a>
+                  <button type="button" className="nav-link nav-link-dropdown" onClick={handleFelinaClick}>{link.label}</button>
                   {(isFelinaDropdownOpen || isFelinaPinned) && (
                     <div className="dropdown-menu show">
                       <Link to="/gestión-felina/ces" className="dropdown-item">CES</Link>
@@ -195,7 +191,7 @@ function Header() {
           if (link.href === '/colabora') {
             return (
               <div key={link.href} className="nav-item-dropdown">
-                <a href={link.href} className="nav-link nav-link-dropdown" onClick={toggleColaboracionDropdown}>{link.label}</a>
+                <button type="button" className="nav-link nav-link-dropdown" onClick={toggleColaboracionDropdown}>{link.label}</button>
                 {isColaboracionDropdownOpen && (
                   <div className="dropdown-menu">
                     <Link to="/colabora/casa-de-acogida" className="dropdown-item" onClick={closeMenu}>Casa de acogida</Link>
@@ -209,7 +205,7 @@ function Header() {
           if (link.href === '/gestión-felina') {
             return (
               <div key={link.href} className="nav-item-dropdown">
-                <a href={link.href} className="nav-link nav-link-dropdown" onClick={toggleFelinaDropdown}>{link.label}</a>
+                <button type="button" className="nav-link nav-link-dropdown" onClick={toggleFelinaDropdown}>{link.label}</button>
                 {isFelinaDropdownOpen && (
                   <div className="dropdown-menu">
                     <Link to="/gestión-felina/ces" className="dropdown-item" onClick={closeMenu}>CES</Link>

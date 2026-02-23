@@ -1,11 +1,12 @@
 import { supabase } from '../lib/supabase'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import AnimalFilter from '../components/AnimalFilter'
 import AnimalCard from '../components/AnimalCard'
 import { Pagination, paginate } from '../components/Pagination'
+import usePageTitle from '../hooks/usePageTitle'
 import './pages.css'
 
 const ANIMAL_TYPE_FILTER = { perros: 'perro', gatos: 'gato' }
@@ -25,17 +26,24 @@ function AnimalsInAdoption() {
 
   useEffect(() => { setCarouselIndex(0) }, [selectedAnimal?.id])
 
-  // Bloquear scroll del body cuando el modal está abierto
+  const handleCloseModal = useCallback(() => {
+    setSelectedAnimal(null)
+    const newSearchParams = new URLSearchParams(searchParams)
+    newSearchParams.delete('animal')
+    setSearchParams(newSearchParams, { replace: true })
+  }, [searchParams, setSearchParams])
+
   useEffect(() => {
     if (selectedAnimal) {
       document.body.style.overflow = 'hidden'
+      const onKey = (e) => { if (e.key === 'Escape') handleCloseModal() }
+      document.addEventListener('keydown', onKey)
+      return () => { document.body.style.overflow = ''; document.removeEventListener('keydown', onKey) }
     } else {
       document.body.style.overflow = ''
     }
-    return () => { document.body.style.overflow = '' }
-  }, [selectedAnimal])
+  }, [selectedAnimal, handleCloseModal])
 
-  // Abrir modal automáticamente si hay un animalId en la URL
   const animalIdFromUrl = searchParams.get('animal')
   useEffect(() => {
     if (animalIdFromUrl && animals.length > 0) {
@@ -46,14 +54,6 @@ function AnimalsInAdoption() {
     }
   }, [animalIdFromUrl, animals])
 
-  // Limpiar URL cuando se cierra el modal
-  const handleCloseModal = () => {
-    setSelectedAnimal(null)
-    const newSearchParams = new URLSearchParams(searchParams)
-    newSearchParams.delete('animal')
-    setSearchParams(newSearchParams, { replace: true })
-  }
-
   const getAnimalImages = (animal) => {
     if (!animal) return []
     const list = Array.isArray(animal.img_url) ? animal.img_url : animal.img_url ? [animal.img_url] : []
@@ -61,6 +61,7 @@ function AnimalsInAdoption() {
   }
 
   const filterValue = animalType ? ANIMAL_TYPE_FILTER[animalType] : null
+  usePageTitle(filterValue === 'perro' ? 'Perros en adopción' : filterValue === 'gato' ? 'Gatos en adopción' : 'Animales en adopción')
   const title = filterValue === 'perro' ? 'Todos los perros en adopción' : filterValue === 'gato' ? 'Todos los gatos en adopción' : 'Todos los animales en adopción'
   const subtitle = filterValue === 'perro' ? 'Estos son todos los perros que actualmente se encuentran en uno de nuestros centros de acogida y están buscando un hogar. Cada ficha se actualiza desde nuestro sistema en tiempo real para garantizar la información más actualizada.' : filterValue === 'gato' ? 'Estos son todos los gatos que actualmente se encuentran en uno de nuestros centros de acogida y están buscando un hogar. Cada ficha se actualiza desde nuestro sistema en tiempo real para garantizar la información más actualizada.' : 'Estos son todos los animales que actualmente se encuentran en uno de nuestros centros de acogida y están buscando un hogar. Cada ficha se actualiza desde nuestro sistema en tiempo real para garantizar la información más actualizada.'
 
@@ -82,7 +83,10 @@ function AnimalsInAdoption() {
     fetchAnimals()
   }, [filterValue])
 
-  useEffect(() => { if (filterValue) setFilters(prev => ({ ...prev, animal_type: filterValue })) }, [filterValue])
+  useEffect(() => {
+    setFilters({ animal_type: filterValue || '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none })
+    setCurrentPage(1)
+  }, [filterValue])
 
   const updateFilter = (key, value) => { setFilters(prev => ({ ...prev, [key]: value })); setCurrentPage(1) }
   const normalized = (v) => (v && String(v).trim().toLowerCase()) || ''
@@ -91,8 +95,7 @@ function AnimalsInAdoption() {
     const m = parseInt(ageMonths)
     if (isNaN(m)) return ''
     if (m < 12) return 'cachorro'
-    if (m < 24) return 'joven'
-    if (m < 84) return 'adulto'
+    if (m < 24) return 'adulto'
     return 'senior'
   }
 
