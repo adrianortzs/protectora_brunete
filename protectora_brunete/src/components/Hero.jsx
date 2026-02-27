@@ -7,7 +7,7 @@ function Hero() {
         <div className="hero-text">
           <h1 className="hero-title">"La adopción es voluntaria, responsable y de por vida"</h1>
           <span className="hero-description">
-            Somos una protectora independiente con centros de acogida propios. Llevamos desde 20XX luchando por los animales y buscamos familias responsables que quieran darles una segunda oportunidad.
+            Somos una protectora independiente con centros de acogida propios. Llevamos desde 2017 luchando por los animales y buscamos familias responsables que quieran darles una segunda oportunidad.
           </span>
           <span className="hero-microcopy">
             Nuestro compromiso: encontrar el hogar ideal para cada mascota.<br />¿Nos ayudas a cambiar una vida hoy?

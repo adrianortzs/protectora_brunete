@@ -3,18 +3,18 @@ import Footer from '../components/Footer'
 import usePageTitle from '../hooks/usePageTitle'
 import './pages.css'
 
+const LAST_UPDATED = 'Última actualización: 1 de enero de 2026'
+
 function LegalNotice() {
   usePageTitle('Aviso legal')
   return (
     <div>
       <Header />
-      <main className="page">
+      <main className="page page--legal page--legal-notice">
         <section className="page-hero">
           <div className="page-hero-content">
             <h1 className="page-hero-title">Aviso Legal</h1>
-            <span className="page-hero-text">
-              Última actualización: 1 de enero de 2026
-            </span>
+            <p className="page-hero-text legal-page-updated">{LAST_UPDATED}</p>
           </div>
         </section>
 

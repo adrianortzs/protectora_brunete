@@ -1,17 +1,16 @@
 import './components.css'
 
 function AnimalCard({ animal, onSelect, formatAge }) {
-  const getFirstImage = () => {
-    if (!animal) return null
-    const list = Array.isArray(animal.img_url) ? animal.img_url : animal.img_url ? [animal.img_url] : []
-    return list.filter(Boolean)[0] || null
-  }
+  const name = animal?.name || 'Animal'
+  const images = Array.isArray(animal?.img_url) ? animal.img_url : animal?.img_url ? [animal.img_url] : []
+  const firstImage = images.filter(Boolean)[0] || null
+  const normalizedGender = animal?.gender ? String(animal.gender).trim().toLowerCase() : ''
 
   return (
     <article className="animal-card">
       <div className="animal-image-wrapper">
-        {getFirstImage() ? (
-          <img src={getFirstImage()} alt={animal.name} className="animal-image" />
+        {firstImage ? (
+          <img src={firstImage} alt={name} className="animal-image" loading="lazy" decoding="async" />
         ) : (
           <div className="animal-image-placeholder">
             <i className="bi bi-image"></i>
@@ -20,27 +19,25 @@ function AnimalCard({ animal, onSelect, formatAge }) {
       </div>
       <div className="animal-content">
         <div className="animal-content-top">
-          <h2 className="animal-name">{animal.name}</h2>
-          {animal.gender && (
+          <h2 className="animal-name">{name}</h2>
+          {animal?.gender && (
             <span className="animal-gender">
-              {animal.gender.toLowerCase() === 'macho' ? (<i className="bi bi-gender-male"></i>) : animal.gender.toLowerCase() === 'hembra' ? (<i className="bi bi-gender-female"></i>) : (animal.gender)}
+              {normalizedGender === 'macho'
+                ? <i className="bi bi-gender-male" aria-hidden="true"></i>
+                : normalizedGender === 'hembra'
+                  ? <i className="bi bi-gender-female" aria-hidden="true"></i>
+                  : animal.gender}
             </span>
           )}
         </div>
         <div className="animal-content-bottom">
           <span className="animal-age">
-            Edad: {formatAge(animal.age)}
+            Edad: {formatAge(animal?.age)}
           </span>
           <span className="animal-size">
-            Tamaño: {animal.size || '—'}
+            Tamaño: {animal?.size || '—'}
           </span>
         </div>
-        {animal.animal_state === 'en adopcion' && (
-          <span className="animal-state-badge">¡Buscando familia!</span>
-        )}
-        {animal.animal_state === 'adoptado' && (
-          <span className="animal-state-badge">¡Adoptado!</span>
-        )}
         <div className="animal-card-action">
           <button type="button" className="animal-card-btn" onClick={() => onSelect(animal)}>
             Conóceme

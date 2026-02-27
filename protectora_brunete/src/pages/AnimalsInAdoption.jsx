@@ -1,16 +1,19 @@
 import { supabase } from '../lib/supabase'
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
 import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import AnimalFilter from '../components/AnimalFilter'
 import AnimalCard from '../components/AnimalCard'
-import { Pagination, paginate } from '../components/Pagination'
+import { Pagination } from '../components/Pagination'
+import { paginate } from '../utils/pagination'
 import usePageTitle from '../hooks/usePageTitle'
 import './pages.css'
 
 const ANIMAL_TYPE_FILTER = { perros: 'perro', gatos: 'gato' }
 const SORT_ARRIVAL = { none: '', newest: 'newest', oldest: 'oldest' }
+const FELINE_ARTICLES = [{ to: '/gestión-felina/ces', label: 'CES' }, { to: '/gestión-felina/castración', label: 'Castración en gatos' }, { to: '/gestión-felina/gatos-callejeros', label: 'Gatos callejeros' }]
+const CANINE_ARTICLES = [{ to: '/10-peticiones-de-un-perro', label: '10 peticiones de un perro' }]
 
 function AnimalsInAdoption() {
   const { animalType } = useParams()
@@ -59,6 +62,7 @@ function AnimalsInAdoption() {
     const list = Array.isArray(animal.img_url) ? animal.img_url : animal.img_url ? [animal.img_url] : []
     return list.filter(Boolean)
   }
+  const selectedAnimalImages = useMemo(() => getAnimalImages(selectedAnimal), [selectedAnimal])
 
   const filterValue = animalType ? ANIMAL_TYPE_FILTER[animalType] : null
   usePageTitle(filterValue === 'perro' ? 'Perros en adopción' : filterValue === 'gato' ? 'Gatos en adopción' : 'Animales en adopción')
@@ -125,21 +129,39 @@ function AnimalsInAdoption() {
   return (
     <div>
       <Header />
-      <main className="animals-page">
+      <main className="animals-page page--animals-in-adoption">
+        <section className="page-hero">
+          <div className="page-hero-content">
+            <h1 className="page-hero-title">{title}</h1>
+            <p className="page-hero-text">{subtitle}</p>
+          </div>
+        </section>
         <div className="animals-container">
-          <header className="animals-header">
-            <h1 className="animals-title">{title}</h1>
-            <span className="animals-subtitle">{subtitle}</span>
-          </header>
-          {loading && (<div className="animals-status"><span className="loader"></span></div>)}
+          {filterValue === 'perro' && (
+            <section className="feline-banner" aria-label="Artículos de adopción canina">
+              <p className="feline-banner-text">Antes de adoptar, lee esta guía esencial</p>
+              <div className="feline-banner-links">
+                {CANINE_ARTICLES.map((item) => (<Link key={item.to} to={item.to} className="feline-banner-link">{item.label}</Link>))}
+              </div>
+            </section>
+          )}
+          {filterValue === 'gato' && (
+            <section className="feline-banner" aria-label="Artículos de gestión felina">
+              <p className="feline-banner-text">¿Quieres profundizar en gestión felina?</p>
+              <div className="feline-banner-links">
+                {FELINE_ARTICLES.map((item) => (<Link key={item.to} to={item.to} className="feline-banner-link">{item.label}</Link>))}
+              </div>
+            </section>
+          )}
+          {loading && (
+            <div className="animals-status animals-status--loading" role="status" aria-live="polite">
+              <span className="loader" aria-hidden="true"></span>
+              <p className="animals-status-loading-text">Cargando animales...</p>
+            </div>
+          )}
           {!loading && error && (<div className="animals-status animals-status-error"><p>{error}</p></div>)}
           {!loading && !error && animals.length > 0 && (
-            <AnimalFilter
-              filters={filters}
-              onFilterChange={updateFilter}
-              filterValue={filterValue}
-              onClear={() => { setFilters({ animal_type: filterValue || '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none }); setCurrentPage(1) }}
-            />
+            <AnimalFilter filters={filters} onFilterChange={updateFilter} filterValue={filterValue} onClear={() => { setFilters({ animal_type: filterValue || '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none }); setCurrentPage(1) }} />
           )}
           {!loading && !error && animals.length === 0 && (
             <div className="animals-status">
@@ -169,10 +191,10 @@ function AnimalsInAdoption() {
             <button type="button" className="animal-modal-close" onClick={handleCloseModal} aria-label="Cerrar ficha">×</button>
             <div className="animal-modal-carousel">
               <div className="animal-modal-carousel-track" style={{ transform: `translateX(-${carouselIndex * 100}%)` }}>
-                {getAnimalImages(selectedAnimal).length > 0 ? (
-                  getAnimalImages(selectedAnimal).map((url, i) => (
+                {selectedAnimalImages.length > 0 ? (
+                  selectedAnimalImages.map((url, i) => (
                     <div key={i} className="animal-modal-carousel-slide">
-                      <img src={url} alt={`${selectedAnimal.name} ${i + 1}`} className="animal-modal-carousel-image" />
+                      <img src={url} alt={`${selectedAnimal.name} ${i + 1}`} className="animal-modal-carousel-image" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
                     </div>
                   ))
                 ) : (
@@ -181,12 +203,12 @@ function AnimalsInAdoption() {
                   </div>
                 )}
               </div>
-              {getAnimalImages(selectedAnimal).length > 1 && (
+              {selectedAnimalImages.length > 1 && (
                 <>
-                  <button type="button" className="animal-modal-carousel-prev" onClick={() => setCarouselIndex((i) => (i <= 0 ? getAnimalImages(selectedAnimal).length - 1 : i - 1))} aria-label="Anterior">‹</button>
-                  <button type="button" className="animal-modal-carousel-next" onClick={() => setCarouselIndex((i) => (i >= getAnimalImages(selectedAnimal).length - 1 ? 0 : i + 1))} aria-label="Siguiente">›</button>
+                  <button type="button" className="animal-modal-carousel-prev" onClick={() => setCarouselIndex((i) => (i <= 0 ? selectedAnimalImages.length - 1 : i - 1))} aria-label="Anterior">‹</button>
+                  <button type="button" className="animal-modal-carousel-next" onClick={() => setCarouselIndex((i) => (i >= selectedAnimalImages.length - 1 ? 0 : i + 1))} aria-label="Siguiente">›</button>
                   <div className="animal-modal-carousel-dots">
-                    {getAnimalImages(selectedAnimal).map((_, i) => (
+                    {selectedAnimalImages.map((_, i) => (
                       <button key={i} type="button" className={`animal-modal-carousel-dot ${i === carouselIndex ? 'is-active' : ''}`} onClick={() => setCarouselIndex(i)} aria-label={`Ir a imagen ${i + 1}`} aria-current={i === carouselIndex ? 'true' : undefined} />
                     ))}
                   </div>

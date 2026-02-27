@@ -1,14 +1,54 @@
 import { supabase } from '../lib/supabase'
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AnimalFilter from '../components/AnimalFilter'
-import { Pagination, paginate } from '../components/Pagination'
+import { Pagination } from '../components/Pagination'
+import { paginate } from '../utils/pagination'
 import usePageTitle from '../hooks/usePageTitle'
 import './pages.css'
 
 const BUCKET = 'animals'
 const SORT_ARRIVAL = { none: '', newest: 'newest', oldest: 'oldest' }
 const TOAST_DURATION = 4000
+const EMPTY_FORM = { name: '', animal_type: '', gender: '', age: '', size: '', description: '', arrival_date: '' }
+const ANIMAL_TYPE_OPTIONS = [{ value: 'perro', label: 'Perro' }, { value: 'gato', label: 'Gato' }]
+const GENDER_OPTIONS = [{ value: 'Macho', label: 'Macho' }, { value: 'Hembra', label: 'Hembra' }]
+const SIZE_OPTIONS = [{ value: 'pequeño', label: 'Pequeño' }, { value: 'mediano', label: 'Mediano' }, { value: 'grande', label: 'Grande' }]
+
+function normalizeImageList(value) {
+  const list = Array.isArray(value) ? value : value ? [value] : []
+  return list.filter(Boolean)
+}
+
+function getFirstImage(animal) {
+  if (!animal) return null
+  return normalizeImageList(animal.img_url)[0] || null
+}
+
+function validateAnimalForm(form, existingImages, pendingFiles) {
+  const errors = {}
+  const name = (form.name || '').trim()
+  const ageValue = form.age === '' ? '' : Number(form.age)
+
+  if (!name) errors.name = 'El nombre es obligatorio.'
+  else if (name.length < 2) errors.name = 'El nombre debe tener al menos 2 caracteres.'
+  else if (name.length > 80) errors.name = 'El nombre no puede superar los 80 caracteres.'
+
+  if (!form.animal_type) errors.animal_type = 'Selecciona un tipo de animal.'
+  if (!form.gender) errors.gender = 'Selecciona el sexo.'
+  if (!form.size) errors.size = 'Selecciona el tamaño.'
+
+  if (form.age !== '') {
+    if (!Number.isInteger(ageValue) || ageValue < 0) errors.age = 'La edad debe ser un número mayor o igual que 0.'
+    if (ageValue > 400) errors.age = 'La edad parece demasiado alta. Revísala.'
+  }
+
+  if ((form.description || '').trim().length > 3500) errors.description = 'La descripción no puede superar los 3500 caracteres.'
+  if (!form.arrival_date) errors.arrival_date = 'La fecha de llegada es obligatoria.'
+  if (existingImages.length + pendingFiles.length === 0) errors.img_url = 'Añade al menos una imagen.'
+
+  return errors
+}
 
 function AdminPanel() {
   usePageTitle('Panel de administración')
@@ -26,6 +66,7 @@ function AdminPanel() {
   const [currentPage, setCurrentPage] = useState(1)
   const [existingImages, setExistingImages] = useState([])
   const [pendingFiles, setPendingFiles] = useState([])
+  const [formErrors, setFormErrors] = useState({})
   const [uploading, setUploading] = useState(false)
   const [toasts, setToasts] = useState([])
   const [confirmDialog, setConfirmDialog] = useState(null)
@@ -46,10 +87,15 @@ function AdminPanel() {
     setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 400)
   }, [])
 
-  const requestConfirm = useCallback((message, description) => {
+  const requestConfirm = useCallback((message, description, options = {}) => {
+    const {
+      confirmLabel = 'Confirmar',
+      confirmVariant = 'danger',
+      iconClass = 'bi-exclamation-triangle'
+    } = options
     return new Promise((resolve) => {
       confirmResolveRef.current = resolve
-      setConfirmDialog({ message, description })
+      setConfirmDialog({ message, description, confirmLabel, confirmVariant, iconClass })
     })
   }, [])
 
@@ -68,6 +114,15 @@ function AdminPanel() {
       }
     })
   }, [navigate])
+
+  useEffect(() => {
+    if (!editAnimal) return
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [editAnimal])
 
   const fetchAnimals = async () => {
     try {
@@ -91,12 +146,6 @@ function AdminPanel() {
     return `${years} ${years === 1 ? 'año' : 'años'}`
   }
 
-  const getFirstImage = (animal) => {
-    if (!animal) return null
-    const list = Array.isArray(animal.img_url) ? animal.img_url : animal.img_url ? [animal.img_url] : []
-    return list.filter(Boolean)[0] || null
-  }
-
   const handleLogout = async () => {
     await supabase.auth.signOut()
     navigate('/hsdkadmin/login')
@@ -115,39 +164,54 @@ function AdminPanel() {
 
   const handleNameSearch = (value) => { setNameSearch(value); setCurrentPage(1) }
 
-  const filteredAnimals = animals.filter((a) => {
-    const typeOk = !filters.animal_type || normalized(a.animal_type) === normalized(filters.animal_type)
-    const genderOk = !filters.gender || normalized(a.gender) === normalized(filters.gender)
-    const ageOk = !filters.age || getAgeCategory(a.age) === filters.age
-    const sizeOk = !filters.size || normalized(a.size) === normalized(filters.size)
-    const nameOk = !nameSearch || normalized(a.name).includes(normalized(nameSearch))
-    return typeOk && genderOk && ageOk && sizeOk && nameOk
-  })
+  const filteredAnimals = useMemo(() => (
+    animals.filter((a) => {
+      const typeOk = !filters.animal_type || normalized(a.animal_type) === normalized(filters.animal_type)
+      const genderOk = !filters.gender || normalized(a.gender) === normalized(filters.gender)
+      const ageOk = !filters.age || getAgeCategory(a.age) === filters.age
+      const sizeOk = !filters.size || normalized(a.size) === normalized(filters.size)
+      const nameOk = !nameSearch || normalized(a.name).includes(normalized(nameSearch))
+      return typeOk && genderOk && ageOk && sizeOk && nameOk
+    })
+  ), [animals, filters, nameSearch])
 
-  const sortedAnimals = [...filteredAnimals].sort((a, b) => {
-    if (filters.arrival_date === SORT_ARRIVAL.newest) return (new Date(b.arrival_date || 0) - new Date(a.arrival_date || 0))
-    if (filters.arrival_date === SORT_ARRIVAL.oldest) return (new Date(a.arrival_date || 0) - new Date(b.arrival_date || 0))
-    return 0
-  })
+  const sortedAnimals = useMemo(() => {
+    const next = [...filteredAnimals]
+    if (filters.arrival_date === SORT_ARRIVAL.newest) return next.sort((a, b) => (new Date(b.arrival_date || 0) - new Date(a.arrival_date || 0)))
+    if (filters.arrival_date === SORT_ARRIVAL.oldest) return next.sort((a, b) => (new Date(a.arrival_date || 0) - new Date(b.arrival_date || 0)))
+    return next
+  }, [filteredAnimals, filters.arrival_date])
+  const animalsInAdoption = useMemo(() => animals.filter((animal) => animal.animal_state === 'en adopcion').length, [animals])
+  const adoptedAnimals = useMemo(() => animals.filter((animal) => animal.animal_state === 'adoptado').length, [animals])
 
   const { paginated: paginatedAnimals, totalPages, safePage } = paginate(sortedAnimals, currentPage)
 
-  const emptyForm = { name: '', animal_type: '', gender: '', age: '', size: '', description: '', arrival_date: '' }
+  const pendingPreviews = useMemo(
+    () => pendingFiles.map((file, index) => ({ id: `${file.name}-${file.size}-${index}`, file, url: URL.createObjectURL(file) })),
+    [pendingFiles]
+  )
+
+  useEffect(() => {
+    return () => {
+      pendingPreviews.forEach((preview) => URL.revokeObjectURL(preview.url))
+    }
+  }, [pendingPreviews])
 
   const openNew = () => {
     setIsNewAnimal(true)
     setEditAnimal({})
-    setEditForm({ ...emptyForm })
+    setEditForm({ ...EMPTY_FORM })
     setExistingImages([])
     setPendingFiles([])
+    setFormErrors({})
   }
 
   const openEdit = (animal) => {
     setIsNewAnimal(false)
     setEditAnimal(animal)
-    const urls = Array.isArray(animal.img_url) ? animal.img_url.filter(Boolean) : animal.img_url ? [animal.img_url] : []
-    setExistingImages(urls)
+    setExistingImages(normalizeImageList(animal.img_url))
     setPendingFiles([])
+    setFormErrors({})
     setEditForm({
       name: animal.name || '',
       animal_type: animal.animal_type || '',
@@ -165,6 +229,7 @@ function AdminPanel() {
       setIsNewAnimal(false)
       setPendingFiles([])
       setExistingImages([])
+      setFormErrors({})
     }
   }
 
@@ -172,6 +237,7 @@ function AdminPanel() {
     const valid = Array.from(files).filter(f => f.type.startsWith('image/'))
     if (valid.length === 0) return
     setPendingFiles(prev => [...prev, ...valid])
+    setFormErrors(prev => ({ ...prev, img_url: '' }))
   }
 
   const removeExistingImage = (index) => {
@@ -197,10 +263,17 @@ function AdminPanel() {
 
   const handleEditChange = (key, value) => {
     setEditForm(prev => ({ ...prev, [key]: value }))
+    setFormErrors(prev => ({ ...prev, [key]: '' }))
   }
 
   const handleSave = async () => {
     if (!editAnimal) return
+    const nextErrors = validateAnimalForm(editForm, existingImages, pendingFiles)
+    if (Object.keys(nextErrors).length > 0) {
+      setFormErrors(nextErrors)
+      pushToast('Revisa los campos obligatorios antes de guardar.', 'error')
+      return
+    }
     const wasNew = isNewAnimal
     setSaving(true)
     setUploading(pendingFiles.length > 0)
@@ -261,15 +334,28 @@ function AdminPanel() {
   const handleAdopt = async (animal) => {
     const isAdopted = animal.animal_state === 'adoptado'
     const newState = isAdopted ? 'en adopcion' : 'adoptado'
+    const adoptionDate = newState === 'adoptado' ? new Date().toISOString().split('T')[0] : null
+    const confirmed = await requestConfirm(
+      isAdopted ? `¿Marcar a "${animal.name}" como en adopción?` : `¿Marcar a "${animal.name}" como adoptado?`,
+      isAdopted
+        ? 'El animal volverá a mostrarse como disponible para adopción.'
+        : 'Se actualizará el estado y se guardará la fecha de adopción.',
+      {
+        confirmLabel: 'Confirmar',
+        confirmVariant: 'primary',
+        iconClass: 'bi-heart'
+      }
+    )
+    if (!confirmed) return
     setAdopting(animal.id)
     try {
       const { error: supabaseError } = await supabase
         .from('animals')
-        .update({ animal_state: newState })
+        .update({ animal_state: newState, adoption_date: adoptionDate })
         .eq('id', animal.id)
 
       if (supabaseError) throw supabaseError
-      setAnimals(prev => prev.map(a => a.id === animal.id ? { ...a, animal_state: newState } : a))
+      setAnimals(prev => prev.map(a => a.id === animal.id ? { ...a, animal_state: newState, adoption_date: adoptionDate } : a))
       pushToast(
         newState === 'adoptado'
           ? `"${animal.name}" marcado como adoptado`
@@ -286,7 +372,12 @@ function AdminPanel() {
   const handleDelete = async (animal) => {
     const confirmed = await requestConfirm(
       `¿Eliminar a "${animal.name}"?`,
-      'Esta acción no se puede deshacer. Se eliminará toda la información del animal.'
+      'Esta acción no se puede deshacer. Se eliminará toda la información del animal.',
+      {
+        confirmLabel: 'Eliminar',
+        confirmVariant: 'danger',
+        iconClass: 'bi-exclamation-triangle'
+      }
     )
     if (!confirmed) return
     setDeleting(animal.id)
@@ -324,8 +415,8 @@ function AdminPanel() {
       <main className="admin-panel-main">
         <div className="admin-panel-toolbar">
           <span className="admin-panel-count">
-            <i className="bi bi-grid"></i> {animals.length} {animals.length === 1 ? 'animal' : 'animales'} en total
-            {sortedAnimals.length !== animals.length && ` · ${sortedAnimals.length} mostrados`}
+            <i className="bi bi-grid"></i> {animals.length} {animals.length === 1 ? 'animal' : 'animales'} en total - {animalsInAdoption} en adopción - {adoptedAnimals} adoptados
+            {sortedAnimals.length !== animals.length && ` - ${sortedAnimals.length} mostrados`}
           </span>
           <button type="button" className="admin-panel-add" onClick={openNew}>
             <i className="bi bi-plus-lg"></i> Añadir animal
@@ -354,7 +445,6 @@ function AdminPanel() {
           <AnimalFilter
             filters={filters}
             onFilterChange={updateFilter}
-            filterValue={null}
             onClear={() => { setFilters({ animal_type: '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none }); setNameSearch(''); setCurrentPage(1) }}
             showNameSearch
             nameSearch={nameSearch}
@@ -371,55 +461,57 @@ function AdminPanel() {
         {!loading && !error && sortedAnimals.length > 0 && (
           <>
             <div className="admin-grid">
-              {paginatedAnimals.map((animal) => (
-                <article key={animal.id} className="admin-card">
-                  <div className="admin-card-image-wrapper">
-                    {getFirstImage(animal) ? (
-                      <img src={getFirstImage(animal)} alt={animal.name} className="admin-card-image" />
-                    ) : (
-                      <div className="admin-card-image-placeholder">
-                        <i className="bi bi-image"></i>
-                      </div>
-                    )}
-                  </div>
-                  <div className="admin-card-body">
-                    <div className="admin-card-top">
-                      <h2 className="admin-card-name">{animal.name}</h2>
-                      {animal.gender && (
-                        <span className="admin-card-gender">
-                          {animal.gender.toLowerCase() === 'macho' ? (<i className="bi bi-gender-male"></i>) : animal.gender.toLowerCase() === 'hembra' ? (<i className="bi bi-gender-female"></i>) : (animal.gender)}
-                        </span>
+              {paginatedAnimals.map((animal) => {
+                const firstImage = getFirstImage(animal)
+                return (
+                  <article key={animal.id} className="admin-card">
+                    <div className="admin-card-image-wrapper">
+                      {firstImage ? (
+                        <img src={firstImage} alt={animal.name} className="admin-card-image" loading="lazy" decoding="async" />
+                      ) : (
+                        <div className="admin-card-image-placeholder">
+                          <i className="bi bi-image"></i>
+                        </div>
                       )}
                     </div>
-                    <div className="admin-card-info">
-                      <span>Edad: {formatAge(animal.age)}</span>
-                      <span>Tamaño: {animal.size || '—'}</span>
-                      <span>Tipo: {animal.animal_type || '—'}</span>
+                    <div className="admin-card-body">
+                      <div className="admin-card-top">
+                        <h2 className="admin-card-name">{animal.name}</h2>
+                        {animal.gender && (
+                          <span className="admin-card-gender">
+                            {animal.gender.toLowerCase() === 'macho' ? (<i className="bi bi-gender-male"></i>) : animal.gender.toLowerCase() === 'hembra' ? (<i className="bi bi-gender-female"></i>) : (animal.gender)}
+                          </span>
+                        )}
+                      </div>
+                      <div className="admin-card-info">
+                        <span>Edad: {formatAge(animal.age)}</span>
+                        <span>Tamaño: {animal.size || '—'}</span>
+                      </div>
+                      <div className="admin-card-actions">
+                        <button type="button" className="admin-card-btn admin-card-btn--edit" onClick={() => openEdit(animal)}>
+                          <i className="bi bi-pencil"></i> Editar
+                        </button>
+                        <button
+                          type="button"
+                          className={`admin-card-btn ${animal.animal_state === 'adoptado' ? 'admin-card-btn--adopted' : 'admin-card-btn--adopt'}`}
+                          onClick={() => handleAdopt(animal)}
+                          disabled={adopting === animal.id}
+                        >
+                          {adopting === animal.id
+                            ? <span className="admin-login-spinner admin-login-spinner--small"></span>
+                            : animal.animal_state === 'adoptado'
+                              ? <><i className="bi bi-heart-fill"></i> Adoptado</>
+                              : <><i className="bi bi-heart"></i> Adoptado</>
+                          }
+                        </button>
+                        <button type="button" className="admin-card-btn admin-card-btn--delete" onClick={() => handleDelete(animal)} disabled={deleting === animal.id}>
+                          {deleting === animal.id ? <span className="admin-login-spinner admin-login-spinner--small"></span> : <><i className="bi bi-trash"></i> Eliminar</>}
+                        </button>
+                      </div>
                     </div>
-                    <div className="admin-card-actions">
-                      <button type="button" className="admin-card-btn admin-card-btn--edit" onClick={() => openEdit(animal)}>
-                        <i className="bi bi-pencil"></i> Editar
-                      </button>
-                      <button
-                        type="button"
-                        className={`admin-card-btn ${animal.animal_state === 'adoptado' ? 'admin-card-btn--adopted' : 'admin-card-btn--adopt'}`}
-                        onClick={() => handleAdopt(animal)}
-                        disabled={adopting === animal.id}
-                      >
-                        {adopting === animal.id
-                          ? <span className="admin-login-spinner admin-login-spinner--small"></span>
-                          : animal.animal_state === 'adoptado'
-                            ? <><i className="bi bi-heart-fill"></i> Adoptado</>
-                            : <><i className="bi bi-heart"></i> Adoptado</>
-                        }
-                      </button>
-                      <button type="button" className="admin-card-btn admin-card-btn--delete" onClick={() => handleDelete(animal)} disabled={deleting === animal.id}>
-                        {deleting === animal.id ? <span className="admin-login-spinner admin-login-spinner--small"></span> : <><i className="bi bi-trash"></i> Eliminar</>}
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              ))}
+                  </article>
+                )
+              })}
             </div>
 
             <Pagination currentPage={safePage} totalPages={totalPages} onPageChange={setCurrentPage} />
@@ -444,14 +536,16 @@ function AdminPanel() {
       {confirmDialog && (
         <div className="admin-confirm-backdrop" onClick={() => resolveConfirm(false)}>
           <div className="admin-confirm" onClick={(e) => e.stopPropagation()} role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby={confirmDialog.description ? 'confirm-desc' : undefined}>
-            <div className="admin-confirm-icon">
-              <i className="bi bi-exclamation-triangle"></i>
+            <div className={`admin-confirm-icon admin-confirm-icon--${confirmDialog.confirmVariant}`}>
+              <i className={`bi ${confirmDialog.iconClass}`}></i>
             </div>
             <h3 id="confirm-title" className="admin-confirm-title">{confirmDialog.message}</h3>
             {confirmDialog.description && <p id="confirm-desc" className="admin-confirm-desc">{confirmDialog.description}</p>}
             <div className="admin-confirm-actions">
               <button type="button" className="admin-confirm-btn admin-confirm-btn--cancel" onClick={() => resolveConfirm(false)}>Cancelar</button>
-              <button type="button" className="admin-confirm-btn admin-confirm-btn--danger" onClick={() => resolveConfirm(true)}>Eliminar</button>
+              <button type="button" className={`admin-confirm-btn admin-confirm-btn--${confirmDialog.confirmVariant}`} onClick={() => resolveConfirm(true)}>
+                {confirmDialog.confirmLabel}
+              </button>
             </div>
           </div>
         </div>
@@ -468,48 +562,50 @@ function AdminPanel() {
               <div className="admin-edit-field">
                 <label>Nombre</label>
                 <input type="text" value={editForm.name} onChange={(e) => handleEditChange('name', e.target.value)} />
+                {formErrors.name && <p className="admin-edit-error">{formErrors.name}</p>}
               </div>
               <div className="admin-edit-row">
                 <div className="admin-edit-field">
                   <label>Tipo de animal</label>
                   <select value={editForm.animal_type} onChange={(e) => handleEditChange('animal_type', e.target.value)}>
                     <option value="">— Seleccionar —</option>
-                    <option value="perro">Perro</option>
-                    <option value="gato">Gato</option>
+                    {ANIMAL_TYPE_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                   </select>
+                  {formErrors.animal_type && <p className="admin-edit-error">{formErrors.animal_type}</p>}
                 </div>
                 <div className="admin-edit-field">
                   <label>Sexo</label>
                   <select value={editForm.gender} onChange={(e) => handleEditChange('gender', e.target.value)}>
                     <option value="">— Seleccionar —</option>
-                    <option value="Macho">Macho</option>
-                    <option value="Hembra">Hembra</option>
+                    {GENDER_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                   </select>
+                  {formErrors.gender && <p className="admin-edit-error">{formErrors.gender}</p>}
                 </div>
               </div>
               <div className="admin-edit-row">
                 <div className="admin-edit-field">
                   <label>Edad (meses)</label>
                   <input type="number" min="0" value={editForm.age} onChange={(e) => handleEditChange('age', e.target.value)} />
+                  {formErrors.age && <p className="admin-edit-error">{formErrors.age}</p>}
                 </div>
                 <div className="admin-edit-field">
                   <label>Tamaño</label>
                   <select value={editForm.size} onChange={(e) => handleEditChange('size', e.target.value)}>
                     <option value="">— Seleccionar —</option>
-                    <option value="toy">Toy</option>
-                    <option value="pequeño">Pequeño</option>
-                    <option value="mediano">Mediano</option>
-                    <option value="grande">Grande</option>
+                    {SIZE_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                   </select>
+                  {formErrors.size && <p className="admin-edit-error">{formErrors.size}</p>}
                 </div>
               </div>
               <div className="admin-edit-field">
                 <label>Fecha de llegada</label>
                 <input type="date" value={editForm.arrival_date} onChange={(e) => handleEditChange('arrival_date', e.target.value)} />
+                {formErrors.arrival_date && <p className="admin-edit-error">{formErrors.arrival_date}</p>}
               </div>
               <div className="admin-edit-field">
                 <label>Descripción</label>
                 <textarea rows="4" value={editForm.description} onChange={(e) => handleEditChange('description', e.target.value)} />
+                {formErrors.description && <p className="admin-edit-error">{formErrors.description}</p>}
               </div>
               <div className="admin-edit-field">
                 <label>Imágenes</label>
@@ -517,15 +613,15 @@ function AdminPanel() {
                   <div className="admin-img-grid">
                     {existingImages.map((url, i) => (
                       <div key={`existing-${i}`} className="admin-img-thumb">
-                        <img src={url} alt={`Imagen ${i + 1}`} />
+                        <img src={url} alt={`Imagen ${i + 1}`} loading="lazy" decoding="async" />
                         <button type="button" className="admin-img-remove" onClick={() => removeExistingImage(i)} aria-label="Eliminar imagen">
                           <i className="bi bi-x-lg"></i>
                         </button>
                       </div>
                     ))}
-                    {pendingFiles.map((file, i) => (
-                      <div key={`pending-${i}`} className="admin-img-thumb admin-img-thumb--pending">
-                        <img src={URL.createObjectURL(file)} alt={file.name} />
+                    {pendingPreviews.map((preview, i) => (
+                      <div key={preview.id} className="admin-img-thumb admin-img-thumb--pending">
+                        <img src={preview.url} alt={preview.file.name} loading="lazy" decoding="async" />
                         <span className="admin-img-badge">Nueva</span>
                         <button type="button" className="admin-img-remove" onClick={() => removePendingFile(i)} aria-label="Eliminar imagen">
                           <i className="bi bi-x-lg"></i>
@@ -534,6 +630,7 @@ function AdminPanel() {
                     ))}
                   </div>
                 )}
+                {formErrors.img_url && <p className="admin-edit-error">{formErrors.img_url}</p>}
                 <div
                   className="admin-img-dropzone"
                   role="button"
