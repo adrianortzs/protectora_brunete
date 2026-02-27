@@ -10,10 +10,11 @@ import './pages.css'
 const BUCKET = 'animals'
 const SORT_ARRIVAL = { none: '', newest: 'newest', oldest: 'oldest' }
 const TOAST_DURATION = 4000
-const EMPTY_FORM = { name: '', animal_type: '', gender: '', age: '', size: '', description: '', arrival_date: '' }
+const EMPTY_FORM = { name: '', animal_type: '', gender: '', age: '', size: '', sterilized: '', description: '', arrival_date: '' }
 const ANIMAL_TYPE_OPTIONS = [{ value: 'perro', label: 'Perro' }, { value: 'gato', label: 'Gato' }]
 const GENDER_OPTIONS = [{ value: 'Macho', label: 'Macho' }, { value: 'Hembra', label: 'Hembra' }]
 const SIZE_OPTIONS = [{ value: 'pequeño', label: 'Pequeño' }, { value: 'mediano', label: 'Mediano' }, { value: 'grande', label: 'Grande' }]
+const STERILIZED_OPTIONS = [{ value: 'si', label: '✓' }, { value: 'no', label: '✕' }]
 
 function normalizeImageList(value) {
   const list = Array.isArray(value) ? value : value ? [value] : []
@@ -37,6 +38,7 @@ function validateAnimalForm(form, existingImages, pendingFiles) {
   if (!form.animal_type) errors.animal_type = 'Selecciona un tipo de animal.'
   if (!form.gender) errors.gender = 'Selecciona el sexo.'
   if (!form.size) errors.size = 'Selecciona el tamaño.'
+  if (!form.sterilized) errors.sterilized = 'Indica si está esterilizado.'
 
   if (form.age !== '') {
     if (!Number.isInteger(ageValue) || ageValue < 0) errors.age = 'La edad debe ser un número mayor o igual que 0.'
@@ -131,7 +133,7 @@ function AdminPanel() {
       if (supabaseError) throw supabaseError
       setAnimals(data || [])
     } catch (err) {
-      setError('Error al cargar los animales.')
+      setError('No se pudo cargar el listado de animales. Recarga la página e inténtalo de nuevo.')
       console.error(err)
     } finally {
       setLoading(false)
@@ -218,6 +220,7 @@ function AdminPanel() {
       gender: animal.gender || '',
       age: animal.age || '',
       size: animal.size || '',
+      sterilized: animal.sterilized === true ? 'si' : animal.sterilized === false ? 'no' : '',
       description: animal.description || '',
       arrival_date: animal.arrival_date || ''
     })
@@ -271,7 +274,7 @@ function AdminPanel() {
     const nextErrors = validateAnimalForm(editForm, existingImages, pendingFiles)
     if (Object.keys(nextErrors).length > 0) {
       setFormErrors(nextErrors)
-      pushToast('Revisa los campos obligatorios antes de guardar.', 'error')
+      pushToast('No se guardó el animal: revisa los campos marcados en rojo.', 'error')
       return
     }
     const wasNew = isNewAnimal
@@ -292,6 +295,7 @@ function AdminPanel() {
         gender: editForm.gender.trim(),
         age: editForm.age === '' ? null : parseInt(editForm.age),
         size: editForm.size.trim(),
+        sterilized: editForm.sterilized === '' ? null : editForm.sterilized === 'si',
         description: editForm.description.trim(),
         img_url: imgUrls,
         arrival_date: editForm.arrival_date || null
@@ -321,22 +325,33 @@ function AdminPanel() {
       setIsNewAnimal(false)
       setPendingFiles([])
       setExistingImages([])
-      pushToast(wasNew ? `"${savedName}" creado correctamente` : `"${savedName}" actualizado correctamente`)
+      pushToast(
+        wasNew
+          ? `Se creó "${savedName}" y ya aparece en el listado.`
+          : `Se guardaron los cambios de "${savedName}".`
+      )
     } catch (err) {
       console.error(err)
       setUploading(false)
-      pushToast(wasNew ? 'Error al crear el animal.' : 'Error al guardar los cambios.', 'error')
+      pushToast(
+        wasNew
+          ? 'No se pudo crear el animal. No se aplicó ningún cambio.'
+          : 'No se pudieron guardar los cambios del animal. Inténtalo de nuevo.',
+        'error'
+      )
     } finally {
       setSaving(false)
     }
   }
 
   const handleAdopt = async (animal) => {
-    const isAdopted = animal.animal_state === 'adoptado'
+    const animalName = (animal?.name || '').trim() || 'este animal'
+    const normalizedState = String(animal?.animal_state || '').trim().toLowerCase()
+    const isAdopted = normalizedState === 'adoptado'
     const newState = isAdopted ? 'en adopcion' : 'adoptado'
     const adoptionDate = newState === 'adoptado' ? new Date().toISOString().split('T')[0] : null
     const confirmed = await requestConfirm(
-      isAdopted ? `¿Marcar a "${animal.name}" como en adopción?` : `¿Marcar a "${animal.name}" como adoptado?`,
+      isAdopted ? `¿Marcar a "${animalName}" como en adopción?` : `¿Marcar a "${animalName}" como adoptado?`,
       isAdopted
         ? 'El animal volverá a mostrarse como disponible para adopción.'
         : 'Se actualizará el estado y se guardará la fecha de adopción.',
@@ -358,12 +373,12 @@ function AdminPanel() {
       setAnimals(prev => prev.map(a => a.id === animal.id ? { ...a, animal_state: newState, adoption_date: adoptionDate } : a))
       pushToast(
         newState === 'adoptado'
-          ? `"${animal.name}" marcado como adoptado`
-          : `"${animal.name}" marcado como en adopción`
+          ? `"${animalName}" se marcó como adoptado y dejó de estar disponible para adopción.`
+          : `"${animalName}" se marcó como en adopción y volverá a mostrarse disponible.`
       )
     } catch (err) {
       console.error(err)
-      pushToast('Error al actualizar el estado del animal.', 'error')
+      pushToast('No se pudo actualizar el estado de adopción. Inténtalo de nuevo.', 'error')
     } finally {
       setAdopting(null)
     }
@@ -389,10 +404,10 @@ function AdminPanel() {
 
       if (supabaseError) throw supabaseError
       setAnimals(prev => prev.filter(a => a.id !== animal.id))
-      pushToast(`"${animal.name}" eliminado correctamente`)
+      pushToast(`"${animal.name}" se eliminó del panel correctamente.`)
     } catch (err) {
       console.error(err)
-      pushToast('Error al eliminar el animal.', 'error')
+      pushToast(`No se pudo eliminar "${animal.name}". Inténtalo de nuevo.`, 'error')
     } finally {
       setDeleting(null)
     }
@@ -596,6 +611,14 @@ function AdminPanel() {
                   </select>
                   {formErrors.size && <p className="admin-edit-error">{formErrors.size}</p>}
                 </div>
+              </div>
+              <div className="admin-edit-field">
+                <label>Esterilizado</label>
+                <select value={editForm.sterilized} onChange={(e) => handleEditChange('sterilized', e.target.value)}>
+                  <option value="">— Seleccionar —</option>
+                  {STERILIZED_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                </select>
+                {formErrors.sterilized && <p className="admin-edit-error">{formErrors.sterilized}</p>}
               </div>
               <div className="admin-edit-field">
                 <label>Fecha de llegada</label>

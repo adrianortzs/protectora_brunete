@@ -111,6 +111,12 @@ function AnimalsInAdoption() {
     return `${years} ${years === 1 ? 'año' : 'años'}`
   }
 
+  const formatSterilized = (value) => {
+    if (value === true) return '✓'
+    if (value === false) return '✕'
+    return '—'
+  }
+
   const filteredAnimals = animals.filter((a) => {
     const typeOk = !filters.animal_type || normalized(a.animal_type) === normalized(filters.animal_type)
     const genderOk = !filters.gender || normalized(a.gender) === normalized(filters.gender)
@@ -243,6 +249,10 @@ function AnimalsInAdoption() {
                 <div className="animal-modal-detail">
                   <dt>Fecha de llegada</dt>
                   <dd>{selectedAnimal.arrival_date ? new Date(selectedAnimal.arrival_date).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—'}</dd>
+                </div>
+                <div className="animal-modal-detail">
+                  <dt>Esterilizado</dt>
+                  <dd>{formatSterilized(selectedAnimal.sterilized)}</dd>
                 </div>
               </dl>
               {selectedAnimal.description && (

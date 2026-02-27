@@ -1,0 +1,26 @@
+{
+  "name": "ARAT Adopta",
+  "short_name": "ARAT",
+  "description": "Asociacion para el rescate y adopcion de animales en Brunete.",
+  "lang": "es",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f6f3ee",
+  "theme_color": "#0e2f4f",
+  "icons": [
+    {
+      "src": "/arat_logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/arat_logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -124,7 +124,7 @@ function Contact() {
     if (Object.keys(nextErrors).length > 0) {
       setTouched({ nombre: true, correo: true, telefono: true, asunto: true, mensaje: true })
       setErrors(nextErrors)
-      setFeedback({ type: 'error', text: 'Revisa los campos marcados e inténtalo de nuevo.' })
+      setFeedback({ type: 'error', text: 'No se envió el formulario: revisa los campos marcados y vuelve a intentarlo.' })
       return
     }
 
@@ -136,7 +136,7 @@ function Contact() {
     setFeedback(null)
     try {
       await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, { publicKey: PUBLIC_KEY })
-      setFeedback({ type: 'success', text: 'Mensaje enviado correctamente. Te responderemos lo antes posible.' })
+      setFeedback({ type: 'success', text: 'Tu mensaje se envió correctamente. Te responderemos por correo lo antes posible.' })
       setFormData({ nombre: '', correo: '', telefono: '', asunto: '', mensaje: '' })
       setErrors({})
       setTouched({})
