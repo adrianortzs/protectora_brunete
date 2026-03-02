@@ -38,12 +38,37 @@ function AnimalsInAdoption() {
 
   useEffect(() => {
     if (selectedAnimal) {
+      const scrollY = window.scrollY || window.pageYOffset || 0
+      const previousBodyOverflow = document.body.style.overflow
+      const previousBodyPosition = document.body.style.position
+      const previousBodyTop = document.body.style.top
+      const previousBodyWidth = document.body.style.width
+      const previousBodyTouchAction = document.body.style.touchAction
+
       document.body.style.overflow = 'hidden'
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollY}px`
+      document.body.style.width = '100%'
+      document.body.style.touchAction = 'none'
+
       const onKey = (e) => { if (e.key === 'Escape') handleCloseModal() }
       document.addEventListener('keydown', onKey)
-      return () => { document.body.style.overflow = ''; document.removeEventListener('keydown', onKey) }
+
+      return () => {
+        document.body.style.overflow = previousBodyOverflow
+        document.body.style.position = previousBodyPosition
+        document.body.style.top = previousBodyTop
+        document.body.style.width = previousBodyWidth
+        document.body.style.touchAction = previousBodyTouchAction
+        window.scrollTo(0, scrollY)
+        document.removeEventListener('keydown', onKey)
+      }
     } else {
       document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
+      document.body.style.touchAction = ''
     }
   }, [selectedAnimal, handleCloseModal])
 
