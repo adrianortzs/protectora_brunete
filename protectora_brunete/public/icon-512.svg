@@ -1,7 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="#0e2f4f" />
-  <circle cx="256" cy="256" r="192" fill="#f6f3ee" />
-  <image href="/arat_logo.svg" x="112" y="56" width="288" height="400" preserveAspectRatio="xMidYMid meet" />
+  <rect width="512" height="512" rx="110" fill="#0e2f4f" />
+  <circle cx="256" cy="278" r="82" fill="#c65a3a" />
+  <circle cx="173" cy="186" r="30" fill="#c65a3a" />
+  <circle cx="227" cy="149" r="28" fill="#c65a3a" />
+  <circle cx="285" cy="149" r="28" fill="#c65a3a" />
+  <circle cx="339" cy="186" r="30" fill="#c65a3a" />
+  <circle cx="256" cy="297" r="26" fill="#f6f3ee" />
+  <path d="M224 262c14 12 50 12 64 0" fill="none" stroke="#f6f3ee" stroke-width="16" stroke-linecap="round" />
 </svg>
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
   <rect width="512" height="512" rx="110" fill="#0e2f4f" />
