@@ -60,7 +60,6 @@ function AnimalFilter({ filters, onFilterChange, onClear, showNameSearch, nameSe
       <button type="button" className="af-toggle" onClick={() => setIsFilterOpen(prev => !prev)}>
         <i className={`bi ${isFilterOpen ? 'bi-x-lg' : 'bi-funnel'}`}></i>
         <span>{isFilterOpen ? 'Cerrar filtros' : 'Filtrar'}</span>
-        {hasActiveFilters && !isFilterOpen && <span className="af-toggle-badge"></span>}
       </button>
       <div className={`af-container ${isFilterOpen ? 'af-container--open' : ''}`}>
       {showNameSearch && (

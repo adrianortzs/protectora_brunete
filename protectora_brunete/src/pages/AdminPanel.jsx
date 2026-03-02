@@ -29,6 +29,7 @@ function getFirstImage(animal) {
 function validateAnimalForm(form, existingImages, pendingFiles) {
   const errors = {}
   const name = (form.name || '').trim()
+  const description = (form.description || '').trim()
   const ageValue = form.age === '' ? '' : Number(form.age)
 
   if (!name) errors.name = 'El nombre es obligatorio.'
@@ -40,12 +41,12 @@ function validateAnimalForm(form, existingImages, pendingFiles) {
   if (!form.size) errors.size = 'Selecciona el tamaño.'
   if (!form.sterilized) errors.sterilized = 'Indica si está esterilizado.'
 
-  if (form.age !== '') {
-    if (!Number.isInteger(ageValue) || ageValue < 0) errors.age = 'La edad debe ser un número mayor o igual que 0.'
-    if (ageValue > 400) errors.age = 'La edad parece demasiado alta. Revísala.'
-  }
+  if (form.age === '') errors.age = 'La edad es obligatoria.'
+  else if (!Number.isInteger(ageValue) || ageValue < 0) errors.age = 'La edad debe ser un número mayor o igual que 0.'
+  else if (ageValue > 400) errors.age = 'La edad parece demasiado alta. Revísala.'
 
-  if ((form.description || '').trim().length > 3500) errors.description = 'La descripción no puede superar los 3500 caracteres.'
+  if (!description) errors.description = 'La descripción es obligatoria.'
+  else if (description.length > 3500) errors.description = 'La descripción no puede superar los 3500 caracteres.'
   if (!form.arrival_date) errors.arrival_date = 'La fecha de llegada es obligatoria.'
   if (existingImages.length + pendingFiles.length === 0) errors.img_url = 'Añade al menos una imagen.'
 
@@ -599,7 +600,7 @@ function AdminPanel() {
               </div>
               <div className="admin-edit-row">
                 <div className="admin-edit-field">
-                  <label>Edad (meses)</label>
+                  <label>Edad (meses) *</label>
                   <input type="number" min="0" value={editForm.age} onChange={(e) => handleEditChange('age', e.target.value)} />
                   {formErrors.age && <p className="admin-edit-error">{formErrors.age}</p>}
                 </div>
@@ -626,7 +627,7 @@ function AdminPanel() {
                 {formErrors.arrival_date && <p className="admin-edit-error">{formErrors.arrival_date}</p>}
               </div>
               <div className="admin-edit-field">
-                <label>Descripción</label>
+                <label>Descripción *</label>
                 <textarea rows="4" value={editForm.description} onChange={(e) => handleEditChange('description', e.target.value)} />
                 {formErrors.description && <p className="admin-edit-error">{formErrors.description}</p>}
               </div>

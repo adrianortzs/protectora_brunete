@@ -285,7 +285,7 @@ button.nav-link {
   font-size: 1rem;
   font-weight: 600;
   color: #fff;
-  background-color: var(--blue-primary);
+  background-color: var(--terracotta);
   border: none;
   border-radius: var(--radius-full);
   text-decoration: none;
@@ -340,7 +340,7 @@ button.nav-link {
     font-weight: 500;
     letter-spacing: 0.01em;
     color: var(--white-soft);
-    background-color: var(--blue-primary);
+    background-color: var(--terracotta);
     border: none;
     border-radius: var(--radius-full);
     text-decoration: none;
@@ -349,7 +349,7 @@ button.nav-link {
   }
 
   .cta-primary:hover {
-    background-color: var(--terracotta);
+    background-color: #A84A2E;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px var(--accent-a30);
   }
@@ -487,13 +487,7 @@ button.nav-link {
 }
 
 .af-toggle-badge {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.75rem;
-  width: 8px;
-  height: 8px;
-  background-color: var(--terracotta);
-  border-radius: 50%;
+  display: none;
 }
 
 .af-container {
@@ -1132,9 +1126,11 @@ button.nav-link {
   margin: 0 auto;
   padding: 1rem 0.75rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.5rem 1rem;
   border-bottom: 2px solid var(--accent-a30);
 }
 
