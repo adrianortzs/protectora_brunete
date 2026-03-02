@@ -1518,7 +1518,7 @@
 .animal-modal-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 3000;
   display: flex;
   align-items: flex-start;
   justify-content: center;
