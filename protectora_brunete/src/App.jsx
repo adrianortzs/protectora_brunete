@@ -11,7 +11,7 @@ import FosterHome from './pages/FosterHome'
 import WantToBeVolunteer from './pages/WantToBeVolunteer'
 import MaterialDonations from './pages/MaterialDonations'
 import DogRequests from './pages/DogRequests'
-import CES from './pages/CES'
+import CER from './pages/CER'
 import CastrationInCats from './pages/CastrationInCats'
 import StreetCats from './pages/StreetCats'
 import AdminLogin from './pages/AdminLogin'
@@ -47,7 +47,7 @@ function App() {
         <Route path="/colabora/casa-de-acogida" element={<FosterHome />} />
         <Route path="/colabora/voluntariado" element={<WantToBeVolunteer />} />
         <Route path="/colabora/donaciones" element={<MaterialDonations />} />
-        <Route path="/gestión-felina/ces" element={<CES />} />
+        <Route path="/gestión-felina/cer" element={<CER />} />
         <Route path="/gestión-felina/castración" element={<CastrationInCats />} />
         <Route path="/gestión-felina/gatos-callejeros" element={<StreetCats />} />
         <Route path="/contacto" element={<Contact />} />

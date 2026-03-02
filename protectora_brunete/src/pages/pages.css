@@ -324,7 +324,7 @@
   max-width: 95ch;
 }
 
-.page--ces .page-container > .page-section:first-child {
+.page--cer .page-container > .page-section:first-child {
   padding-top: clamp(1.5rem, 0.5rem + 2.5vw, 3rem);
 }
 

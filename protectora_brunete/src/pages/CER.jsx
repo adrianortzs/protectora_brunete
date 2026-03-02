@@ -3,12 +3,12 @@ import Footer from '../components/Footer'
 import usePageTitle from '../hooks/usePageTitle'
 import './pages.css'
 
-function CES() {
+function CER() {
   usePageTitle('CER – Captura, esterilización y retorno')
   return (
     <div>
       <Header />
-      <main className="page page--ces">
+      <main className="page page--cer">
         <section className="page-hero">
           <div className="page-hero-content">
             <h1 className="page-hero-title">CER – Captura, Esterilización y Retorno</h1>
@@ -108,4 +108,4 @@ function CES() {
   )
 }
 
-export default CES
+export default CER
