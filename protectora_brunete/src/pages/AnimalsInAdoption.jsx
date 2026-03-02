@@ -72,8 +72,7 @@ function AnimalsInAdoption() {
   useEffect(() => {
     const fetchAnimals = async () => {
       try {
-        let query = supabase.from('animals').select('*').eq('animal_state', 'en adopcion')
-        if (filterValue) query = query.eq('animal_type', filterValue)
+        const query = supabase.from('animals').select('*').eq('animal_state', 'en adopcion')
         const { data, error: supabaseError } = await query
         if (supabaseError) throw supabaseError
         setAnimals(data || [])
