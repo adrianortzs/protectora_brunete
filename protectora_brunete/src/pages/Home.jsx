@@ -35,6 +35,7 @@ export default function Home() {
   usePageTitle(null)
   const [adoptionPreview, setAdoptionPreview] = useState({ all: null, dogs: null, cats: null })
   const [loadingPreview, setLoadingPreview] = useState(true)
+  const [failedPreviewImages, setFailedPreviewImages] = useState({})
 
   useEffect(() => {
     const fetchPreviewAnimals = async () => {
@@ -82,20 +83,23 @@ export default function Home() {
                 {HOME_ADOPTION_SECTIONS.map((section) => {
                   const previewAnimal = adoptionPreview[section.key]
                   const previewImage = getFirstImage(previewAnimal)
+                  const imageFailed = Boolean(failedPreviewImages[section.key])
                   return (
                     <article key={section.key} className="home-adoption-card">
                       <div className="home-adoption-image-wrap">
-                        {previewImage ? (
+                        {previewImage && !imageFailed ? (
                           <img
                             src={previewImage}
                             alt={previewAnimal?.name || section.title}
                             className="home-adoption-image"
                             loading="lazy"
                             decoding="async"
+                            onError={() => setFailedPreviewImages(prev => ({ ...prev, [section.key]: true }))}
                           />
                         ) : (
                           <div className="home-adoption-image-placeholder">
                             <i className="bi bi-image" aria-hidden="true"></i>
+                            <span>Imagen no disponible</span>
                           </div>
                         )}
                       </div>

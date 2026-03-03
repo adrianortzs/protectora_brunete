@@ -24,10 +24,14 @@ function AnimalsInAdoption() {
   const [filters, setFilters] = useState({ animal_type: '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none })
   const [selectedAnimal, setSelectedAnimal] = useState(null)
   const [carouselIndex, setCarouselIndex] = useState(0)
+  const [failedCarouselImages, setFailedCarouselImages] = useState({})
   const [currentPage, setCurrentPage] = useState(1)
   const navigate = useNavigate()
 
-  useEffect(() => { setCarouselIndex(0) }, [selectedAnimal?.id])
+  useEffect(() => {
+    setCarouselIndex(0)
+    setFailedCarouselImages({})
+  }, [selectedAnimal?.id])
 
   const handleCloseModal = useCallback(() => {
     setSelectedAnimal(null)
@@ -224,11 +228,26 @@ function AnimalsInAdoption() {
                 {selectedAnimalImages.length > 0 ? (
                   selectedAnimalImages.map((url, i) => (
                     <div key={i} className="animal-modal-carousel-slide">
-                      <img src={url} alt={`${selectedAnimal.name} ${i + 1}`} className="animal-modal-carousel-image" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+                      {failedCarouselImages[i] ? (
+                        <div className="animal-modal-carousel-placeholder">
+                          <i className="bi bi-image" aria-hidden="true"></i>
+                          <span>Imagen no disponible</span>
+                        </div>
+                      ) : (
+                        <img
+                          src={url}
+                          alt={`${selectedAnimal.name} ${i + 1}`}
+                          className="animal-modal-carousel-image"
+                          loading={i === 0 ? 'eager' : 'lazy'}
+                          decoding="async"
+                          onError={() => setFailedCarouselImages(prev => ({ ...prev, [i]: true }))}
+                        />
+                      )}
                     </div>
                   ))
                 ) : (
                   <div className="animal-modal-carousel-slide animal-modal-carousel-placeholder">
+                    <i className="bi bi-image" aria-hidden="true"></i>
                     <span>Sin imagen</span>
                   </div>
                 )}

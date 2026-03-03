@@ -43,6 +43,7 @@ function HappyEndings() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
+  const [failedImages, setFailedImages] = useState({})
 
   useEffect(() => {
     const fetchAnimals = async () => {
@@ -91,14 +92,24 @@ function HappyEndings() {
                 {paginatedAnimals.map((animal) => {
                   const firstImage = getImageList(animal)[0]
                   const displayName = capitalizeFirstLetter(animal?.name)
+                  const imageKey = animal.id ?? displayName
+                  const imageFailed = Boolean(failedImages[imageKey])
                   return (
                     <article key={animal.id} className="happy-card">
                       <div className="happy-card-img-wrapper">
-                        {firstImage ? (
-                          <img src={firstImage} alt={displayName || 'Animal adoptado'} className="happy-card-img" loading="lazy" decoding="async" />
+                        {firstImage && !imageFailed ? (
+                          <img
+                            src={firstImage}
+                            alt={displayName || 'Animal adoptado'}
+                            className="happy-card-img"
+                            loading="lazy"
+                            decoding="async"
+                            onError={() => setFailedImages(prev => ({ ...prev, [imageKey]: true }))}
+                          />
                         ) : (
                           <div className="happy-card-placeholder">
                             <i className="bi bi-image" aria-hidden="true"></i>
+                            <span>Imagen no disponible</span>
                           </div>
                         )}
                       </div>

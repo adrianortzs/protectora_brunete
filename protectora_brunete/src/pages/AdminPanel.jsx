@@ -10,6 +10,9 @@ import './pages.css'
 const BUCKET = 'animals'
 const SORT_ARRIVAL = { none: '', newest: 'newest', oldest: 'oldest' }
 const TOAST_DURATION = 4000
+const WEBP_QUALITY = 0.82
+const ALLOWED_UPLOAD_MIME_TYPES = ['image/jpeg', 'image/png']
+const ALLOWED_UPLOAD_EXTENSIONS = ['jpg', 'jpeg', 'png']
 const EMPTY_FORM = { name: '', animal_type: '', gender: '', age: '', size: '', sterilized: '', description: '', arrival_date: '' }
 const ANIMAL_TYPE_OPTIONS = [{ value: 'perro', label: 'Perro' }, { value: 'gato', label: 'Gato' }]
 const GENDER_OPTIONS = [{ value: 'Macho', label: 'Macho' }, { value: 'Hembra', label: 'Hembra' }]
@@ -24,6 +27,55 @@ function normalizeImageList(value) {
 function getFirstImage(animal) {
   if (!animal) return null
   return normalizeImageList(animal.img_url)[0] || null
+}
+
+function isAllowedUploadImage(file) {
+  if (!(file instanceof File)) return false
+  if (ALLOWED_UPLOAD_MIME_TYPES.includes(file.type)) return true
+  const extension = (file.name || '').split('.').pop()?.toLowerCase()
+  return extension ? ALLOWED_UPLOAD_EXTENSIONS.includes(extension) : false
+}
+
+async function convertFileToWebp(file) {
+  if (!(file instanceof File)) return file
+  if (!isAllowedUploadImage(file)) return file
+
+  const objectUrl = URL.createObjectURL(file)
+  try {
+    const image = await new Promise((resolve, reject) => {
+      const img = new Image()
+      img.onload = () => resolve(img)
+      img.onerror = () => reject(new Error('No se pudo leer la imagen para convertirla a webp.'))
+      img.src = objectUrl
+    })
+
+    const canvas = document.createElement('canvas')
+    canvas.width = image.naturalWidth
+    canvas.height = image.naturalHeight
+    const context = canvas.getContext('2d')
+    if (!context) return file
+    context.drawImage(image, 0, 0)
+
+    const webpBlob = await new Promise((resolve) => {
+      canvas.toBlob(resolve, 'image/webp', WEBP_QUALITY)
+    })
+    if (!webpBlob) return file
+
+    const safeName = (file.name || 'image').replace(/\.[^.]+$/, '')
+    return new File([webpBlob], `${safeName}.webp`, { type: 'image/webp' })
+  } catch (error) {
+    console.warn('No se pudo convertir la imagen a webp. Se usará el archivo original.', error)
+    return file
+  } finally {
+    URL.revokeObjectURL(objectUrl)
+  }
+}
+
+function getExtensionFromFile(file) {
+  if (file.type === 'image/webp') return 'webp'
+  if (file.type === 'image/jpeg') return 'jpg'
+  if (file.type === 'image/png') return 'png'
+  return 'webp'
 }
 
 function validateAnimalForm(form, existingImages, pendingFiles) {
@@ -71,6 +123,7 @@ function AdminPanel() {
   const [pendingFiles, setPendingFiles] = useState([])
   const [formErrors, setFormErrors] = useState({})
   const [uploading, setUploading] = useState(false)
+  const [failedCardImages, setFailedCardImages] = useState({})
   const [toasts, setToasts] = useState([])
   const [confirmDialog, setConfirmDialog] = useState(null)
   const fileInputRef = useRef(null)
@@ -238,7 +291,18 @@ function AdminPanel() {
   }
 
   const handleFilesSelected = (files) => {
-    const valid = Array.from(files).filter(f => f.type.startsWith('image/'))
+    const selected = Array.from(files || [])
+    if (selected.length === 0) return
+    const valid = selected.filter((file) => isAllowedUploadImage(file))
+    const invalidCount = selected.length - valid.length
+    if (invalidCount > 0) {
+      pushToast(
+        invalidCount === 1
+          ? 'Ese archivo no es válido. Solo se permiten imágenes JPG o PNG.'
+          : 'Algunos archivos no son válidos. Solo se permiten imágenes JPG o PNG.',
+        'error'
+      )
+    }
     if (valid.length === 0) return
     setPendingFiles(prev => [...prev, ...valid])
     setFormErrors(prev => ({ ...prev, img_url: '' }))
@@ -255,9 +319,10 @@ function AdminPanel() {
   const uploadFiles = async (files) => {
     const urls = []
     for (const file of files) {
-      const ext = file.name.split('.').pop()
-      const path = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`
-      const { error: uploadError } = await supabase.storage.from(BUCKET).upload(path, file, { cacheControl: '31536000', upsert: false })
+      const fileToUpload = await convertFileToWebp(file)
+      const extension = getExtensionFromFile(fileToUpload)
+      const path = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${extension}`
+      const { error: uploadError } = await supabase.storage.from(BUCKET).upload(path, fileToUpload, { cacheControl: '31536000', upsert: false })
       if (uploadError) throw uploadError
       const { data: { publicUrl } } = supabase.storage.from(BUCKET).getPublicUrl(path)
       urls.push(publicUrl)
@@ -479,14 +544,24 @@ function AdminPanel() {
             <div className="admin-grid">
               {paginatedAnimals.map((animal) => {
                 const firstImage = getFirstImage(animal)
+                const imageKey = animal.id ?? animal.name
+                const imageFailed = Boolean(failedCardImages[imageKey])
                 return (
                   <article key={animal.id} className="admin-card">
                     <div className="admin-card-image-wrapper">
-                      {firstImage ? (
-                        <img src={firstImage} alt={animal.name} className="admin-card-image" loading="lazy" decoding="async" />
+                      {firstImage && !imageFailed ? (
+                        <img
+                          src={firstImage}
+                          alt={animal.name}
+                          className="admin-card-image"
+                          loading="lazy"
+                          decoding="async"
+                          onError={() => setFailedCardImages(prev => ({ ...prev, [imageKey]: true }))}
+                        />
                       ) : (
                         <div className="admin-card-image-placeholder">
                           <i className="bi bi-image"></i>
+                          <span>Imagen no disponible</span>
                         </div>
                       )}
                     </div>
@@ -670,7 +745,7 @@ function AdminPanel() {
                   <input
                     ref={fileInputRef}
                     type="file"
-                    accept="image/*"
+                    accept=".jpg,.jpeg,.png,image/jpeg,image/png"
                     multiple
                     className="admin-img-input-hidden"
                     onChange={(e) => { handleFilesSelected(e.target.files); e.target.value = '' }}

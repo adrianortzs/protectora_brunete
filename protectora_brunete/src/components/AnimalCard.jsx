@@ -1,19 +1,29 @@
 import './components.css'
+import { useState } from 'react'
 
 function AnimalCard({ animal, onSelect, formatAge }) {
   const name = animal?.name || 'Animal'
   const images = Array.isArray(animal?.img_url) ? animal.img_url : animal?.img_url ? [animal.img_url] : []
   const firstImage = images.filter(Boolean)[0] || null
   const normalizedGender = animal?.gender ? String(animal.gender).trim().toLowerCase() : ''
+  const [imageFailed, setImageFailed] = useState(false)
 
   return (
     <article className="animal-card">
       <div className="animal-image-wrapper">
-        {firstImage ? (
-          <img src={firstImage} alt={name} className="animal-image" loading="lazy" decoding="async" />
+        {firstImage && !imageFailed ? (
+          <img
+            src={firstImage}
+            alt={name}
+            className="animal-image"
+            loading="lazy"
+            decoding="async"
+            onError={() => setImageFailed(true)}
+          />
         ) : (
           <div className="animal-image-placeholder">
             <i className="bi bi-image"></i>
+            <span>Imagen no disponible</span>
           </div>
         )}
       </div>
