@@ -13,7 +13,7 @@ const TOAST_DURATION = 4000
 const WEBP_QUALITY = 0.82
 const ALLOWED_UPLOAD_MIME_TYPES = ['image/jpeg', 'image/png']
 const ALLOWED_UPLOAD_EXTENSIONS = ['jpg', 'jpeg', 'png']
-const EMPTY_FORM = { name: '', animal_type: '', gender: '', age: '', size: '', sterilized: '', description: '', arrival_date: '' }
+const EMPTY_FORM = { name: '', animal_type: '', gender: '', age: '', size: '', sterilized: '', city_hall: '', description: '', arrival_date: '' }
 const ANIMAL_TYPE_OPTIONS = [{ value: 'perro', label: 'Perro' }, { value: 'gato', label: 'Gato' }]
 const GENDER_OPTIONS = [{ value: 'Macho', label: 'Macho' }, { value: 'Hembra', label: 'Hembra' }]
 const SIZE_OPTIONS = [{ value: 'pequeño', label: 'Pequeño' }, { value: 'mediano', label: 'Mediano' }, { value: 'grande', label: 'Grande' }]
@@ -275,6 +275,7 @@ function AdminPanel() {
       age: animal.age || '',
       size: animal.size || '',
       sterilized: animal.sterilized === true ? 'si' : animal.sterilized === false ? 'no' : '',
+      city_hall: animal.city_hall || '',
       description: animal.description || '',
       arrival_date: animal.arrival_date || ''
     })
@@ -362,6 +363,7 @@ function AdminPanel() {
         age: editForm.age === '' ? null : parseInt(editForm.age),
         size: editForm.size.trim(),
         sterilized: editForm.sterilized === '' ? null : editForm.sterilized === 'si',
+        city_hall: (editForm.city_hall || '').trim() || null,
         description: editForm.description.trim(),
         img_url: imgUrls,
         arrival_date: editForm.arrival_date || null
@@ -700,6 +702,10 @@ function AdminPanel() {
                 <label>Fecha de llegada</label>
                 <input type="date" value={editForm.arrival_date} onChange={(e) => handleEditChange('arrival_date', e.target.value)} />
                 {formErrors.arrival_date && <p className="admin-edit-error">{formErrors.arrival_date}</p>}
+              </div>
+              <div className="admin-edit-field">
+                <label>Ayuntamiento</label>
+                <input type="text" value={editForm.city_hall || ''} onChange={(e) => handleEditChange('city_hall', e.target.value)}/>
               </div>
               <div className="admin-edit-field">
                 <label>Descripción *</label>
