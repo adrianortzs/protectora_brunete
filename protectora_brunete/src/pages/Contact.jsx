@@ -14,7 +14,7 @@ const PHONE_ALLOWED_REGEX = /^[0-9+\s().-]+$/
 
 const HERO_PARAGRAPHS = ['¿Tienes alguna duda o quieres colaborar? Escríbenos y te responderemos lo antes posible.']
 
-const CONTACT_EMAILS = [{ label: 'aratadopciones@gmail.com', href: 'mailto:aratadopciones@gmail.com' }, { label: 'gestion@aratadopta.com', href: 'mailto:gestion@aratadopta.com' }]
+const CONTACT_EMAILS = [{ label: 'aratadopciones@gmail.com', href: 'mailto:aratadopciones@gmail.com' }, { label: 'administracion@aratadopta.com', href: 'mailto:administracion@aratadopta.com' }]
 
 const CONTACT_PHONES = [{ label: 'Torrelodones', number: '918 15 92 94', href: 'tel:+34918159294' }, { label: 'Brunete', number: '918 15 86 73', href: 'tel:+34918158673' }]
 

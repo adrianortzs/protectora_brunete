@@ -13,7 +13,6 @@ import MaterialDonations from './pages/MaterialDonations'
 import DogRequests from './pages/DogRequests'
 import CER from './pages/CER'
 import CastrationInCats from './pages/CastrationInCats'
-import StreetCats from './pages/StreetCats'
 import AdminLogin from './pages/AdminLogin'
 import AdminPanel from './pages/AdminPanel'
 import LegalNotice from './pages/LegalNotice'
@@ -49,7 +48,6 @@ function App() {
         <Route path="/colabora/donaciones" element={<MaterialDonations />} />
         <Route path="/gestión-felina/cer" element={<CER />} />
         <Route path="/gestión-felina/castración" element={<CastrationInCats />} />
-        <Route path="/gestión-felina/gatos-callejeros" element={<StreetCats />} />
         <Route path="/contacto" element={<Contact />} />
         <Route path="/términos-y-condiciones" element={<TermsAndConditions />} />
         <Route path="/aviso-legal" element={<LegalNotice />} />

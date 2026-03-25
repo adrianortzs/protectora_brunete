@@ -1554,6 +1554,8 @@
   overflow: hidden;
   display: grid;
   grid-template-columns: 1fr;
+  /* Carousel arriba, contenido ocupando el resto (para que el botón no quede cortado). */
+  grid-template-rows: auto 1fr;
   background-color: var(--white-soft);
   border: 2px solid var(--alpha-8);
   border-radius: var(--radius-xl);
@@ -1737,6 +1739,16 @@
   display: flex;
   flex-direction: column;
   background: linear-gradient(180deg, var(--white-soft) 0%, #f8f4ef 100%);
+  min-height: 0; /* importante para que funcione el scroll interno en grid */
+}
+
+/* Admin: asegurar el mismo grid interno que el modal público */
+.animal-modal--admin {
+  grid-template-rows: auto 1fr;
+}
+
+.animal-modal--admin .animal-modal-content {
+  min-height: 0;
 }
 
 .animal-modal-name {
@@ -1755,17 +1767,17 @@
 .animal-modal-details {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.375rem;
-  margin: 0 0 1rem 0;
+  gap: 0.5rem;
+  margin: 0 0 1.25rem 0;
   padding: 0;
 }
 
 .animal-modal-detail {
   margin: 0;
   display: flex;
-  align-items: baseline;
-  gap: 0.375rem;
-  padding: 0.375rem 0.625rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
   background-color: var(--white-soft);
   border-radius: var(--radius-full);
   border: 1px solid var(--alpha-8);
@@ -1787,7 +1799,47 @@
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--blue-primary);
-  text-transform: capitalize;
+  text-transform: none;
+}
+
+/* Admin: más campos en la ficha -> ordenar en "fila" tipo grilla (columnas)
+   para evitar desbordes/colapsos de espaciado con la descripción. */
+.animal-modal--admin .animal-modal-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 1rem 0;
+  padding: 0;
+}
+
+.animal-modal--admin .animal-modal-detail {
+  min-height: 3rem; /* iguala altura aunque algunos valores se envuelvan */
+  padding: 0.5rem 0.75rem; /* fuerza el padding uniforme */
+}
+
+.animal-modal--admin .animal-modal-detail dt {
+  flex: 0 0 auto;
+  line-height: 1.1;
+}
+
+.animal-modal--admin .animal-modal-detail dd {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.1;
+}
+
+.animal-modal--admin .animal-modal-detail--arrival dd,
+.animal-modal--admin .animal-modal-detail--city dd {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  word-break: break-word;
+}
+
+.animal-modal--admin .animal-modal-description {
+  flex: 0 0 auto;
 }
 
 .animal-modal-detail dd i {
@@ -1798,7 +1850,7 @@
 .animal-modal-description {
   padding-top: 1rem;
   border-top: 1px solid var(--alpha-6);
-  flex: 1;
+  flex: 0 0 auto;
 }
 
 .animal-modal-description h3 {

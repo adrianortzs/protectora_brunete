@@ -13,14 +13,35 @@ const SIZE_OPTIONS = [{ value: '', label: 'Cualquiera' }, { value: 'pequeño', l
 
 const ARRIVAL_OPTIONS = [{ value: SORT_ARRIVAL.none, label: 'Sin orden', buttonLabel: 'Sin orden' }, { value: SORT_ARRIVAL.oldest, label: 'Más antiguos primero', buttonLabel: 'Más antiguos' }, { value: SORT_ARRIVAL.newest, label: 'Más recientes primero', buttonLabel: 'Más recientes' }]
 
-function AnimalFilter({ filters, onFilterChange, onClear, showNameSearch, nameSearch, onNameSearchChange }) {
+function AnimalFilter({
+  filters,
+  onFilterChange,
+  onClear,
+  showNameSearch,
+  nameSearch,
+  onNameSearchChange,
+  cityHallOptions = [],
+  showLocationFilters = false
+}) {
   const [openDropdown, setOpenDropdown] = useState(null)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const toggleDropdown = (name) => { setOpenDropdown(prev => prev === name ? null : name) }
   const closeDropdowns = () => { setOpenDropdown(null) }
   const selectOption = (key, value) => { onFilterChange(key, value); closeDropdowns() }
 
-  const hasActiveFilters = filters.animal_type || filters.gender || filters.age || filters.size || filters.arrival_date || (showNameSearch && nameSearch)
+  const hasActiveFilters =
+    filters.animal_type ||
+    filters.gender ||
+    filters.age ||
+    filters.size ||
+    filters.arrival_date ||
+    (showLocationFilters && (filters.city_hall || filters.chenil)) ||
+    (showNameSearch && nameSearch)
+
+  const cityHallDropdownOptions = [
+    { value: '', label: 'Cualquiera' },
+    ...(cityHallOptions || []).map((city) => ({ value: city, label: city }))
+  ]
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -76,10 +97,34 @@ function AnimalFilter({ filters, onFilterChange, onClear, showNameSearch, nameSe
           </div>
         </div>
       )}
+
+      {showLocationFilters && (
+        <div className="filter-dropdown af-chenil-search">
+          <span className="filter-dropdown-label">Nº de chenil</span>
+          <div className="af-name-input-wrap">
+            <i className="bi bi-hash af-name-icon"></i>
+            <input
+              type="number"
+              value={filters.chenil ?? ''}
+              onChange={(e) => onFilterChange('chenil', e.target.value)}
+              className="af-name-input"
+              placeholder="Ej: 12"
+              min="0"
+            />
+            {filters.chenil !== '' && (
+              <button type="button" className="af-name-clear" onClick={() => onFilterChange('chenil', '')} aria-label="Limpiar filtro">
+                <i className="bi bi-x-lg"></i>
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
       {renderDropdown({ key: 'animal_type', label: 'Tipo de animal', options: ANIMAL_TYPE_OPTIONS })}
       {renderDropdown({ key: 'gender', label: 'Sexo', options: GENDER_OPTIONS })}
       {renderDropdown({ key: 'age', label: 'Edad', options: AGE_OPTIONS })}
       {renderDropdown({ key: 'size', label: 'Tamaño', options: SIZE_OPTIONS })}
+      {showLocationFilters && renderDropdown({ key: 'city_hall', label: 'Ayuntamiento', options: cityHallDropdownOptions })}
       {renderDropdown({ key: 'arrival_date', label: 'Fecha de llegada', options: ARRIVAL_OPTIONS, buttonLabelGetter: (value) => ARRIVAL_OPTIONS.find((opt) => opt.value === value)?.buttonLabel || 'Sin orden' })}
 
       <button type="button" className="animals-filter-reset" onClick={handleClear}>Limpiar filtros</button>

@@ -12,7 +12,7 @@ import './pages.css'
 
 const ANIMAL_TYPE_FILTER = { perros: 'perro', gatos: 'gato' }
 const SORT_ARRIVAL = { none: '', newest: 'newest', oldest: 'oldest' }
-const FELINE_ARTICLES = [{ to: '/gestión-felina/cer', label: 'CER' }, { to: '/gestión-felina/castración', label: 'Castración en gatos' }, { to: '/gestión-felina/gatos-callejeros', label: 'Gatos callejeros' }]
+const FELINE_ARTICLES = [{ to: '/gestión-felina/cer', label: 'CER' }, { to: '/gestión-felina/castración', label: 'Castración en gatos' }]
 const CANINE_ARTICLES = [{ to: '/10-peticiones-de-un-perro', label: '10 peticiones de un perro' }]
 
 function AnimalsInAdoption() {

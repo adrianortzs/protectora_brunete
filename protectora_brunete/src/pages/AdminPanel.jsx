@@ -13,7 +13,7 @@ const TOAST_DURATION = 4000
 const WEBP_QUALITY = 0.82
 const ALLOWED_UPLOAD_MIME_TYPES = ['image/jpeg', 'image/png']
 const ALLOWED_UPLOAD_EXTENSIONS = ['jpg', 'jpeg', 'png']
-const EMPTY_FORM = { name: '', animal_type: '', gender: '', age: '', size: '', sterilized: '', city_hall: '', description: '', arrival_date: '' }
+const EMPTY_FORM = { name: '', animal_type: '', gender: '', age: '', size: '', sterilized: '', city_hall: '', chenil: '', description: '', arrival_date: '' }
 const ANIMAL_TYPE_OPTIONS = [{ value: 'perro', label: 'Perro' }, { value: 'gato', label: 'Gato' }]
 const GENDER_OPTIONS = [{ value: 'Macho', label: 'Macho' }, { value: 'Hembra', label: 'Hembra' }]
 const SIZE_OPTIONS = [{ value: 'pequeño', label: 'Pequeño' }, { value: 'mediano', label: 'Mediano' }, { value: 'grande', label: 'Grande' }]
@@ -83,6 +83,7 @@ function validateAnimalForm(form, existingImages, pendingFiles) {
   const name = (form.name || '').trim()
   const description = (form.description || '').trim()
   const ageValue = form.age === '' ? '' : Number(form.age)
+  const chenilValue = form.chenil === '' || form.chenil === null || form.chenil === undefined ? '' : Number(form.chenil)
 
   if (!name) errors.name = 'El nombre es obligatorio.'
   else if (name.length < 2) errors.name = 'El nombre debe tener al menos 2 caracteres.'
@@ -96,6 +97,10 @@ function validateAnimalForm(form, existingImages, pendingFiles) {
   if (form.age === '') errors.age = 'La edad es obligatoria.'
   else if (!Number.isInteger(ageValue) || ageValue < 0) errors.age = 'La edad debe ser un número mayor o igual que 0.'
   else if (ageValue > 400) errors.age = 'La edad parece demasiado alta. Revísala.'
+
+  if (form.chenil !== '' && form.chenil !== null && form.chenil !== undefined) {
+    if (!Number.isInteger(chenilValue) || chenilValue < 0) errors.chenil = 'El Nº de chenil debe ser un número entero mayor o igual que 0.'
+  }
 
   if (!description) errors.description = 'La descripción es obligatoria.'
   else if (description.length > 3500) errors.description = 'La descripción no puede superar los 3500 caracteres.'
@@ -111,12 +116,15 @@ function AdminPanel() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [editAnimal, setEditAnimal] = useState(null)
+  const [detailAnimal, setDetailAnimal] = useState(null)
+  const [detailCarouselIndex, setDetailCarouselIndex] = useState(0)
+  const [failedDetailCarouselImages, setFailedDetailCarouselImages] = useState({})
   const [editForm, setEditForm] = useState({})
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState(null)
   const [adopting, setAdopting] = useState(null)
   const [isNewAnimal, setIsNewAnimal] = useState(false)
-  const [filters, setFilters] = useState({ animal_type: '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none })
+  const [filters, setFilters] = useState({ animal_type: '', gender: '', age: '', size: '', city_hall: '', chenil: '', arrival_date: SORT_ARRIVAL.none })
   const [nameSearch, setNameSearch] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [existingImages, setExistingImages] = useState([])
@@ -172,6 +180,12 @@ function AdminPanel() {
   }, [navigate])
 
   useEffect(() => {
+    if (!detailAnimal) return
+    setDetailCarouselIndex(0)
+    setFailedDetailCarouselImages({})
+  }, [detailAnimal])
+
+  useEffect(() => {
     if (!editAnimal) return
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -194,17 +208,9 @@ function AdminPanel() {
     }
   }
 
-  const formatAge = (ageMonths) => {
-    const m = parseInt(ageMonths)
-    if (isNaN(m)) return '—'
-    if (m < 12) return `${m} ${m === 1 ? 'mes' : 'meses'}`
-    const years = Math.floor(m / 12)
-    return `${years} ${years === 1 ? 'año' : 'años'}`
-  }
-
   const handleLogout = async () => {
     await supabase.auth.signOut()
-    navigate('/hsdkadmin/login')
+    navigate('/')
   }
 
   const updateFilter = (key, value) => { setFilters(prev => ({ ...prev, [key]: value })); setCurrentPage(1) }
@@ -218,6 +224,20 @@ function AdminPanel() {
     return 'senior'
   }
 
+  const formatAge = (ageMonths) => {
+    const m = parseInt(ageMonths)
+    if (isNaN(m)) return '—'
+    if (m < 12) return `${m} ${m === 1 ? 'mes' : 'meses'}`
+    const years = Math.floor(m / 12)
+    return `${years} ${years === 1 ? 'año' : 'años'}`
+  }
+
+  const formatSterilized = (value) => {
+    if (value === true) return '✓'
+    if (value === false) return '✕'
+    return '—'
+  }
+
   const handleNameSearch = (value) => { setNameSearch(value); setCurrentPage(1) }
 
   const filteredAnimals = useMemo(() => (
@@ -226,8 +246,10 @@ function AdminPanel() {
       const genderOk = !filters.gender || normalized(a.gender) === normalized(filters.gender)
       const ageOk = !filters.age || getAgeCategory(a.age) === filters.age
       const sizeOk = !filters.size || normalized(a.size) === normalized(filters.size)
+      const cityOk = !filters.city_hall || normalized(a.city_hall) === normalized(filters.city_hall)
+      const chenilOk = filters.chenil === '' || parseInt(a.chenil, 10) === parseInt(filters.chenil, 10)
       const nameOk = !nameSearch || normalized(a.name).includes(normalized(nameSearch))
-      return typeOk && genderOk && ageOk && sizeOk && nameOk
+      return typeOk && genderOk && ageOk && sizeOk && cityOk && chenilOk && nameOk
     })
   ), [animals, filters, nameSearch])
 
@@ -239,6 +261,21 @@ function AdminPanel() {
   }, [filteredAnimals, filters.arrival_date])
   const animalsInAdoption = useMemo(() => animals.filter((animal) => animal.animal_state === 'en adopcion').length, [animals])
   const adoptedAnimals = useMemo(() => animals.filter((animal) => animal.animal_state === 'adoptado').length, [animals])
+
+  const cityHallOptions = useMemo(() => {
+    const set = new Set(
+      animals
+        .map((a) => a.city_hall)
+        .filter((v) => v !== null && v !== undefined && String(v).trim() !== '')
+        .map((v) => String(v).trim())
+    )
+    return Array.from(set).sort((a, b) => a.localeCompare(b, 'es'))
+  }, [animals])
+
+  const detailAnimalImages = useMemo(() => {
+    if (!detailAnimal) return []
+    return normalizeImageList(detailAnimal.img_url)
+  }, [detailAnimal])
 
   const { paginated: paginatedAnimals, totalPages, safePage } = paginate(sortedAnimals, currentPage)
 
@@ -254,6 +291,7 @@ function AdminPanel() {
   }, [pendingPreviews])
 
   const openNew = () => {
+    setDetailAnimal(null)
     setIsNewAnimal(true)
     setEditAnimal({})
     setEditForm({ ...EMPTY_FORM })
@@ -263,6 +301,7 @@ function AdminPanel() {
   }
 
   const openEdit = (animal) => {
+    setDetailAnimal(null)
     setIsNewAnimal(false)
     setEditAnimal(animal)
     setExistingImages(normalizeImageList(animal.img_url))
@@ -276,6 +315,7 @@ function AdminPanel() {
       size: animal.size || '',
       sterilized: animal.sterilized === true ? 'si' : animal.sterilized === false ? 'no' : '',
       city_hall: animal.city_hall || '',
+      chenil: animal.chenil ?? '',
       description: animal.description || '',
       arrival_date: animal.arrival_date || ''
     })
@@ -289,6 +329,10 @@ function AdminPanel() {
       setExistingImages([])
       setFormErrors({})
     }
+  }
+
+  const closeDetailModal = () => {
+    setDetailAnimal(null)
   }
 
   const handleFilesSelected = (files) => {
@@ -364,6 +408,7 @@ function AdminPanel() {
         size: editForm.size.trim(),
         sterilized: editForm.sterilized === '' ? null : editForm.sterilized === 'si',
         city_hall: (editForm.city_hall || '').trim() || null,
+        chenil: editForm.chenil === '' ? null : parseInt(editForm.chenil, 10),
         description: editForm.description.trim(),
         img_url: imgUrls,
         arrival_date: editForm.arrival_date || null
@@ -528,7 +573,9 @@ function AdminPanel() {
           <AnimalFilter
             filters={filters}
             onFilterChange={updateFilter}
-            onClear={() => { setFilters({ animal_type: '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none }); setNameSearch(''); setCurrentPage(1) }}
+            onClear={() => { setFilters({ animal_type: '', gender: '', age: '', size: '', city_hall: '', chenil: '', arrival_date: SORT_ARRIVAL.none }); setNameSearch(''); setCurrentPage(1) }}
+            cityHallOptions={cityHallOptions}
+            showLocationFilters
             showNameSearch
             nameSearch={nameSearch}
             onNameSearchChange={handleNameSearch}
@@ -550,7 +597,19 @@ function AdminPanel() {
                 const imageFailed = Boolean(failedCardImages[imageKey])
                 return (
                   <article key={animal.id} className="admin-card">
-                    <div className="admin-card-image-wrapper">
+                    <div
+                      className="admin-card-image-wrapper"
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => setDetailAnimal(animal)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault()
+                          setDetailAnimal(animal)
+                        }
+                      }}
+                      style={{ cursor: 'pointer' }}
+                    >
                       {firstImage && !imageFailed ? (
                         <img
                           src={firstImage}
@@ -575,10 +634,6 @@ function AdminPanel() {
                             {animal.gender.toLowerCase() === 'macho' ? (<i className="bi bi-gender-male"></i>) : animal.gender.toLowerCase() === 'hembra' ? (<i className="bi bi-gender-female"></i>) : (animal.gender)}
                           </span>
                         )}
-                      </div>
-                      <div className="admin-card-info">
-                        <span>Edad: {formatAge(animal.age)}</span>
-                        <span>Tamaño: {animal.size || '—'}</span>
                       </div>
                       <div className="admin-card-actions">
                         <button type="button" className="admin-card-btn admin-card-btn--edit" onClick={() => openEdit(animal)}>
@@ -708,6 +763,11 @@ function AdminPanel() {
                 <input type="text" value={editForm.city_hall || ''} onChange={(e) => handleEditChange('city_hall', e.target.value)}/>
               </div>
               <div className="admin-edit-field">
+                <label>Nº de chenil</label>
+                <input type="number" min="0" value={editForm.chenil || ''} onChange={(e) => handleEditChange('chenil', e.target.value)} />
+                {formErrors.chenil && <p className="admin-edit-error">{formErrors.chenil}</p>}
+              </div>
+              <div className="admin-edit-field">
                 <label>Descripción *</label>
                 <textarea rows="4" value={editForm.description} onChange={(e) => handleEditChange('description', e.target.value)} />
                 {formErrors.description && <p className="admin-edit-error">{formErrors.description}</p>}
@@ -771,6 +831,131 @@ function AdminPanel() {
                   : isNewAnimal ? 'Crear animal' : 'Guardar cambios'
                 }
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {detailAnimal && !editAnimal && (
+        <div className="animal-modal-backdrop" onClick={closeDetailModal}>
+          <div className="animal-modal animal-modal--admin" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="animal-modal-title">
+            <button type="button" className="animal-modal-close" onClick={closeDetailModal} aria-label="Cerrar ficha">×</button>
+
+            <div className="animal-modal-carousel">
+              <div className="animal-modal-carousel-track" style={{ transform: `translateX(-${detailCarouselIndex * 100}%)` }}>
+                {detailAnimalImages.length > 0 ? (
+                  detailAnimalImages.map((url, i) => (
+                    <div key={i} className="animal-modal-carousel-slide">
+                      {failedDetailCarouselImages[i] ? (
+                        <div className="animal-modal-carousel-placeholder">
+                          <i className="bi bi-image" aria-hidden="true"></i>
+                          <span>Imagen no disponible</span>
+                        </div>
+                      ) : (
+                        <img
+                          src={url}
+                          alt={`${detailAnimal.name} ${i + 1}`}
+                          className="animal-modal-carousel-image"
+                          loading={i === 0 ? 'eager' : 'lazy'}
+                          decoding="async"
+                          onError={() => setFailedDetailCarouselImages(prev => ({ ...prev, [i]: true }))}
+                        />
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <div className="animal-modal-carousel-slide animal-modal-carousel-placeholder">
+                    <i className="bi bi-image" aria-hidden="true"></i>
+                    <span>Sin imagen</span>
+                  </div>
+                )}
+              </div>
+
+              {detailAnimalImages.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    className="animal-modal-carousel-prev"
+                    onClick={() => setDetailCarouselIndex((i) => (i <= 0 ? detailAnimalImages.length - 1 : i - 1))}
+                    aria-label="Anterior"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    type="button"
+                    className="animal-modal-carousel-next"
+                    onClick={() => setDetailCarouselIndex((i) => (i >= detailAnimalImages.length - 1 ? 0 : i + 1))}
+                    aria-label="Siguiente"
+                  >
+                    ›
+                  </button>
+                  <div className="animal-modal-carousel-dots">
+                    {detailAnimalImages.map((_, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        className={`animal-modal-carousel-dot ${i === detailCarouselIndex ? 'is-active' : ''}`}
+                        onClick={() => setDetailCarouselIndex(i)}
+                        aria-label={`Ir a imagen ${i + 1}`}
+                        aria-current={i === detailCarouselIndex ? 'true' : undefined}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="animal-modal-content">
+              <h2 id="animal-modal-title" className="animal-modal-name">{detailAnimal.name}</h2>
+              <dl className="animal-modal-details">
+                <div className="animal-modal-detail">
+                  <dt>Sexo</dt>
+                  <dd>
+                    {detailAnimal.gender ? (
+                      detailAnimal.gender.toLowerCase() === 'macho' ? (
+                        <><i className="bi bi-gender-male" aria-hidden></i> Macho</>
+                      ) : detailAnimal.gender.toLowerCase() === 'hembra' ? (
+                        <><i className="bi bi-gender-female" aria-hidden></i> Hembra</>
+                      ) : (
+                        detailAnimal.gender
+                      )
+                    ) : '—'}
+                  </dd>
+                </div>
+                <div className="animal-modal-detail">
+                  <dt>Edad</dt>
+                  <dd>{formatAge(detailAnimal.age)}</dd>
+                </div>
+                <div className="animal-modal-detail">
+                  <dt>Tamaño</dt>
+                  <dd>{detailAnimal.size ? String(detailAnimal.size).charAt(0).toUpperCase() + String(detailAnimal.size).slice(1).toLowerCase() : '—'}</dd>
+                </div>
+                <div className="animal-modal-detail animal-modal-detail--arrival">
+                  <dt>Fecha de llegada</dt>
+                  <dd>{detailAnimal.arrival_date ? new Date(detailAnimal.arrival_date).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—'}</dd>
+                </div>
+                <div className="animal-modal-detail">
+                  <dt>Esterilizado</dt>
+                  <dd>{formatSterilized(detailAnimal.sterilized)}</dd>
+                </div>
+
+                <div className="animal-modal-detail animal-modal-detail--city">
+                  <dt>Ayuntamiento</dt>
+                  <dd>{detailAnimal.city_hall || '—'}</dd>
+                </div>
+
+                <div className="animal-modal-detail">
+                  <dt>Nº de chenil</dt>
+                  <dd>{detailAnimal.chenil === '' || detailAnimal.chenil === null || detailAnimal.chenil === undefined ? '—' : detailAnimal.chenil}</dd>
+                </div>
+              </dl>
+
+              {detailAnimal.description && (
+                <div className="animal-modal-description">
+                  <h3>Descripción</h3>
+                  <p>{detailAnimal.description}</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
