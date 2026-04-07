@@ -75,7 +75,7 @@ function FosterHome() {
             <h2 className="page-section-title">¿Cómo empezar?</h2>
             {START_PARAGRAPHS.map((paragraph) => (<p key={paragraph} className="page-text">{paragraph}</p>))}
             <div className="page-cta-wrap">
-              <Link to="/contacto?asunto=Interés en ser casa de acogida&mensaje=Hola, me gustaría recibir información sobre cómo colaborar como casa de acogida #contact-form" className="page-cta">Quiero ser casa de acogida</Link>
+              <Link to="/contacto?asunto=Interés en ser casa de acogida&mensaje=Hola, me gustaría recibir información sobre cómo colaborar como casa de acogida. Gracias. #contact-form" className="page-cta">Quiero ser casa de acogida</Link>
             </div>
           </section>
         </div>

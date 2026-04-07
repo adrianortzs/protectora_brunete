@@ -16,11 +16,11 @@ const HERO_PARAGRAPHS = ['¿Tienes alguna duda o quieres colaborar? Escríbenos 
 
 const CONTACT_EMAILS = [{ label: 'aratadopciones@gmail.com', href: 'mailto:aratadopciones@gmail.com' }, { label: 'administracion@aratadopta.com', href: 'mailto:administracion@aratadopta.com' }]
 
-const CONTACT_PHONES = [{ label: 'Torrelodones', number: '918 15 92 94', href: 'tel:+34918159294' }, { label: 'Brunete', number: '918 15 86 73', href: 'tel:+34918158673' }]
+const CONTACT_PHONES = [{ label: 'Brunete', number: '918 158 673', href: 'tel:+34918158673' }, { label: 'Torrelodones', number: '918 159 294', href: 'tel:+34918159294' }]
 
 const SOCIAL_LINKS = [{ label: 'Facebook', href: 'https://www.facebook.com/aratadopta', icon: 'bi-facebook' }, { label: 'Instagram', href: 'https://www.instagram.com/aratadopta', icon: 'bi-instagram' }]
 
-const CENTER_LOCATIONS = [{ city: 'Torrelodones', lines: ['Paseo Joaquín Ruiz Gimenez 30', '28250 Torrelodones, Madrid'] }, { city: 'Brunete', lines: ['Carretera M513 km 14.900', '28690 Brunete, Madrid'] }]
+const CENTER_LOCATIONS = [{ city: 'Brunete', lines: ['Carretera M513 km 14.900', '28690 Brunete, Madrid'] }, { city: 'Torrelodones', lines: ['Paseo Joaquín Ruiz Gimenez 30', '28250 Torrelodones, Madrid'] }]
 
 function getDigits(value) {
   return value.replace(/\D/g, '')
@@ -31,8 +31,8 @@ function validateField(name, value) {
 
   if (name === 'nombre') {
     if (!trimmedValue) return 'El nombre es obligatorio.'
-    if (trimmedValue.length < 2) return 'El nombre debe tener al menos 2 caracteres.'
-    if (trimmedValue.length > 40) return 'El nombre no puede superar los 40 caracteres.'
+    if (trimmedValue.length < 2) return 'El nombre es demasiado corto.'
+    if (trimmedValue.length > 20) return 'El nombre es demasiado largo.'
     return ''
   }
 
@@ -43,24 +43,22 @@ function validateField(name, value) {
   }
 
   if (name === 'telefono') {
-    if (!trimmedValue) return ''
+    if (!trimmedValue) return 'El teléfono es obligatorio.'
     if (!PHONE_ALLOWED_REGEX.test(trimmedValue)) return 'El teléfono contiene caracteres no válidos.'
     const phoneDigits = getDigits(trimmedValue)
-    if (phoneDigits.length < 9) return 'El teléfono debe tener al menos 9 dígitos.'
-    if (phoneDigits.length > 15) return 'El teléfono no puede superar los 15 dígitos.'
+    if (phoneDigits.length < 9) return 'El teléfono es demasiado corto.'
+    if (phoneDigits.length > 15) return 'El teléfono es demasiado largo.'
     return ''
   }
 
   if (name === 'asunto') {
     if (!trimmedValue) return 'El asunto es obligatorio.'
-    if (trimmedValue.length < 4) return 'El asunto debe tener al menos 4 caracteres.'
-    if (trimmedValue.length > 120) return 'El asunto no puede superar los 120 caracteres.'
+    if (trimmedValue.length > 60) return 'El asunto no puede superar los 60 caracteres.'
     return ''
   }
 
   if (name === 'mensaje') {
     if (!trimmedValue) return 'El mensaje es obligatorio.'
-    if (trimmedValue.length < 20) return 'El mensaje debe tener al menos 20 caracteres.'
     if (trimmedValue.length > 2500) return 'El mensaje no puede superar los 2500 caracteres.'
     return ''
   }
@@ -83,13 +81,7 @@ function Contact() {
   const params = new URLSearchParams(search)
   const formRef = useRef(null)
 
-  const [formData, setFormData] = useState({
-    nombre: '',
-    correo: '',
-    telefono: '',
-    asunto: params.get('asunto') || '',
-    mensaje: params.get('mensaje') || ''
-  })
+  const [formData, setFormData] = useState({ nombre: '', correo: '', telefono: '', asunto: params.get('asunto') || '', mensaje: params.get('mensaje') || '' })
   const [sending, setSending] = useState(false)
   const [feedback, setFeedback] = useState(null)
   const [errors, setErrors] = useState({})
@@ -129,19 +121,19 @@ function Contact() {
     }
 
     if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
-      setFeedback({ type: 'error', text: 'El servicio de correo no está configurado. Contacta directamente a gestion@aratadopta.com.' })
+      setFeedback({ type: 'error', text: 'El servicio de correo no está configurado. Contacta directamente a administracion@aratadopta.com.' })
       return
     }
     setSending(true)
     setFeedback(null)
     try {
       await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, { publicKey: PUBLIC_KEY })
-      setFeedback({ type: 'success', text: 'Tu mensaje se envió correctamente. Te responderemos por correo lo antes posible.' })
+      setFeedback({ type: 'success', text: 'Tu mensaje se envió correctamente. Te responderemos lo antes posible.' })
       setFormData({ nombre: '', correo: '', telefono: '', asunto: '', mensaje: '' })
       setErrors({})
       setTouched({})
     } catch {
-      setFeedback({ type: 'error', text: 'No se pudo enviar el mensaje. Inténtalo de nuevo o escríbenos a gestion@aratadopta.com.' })
+      setFeedback({ type: 'error', text: 'No se pudo enviar el mensaje. Inténtalo de nuevo o escríbenos a administracion@aratadopta.com.' })
     } finally {
       setSending(false)
     }
@@ -200,101 +192,32 @@ function Contact() {
               )}
               <form className="contact-form" ref={formRef} onSubmit={handleSubmit} noValidate>
                 <div className="contact-field">
-                  <label htmlFor="nombre">Nombre *</label>
-                  <input
-                    type="text"
-                    id="nombre"
-                    name="nombre"
-                    value={formData.nombre}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    required
-                    placeholder="Tu nombre completo"
-                    disabled={sending}
-                    maxLength="80"
-                    aria-invalid={Boolean(errors.nombre)}
-                    aria-describedby={errors.nombre ? 'nombre-error' : undefined}
-                    className={errors.nombre ? 'contact-input--error' : ''}
-                  />
+                  <label htmlFor="nombre">Nombre</label>
+                  <input type="text" id="nombre" name="nombre" value={formData.nombre} onChange={handleChange} onBlur={handleBlur} required placeholder="Tu nombre" disabled={sending} aria-invalid={Boolean(errors.nombre)} aria-describedby={errors.nombre ? 'nombre-error' : undefined} className={errors.nombre ? 'contact-input--error' : ''}/>
                   {errors.nombre && <p id="nombre-error" className="contact-field-error">{errors.nombre}</p>}
                 </div>
 
                 <div className="contact-field">
-                  <label htmlFor="correo">Correo electrónico *</label>
-                  <input
-                    type="email"
-                    id="correo"
-                    name="correo"
-                    value={formData.correo}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    required
-                    placeholder="tu@email.com"
-                    disabled={sending}
-                    maxLength="120"
-                    aria-invalid={Boolean(errors.correo)}
-                    aria-describedby={errors.correo ? 'correo-error' : undefined}
-                    className={errors.correo ? 'contact-input--error' : ''}
-                  />
+                  <label htmlFor="correo">Correo electrónico</label>
+                  <input type="email" id="correo" name="correo" value={formData.correo} onChange={handleChange} onBlur={handleBlur} required placeholder="tu@email.com" disabled={sending} aria-invalid={Boolean(errors.correo)} aria-describedby={errors.correo ? 'correo-error' : undefined} className={errors.correo ? 'contact-input--error' : ''}/>
                   {errors.correo && <p id="correo-error" className="contact-field-error">{errors.correo}</p>}
                 </div>
 
                 <div className="contact-field">
                   <label htmlFor="telefono">Teléfono</label>
-                  <input
-                    type="tel"
-                    id="telefono"
-                    name="telefono"
-                    value={formData.telefono}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    placeholder="600 000 000"
-                    disabled={sending}
-                    maxLength="25"
-                    aria-invalid={Boolean(errors.telefono)}
-                    aria-describedby={errors.telefono ? 'telefono-error' : undefined}
-                    className={errors.telefono ? 'contact-input--error' : ''}
-                  />
+                  <input type="tel" id="telefono" name="telefono" value={formData.telefono} onChange={handleChange} onBlur={handleBlur} required placeholder="000 000 000" disabled={sending} aria-invalid={Boolean(errors.telefono)} aria-describedby={errors.telefono ? 'telefono-error' : undefined} className={errors.telefono ? 'contact-input--error' : ''}/>
                   {errors.telefono && <p id="telefono-error" className="contact-field-error">{errors.telefono}</p>}
                 </div>
 
                 <div className="contact-field">
-                  <label htmlFor="asunto">Asunto *</label>
-                  <input
-                    type="text"
-                    id="asunto"
-                    name="asunto"
-                    value={formData.asunto}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    required
-                    placeholder="¿Sobre qué quieres contactarnos?"
-                    disabled={sending}
-                    maxLength="120"
-                    aria-invalid={Boolean(errors.asunto)}
-                    aria-describedby={errors.asunto ? 'asunto-error' : undefined}
-                    className={errors.asunto ? 'contact-input--error' : ''}
-                  />
+                  <label htmlFor="asunto">Asunto</label>
+                  <input type="text" id="asunto" name="asunto" value={formData.asunto} onChange={handleChange} onBlur={handleBlur} required placeholder="¿Sobre qué quieres contactarnos?" disabled={sending} aria-invalid={Boolean(errors.asunto)} aria-describedby={errors.asunto ? 'asunto-error' : undefined} className={errors.asunto ? 'contact-input--error' : ''}/>
                   {errors.asunto && <p id="asunto-error" className="contact-field-error">{errors.asunto}</p>}
                 </div>
 
                 <div className="contact-field">
-                  <label htmlFor="mensaje">Mensaje *</label>
-                  <textarea
-                    id="mensaje"
-                    name="mensaje"
-                    value={formData.mensaje}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    required
-                    rows="6"
-                    placeholder="Escribe tu mensaje aquí..."
-                    disabled={sending}
-                    maxLength="2500"
-                    aria-invalid={Boolean(errors.mensaje)}
-                    aria-describedby={errors.mensaje ? 'mensaje-error' : undefined}
-                    className={errors.mensaje ? 'contact-input--error' : ''}
-                  />
+                  <label htmlFor="mensaje">Mensaje</label>
+                  <textarea id="mensaje" name="mensaje" value={formData.mensaje} onChange={handleChange} onBlur={handleBlur} required rows="6" placeholder="Escribe tu mensaje aquí..." disabled={sending} aria-invalid={Boolean(errors.mensaje)} aria-describedby={errors.mensaje ? 'mensaje-error' : undefined} className={errors.mensaje ? 'contact-input--error' : ''}/>
                   {errors.mensaje && <p id="mensaje-error" className="contact-field-error">{errors.mensaje}</p>}
                 </div>
 

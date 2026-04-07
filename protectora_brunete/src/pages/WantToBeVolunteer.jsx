@@ -84,7 +84,7 @@ function WantToBeVolunteer() {
             <h2 className="page-section-title">¿Cómo empezar?</h2>
             {START_PARAGRAPHS.map((paragraph) => (<p key={paragraph} className="page-text">{paragraph}</p>))}
             <div className="page-cta-wrap">
-              <Link to="/contacto?asunto=Interés en ser voluntario&mensaje=Hola, me gustaría recibir información sobre cómo colaborar como voluntario.#contact-form" className="page-cta">Quiero ser voluntario</Link>
+              <Link to="/contacto?asunto=Interés en ser voluntari@&mensaje=Hola, me gustaría recibir información sobre cómo colaborar como voluntari@. Gracias. #contact-form" className="page-cta">Quiero ser voluntario</Link>
             </div>
           </section>
         </div>

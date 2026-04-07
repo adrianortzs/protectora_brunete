@@ -9,7 +9,7 @@ const LOCATIONS = [
   {
     city: 'Brunete',
     addressLines: ['Carretera M513 km 14.900', '28690 Brunete, Madrid'],
-    phoneLabel: '918 15 86 73',
+    phoneLabel: '918 158 673',
     phoneHref: 'tel:+34918158673',
     mapsHref: 'https://www.google.com/maps/search/?api=1&query=Carretera+M513+km+14.900,+28690+Brunete,+Madrid',
     mapEmbedSrc: 'https://www.google.com/maps?q=Carretera+M513+km+14.900,+28690+Brunete,+Madrid&output=embed',
@@ -18,7 +18,7 @@ const LOCATIONS = [
   {
     city: 'Torrelodones',
     addressLines: ['Paseo Joaquín Ruiz Gimenez 30', '28250 Torrelodones, Madrid'],
-    phoneLabel: '918 15 92 94',
+    phoneLabel: '918 159 294',
     phoneHref: 'tel:+34918159294',
     mapsHref: 'https://www.google.com/maps/search/?api=1&query=Paseo+Joaquín+Ruiz+Gimenez+30,+28250+Torrelodones,+Madrid',
     mapEmbedSrc: 'https://www.google.com/maps?q=Paseo+Joaquín+Ruiz+Gimenez+30,+28250+Torrelodones,+Madrid&output=embed',
