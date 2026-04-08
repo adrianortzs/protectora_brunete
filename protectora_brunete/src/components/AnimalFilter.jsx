@@ -29,15 +29,6 @@ function AnimalFilter({
   const closeDropdowns = () => { setOpenDropdown(null) }
   const selectOption = (key, value) => { onFilterChange(key, value); closeDropdowns() }
 
-  const hasActiveFilters =
-    filters.animal_type ||
-    filters.gender ||
-    filters.age ||
-    filters.size ||
-    filters.arrival_date ||
-    (showLocationFilters && (filters.city_hall || filters.chenil)) ||
-    (showNameSearch && nameSearch)
-
   const cityHallDropdownOptions = [
     { value: '', label: 'Cualquiera' },
     ...(cityHallOptions || []).map((city) => ({ value: city, label: city }))

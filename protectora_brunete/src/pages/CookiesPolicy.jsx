@@ -1,19 +1,22 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
 const LAST_UPDATED = 'Última actualización: 1 de enero de 2026'
 
 function CookiesPolicy() {
-  usePageTitle('Política de cookies')
+  usePageSEO({
+    title: 'Política de cookies',
+    description: 'Política de cookies de Arat Adopta: qué cookies usamos y cómo gestionarlas.',
+  })
   return (
     <div>
       <Header />
       <main className="page page--legal page--legal-cookies">
         <section className="page-hero">
           <div className="page-hero-content">
-            <h1 className="page-hero-title">Política de Cookies</h1>
+            <h1 className="page-hero-title">Política de cookies</h1>
             <p className="page-hero-text legal-page-updated">{LAST_UPDATED}</p>
           </div>
         </section>
@@ -43,9 +46,9 @@ function CookiesPolicy() {
             </section>
 
             <section className="page-card">
-              <h3 className="page-card-title">Cookies analíticas</h3>
+              <h3 className="page-card-title">Cookies de analítica</h3>
               <span className="page-text">
-                Son aquellas que permiten realizar el seguimiento y análisis del comportamiento de los usuarios del sitio web. La información recogida mediante este tipo de cookies se utiliza en la medición de la actividad del sitio web y para la elaboración de perfiles de navegación, con el fin de introducir mejoras en función del análisis de los datos de uso.
+                Actualmente no utilizamos cookies de analítica web propias (por ejemplo, Google Analytics). Si en el futuro se incorporaran, actualizaremos esta política y, en su caso, solicitaremos tu consentimiento cuando la normativa lo exija.
               </span>
             </section>
           </section>
@@ -59,7 +62,7 @@ function CookiesPolicy() {
               En particular, este sitio web utiliza los siguientes servicios de terceros:
             </span>
             <ul className="page-list">
-              <li><strong>YouTube</strong> — para la reproducción de vídeos integrados. YouTube puede establecer cookies en tu dispositivo para gestionar el reproductor de vídeo y recopilar estadísticas de reproducción. Puedes consultar la política de privacidad de YouTube en <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">policies.google.com/privacy</a>.</li>
+              <li><strong>YouTube</strong> — en la página de inicio se muestra un vídeo embebido (dominio youtube-nocookie.com cuando es posible). YouTube/Google pueden establecer cookies o tecnologías similares; puedes consultar su política en <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">policies.google.com/privacy</a>.</li>
               <li><strong>Supabase</strong> — como servicio de backend para la gestión de datos de los animales en adopción. Las conexiones se realizan de forma segura y no se almacenan cookies adicionales en tu dispositivo con fines de seguimiento.</li>
             </ul>
           </section>
@@ -86,7 +89,7 @@ function CookiesPolicy() {
               Esta política de cookies puede actualizarse en cualquier momento para adaptarse a novedades normativas o cambios en las cookies utilizadas. Te recomendamos revisarla periódicamente.
             </span>
             <span className="page-text">
-              Si tienes cualquier duda sobre esta política de cookies, puedes contactar con nosotros a través del correo electrónico <a href="mailto:gestion@aratadopta.com">gestion@aratadopta.com</a>.
+              Si tienes cualquier duda sobre esta política de cookies, puedes contactar con nosotros a través del correo electrónico <a href="mailto:administracion@aratadopta.com">administracion@aratadopta.com</a>.
             </span>
           </section>
         </div>

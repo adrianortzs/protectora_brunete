@@ -4,38 +4,62 @@ import { supabase } from '../lib/supabase'
 import Header from '../components/Header'
 import Hero from '../components/Hero'
 import Footer from '../components/Footer'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
+import { DEFAULT_DESCRIPTION, getAbsoluteUrl, SITE_NAME } from '../seo/site'
 import './pages.css'
 
 const HOME_ADOPTION_SECTIONS = [
   {
     key: 'all',
-    title: 'Animales en adopcion',
+    title: 'Animales en adopción',
     description: 'Explora todos los animales disponibles y encuentra el compañero ideal para tu familia.',
     to: '/animales-en-adopción',
-    ctaLabel: 'Ver animales'
+    ctaLabel: 'Ver animales',
+    staticImage: '/animales.webp',
   },
   {
     key: 'cats',
-    title: 'Gatos en adopcion',
-    description: 'Conoce a los gatos que esperan un hogar con adopcion responsable y seguimiento.',
+    title: 'Gatos en adopción',
+    description: 'Conoce a los gatos que esperan un hogar con adopción responsable y seguimiento.',
     to: '/animales-en-adopción/gatos',
-    ctaLabel: 'Ver gatos'
+    ctaLabel: 'Ver gatos',
   },
   {
     key: 'dogs',
-    title: 'Perros en adopcion',
+    title: 'Perros en adopción',
     description: 'Descubre los perros que buscan familia y da el primer paso para adoptar.',
     to: '/animales-en-adopción/perros',
-    ctaLabel: 'Ver perros'
-  }
+    ctaLabel: 'Ver perros',
+    staticImage: '/perro.webp',
+  },
 ]
 
 export default function Home() {
-  usePageTitle(null)
   const [adoptionPreview, setAdoptionPreview] = useState({ all: null, dogs: null, cats: null })
   const [loadingPreview, setLoadingPreview] = useState(true)
   const [failedPreviewImages, setFailedPreviewImages] = useState({})
+
+  usePageSEO({ title: null, description: DEFAULT_DESCRIPTION })
+
+  useEffect(() => {
+    const payload = {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: getAbsoluteUrl('/'),
+      logo: getAbsoluteUrl('/arat_logo.svg'),
+      description: DEFAULT_DESCRIPTION,
+      sameAs: ['https://www.facebook.com/aratadopta', 'https://www.instagram.com/aratadopta'],
+    }
+    const script = document.createElement('script')
+    script.type = 'application/ld+json'
+    script.setAttribute('data-arat-seo', 'organization')
+    script.textContent = JSON.stringify(payload)
+    document.head.appendChild(script)
+    return () => {
+      script.remove()
+    }
+  }, [])
 
   useEffect(() => {
     const fetchPreviewAnimals = async () => {
@@ -82,7 +106,7 @@ export default function Home() {
               <div className="home-adoption-grid">
                 {HOME_ADOPTION_SECTIONS.map((section) => {
                   const previewAnimal = adoptionPreview[section.key]
-                  const previewImage = getFirstImage(previewAnimal)
+                  const previewImage = section.staticImage || getFirstImage(previewAnimal)
                   const imageFailed = Boolean(failedPreviewImages[section.key])
                   return (
                     <article key={section.key} className="home-adoption-card">
@@ -90,7 +114,7 @@ export default function Home() {
                         {previewImage && !imageFailed ? (
                           <img
                             src={previewImage}
-                            alt={previewAnimal?.name || section.title}
+                            alt={section.staticImage ? section.title : (previewAnimal?.name || section.title)}
                             className="home-adoption-image"
                             loading="lazy"
                             decoding="async"

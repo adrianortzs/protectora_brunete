@@ -1,4 +1,4 @@
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import './pages.css'
@@ -31,7 +31,10 @@ const COMMITMENT_POINTS = ['Fomentar la tenencia responsable.', 'Prevenir el aba
 const TEAM_ROLES = ['Cuidadores de animales', 'Auxiliares veterinarios', 'Veterinarios especialistas en etología y medicina médico-quirúrgica', 'Personal administrativo']
 
 function WhoAreWe() {
-  usePageTitle('Quiénes somos')
+  usePageSEO({
+    title: 'Quiénes somos',
+    description: 'Conócenos: misión, equipo y valores de la protectora de animales.',
+  })
   return (
     <div>
       <Header />

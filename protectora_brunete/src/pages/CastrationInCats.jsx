@@ -1,14 +1,17 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
 function CastrationInCats() {
-  usePageTitle('Castración en gatos')
+  usePageSEO({
+    title: 'Castración en gatos',
+    description: 'Información sobre castración en gatos: beneficios, recuperación y cuidados.',
+  })
   return (
     <div>
       <Header />
-      <main className="page">
+      <main className="page page--castration-cats">
         <section className="page-hero">
           <div className="page-hero-content">
             <h1 className="page-hero-title">Castración en gatos</h1>
@@ -20,7 +23,10 @@ function CastrationInCats() {
 
         <div className="page-container">
           <section className="page-section">
-            <h2 className="page-section-title">Ventajas de la castración</h2>
+            <h2 className="page-section-title">
+              <i className="bi bi-patch-check page-section-icon"></i>
+              Ventajas de la castración
+            </h2>
             <span className="page-text">
               La castración tiene muchas ventajas. Lo primero y más importante es que evita el riesgo de embarazos no deseados y ayuda a reducir la población de gatos callejeros. Además, reduce la probabilidad de que tu gato sufra determinadas enfermedades y se comporte de forma poco sociable.
             </span>
@@ -59,14 +65,20 @@ function CastrationInCats() {
           </section>
 
           <section className="page-section">
-            <h2 className="page-section-title">Cuándo se debe llevar a cabo</h2>
+            <h2 className="page-section-title">
+              <i className="bi bi-calendar-event page-section-icon"></i>
+              Cuándo se debe llevar a cabo
+            </h2>
             <span className="page-text">
               El veterinario te recomendará cuál es el mejor momento para realizar la castración, pero por lo general la operación se lleva a cabo unos seis meses antes de que la mascota llegue a su edad de madurez sexual. Sin embargo, según el país donde vivas y las recomendaciones de tu veterinario, la castración se puede realizar a partir de las ocho semanas de vida.
             </span>
           </section>
 
           <section className="page-section">
-            <h2 className="page-section-title">La operación</h2>
+            <h2 className="page-section-title">
+              <i className="bi bi-scissors page-section-icon"></i>
+              La operación
+            </h2>
             <span className="page-text">
               La castración de un macho implica la retirada de ambos testículos. La castración de una hembra, a veces llamada esterilización, implica la retirada de ambos ovarios y, en ocasiones, también del útero.
             </span>
@@ -76,7 +88,10 @@ function CastrationInCats() {
           </section>
 
           <section className="page-section">
-            <h2 className="page-section-title">Después de la operación</h2>
+            <h2 className="page-section-title">
+              <i className="bi bi-bandaid page-section-icon"></i>
+              Después de la operación
+            </h2>
             <span className="page-text">
               Intenta mantener a tu gato en casa durante al menos 3 días tras la operación para minimizar el riesgo de infecciones y para que puedas ir comprobando el aspecto de la región operada. Si detectas algún enrojecimiento o inflamación, o alguna secreción anormal alrededor de la herida, tanto si se trata de un macho como una hembra, es importante que te pongas en contacto con tu veterinario de inmediato.
             </span>
@@ -89,7 +104,10 @@ function CastrationInCats() {
           </section>
 
           <section className="page-section">
-            <h2 className="page-section-title">Nutrición</h2>
+            <h2 className="page-section-title">
+              <i className="bi bi-egg-fried page-section-icon"></i>
+              Nutrición
+            </h2>
             <span className="page-text">
               Después de una intervención quirúrgica, también es de gran importancia darle a tu gato una dieta altamente nutritiva, puesto que su cuerpo requiere nutrientes para curarse debidamente.
             </span>

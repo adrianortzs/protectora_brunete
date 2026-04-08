@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import emailjs from '@emailjs/browser'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
 const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID
@@ -20,7 +20,7 @@ const CONTACT_PHONES = [{ label: 'Brunete', number: '918 158 673', href: 'tel:+3
 
 const SOCIAL_LINKS = [{ label: 'Facebook', href: 'https://www.facebook.com/aratadopta', icon: 'bi-facebook' }, { label: 'Instagram', href: 'https://www.instagram.com/aratadopta', icon: 'bi-instagram' }]
 
-const CENTER_LOCATIONS = [{ city: 'Brunete', lines: ['Carretera M513 km 14.900', '28690 Brunete, Madrid'] }, { city: 'Torrelodones', lines: ['Paseo Joaquín Ruiz Gimenez 30', '28250 Torrelodones, Madrid'] }]
+const CENTER_LOCATIONS = [{ city: 'Brunete', lines: ['Carretera M513 km 14.900', '28690 Brunete, Madrid'] }, { city: 'Torrelodones', lines: ['Paseo Joaquín Ruiz Giménez 30', '28250 Torrelodones, Madrid'] }]
 
 function getDigits(value) {
   return value.replace(/\D/g, '')
@@ -76,7 +76,10 @@ function validateForm(values) {
 }
 
 function Contact() {
-  usePageTitle('Contacto')
+  usePageSEO({
+    title: 'Contacto',
+    description: 'Contacta con Arat Adopta: formulario, teléfono y redes sociales para adopciones, voluntariado y colaboración en Brunete.',
+  })
   const { hash, search } = useLocation()
   const params = new URLSearchParams(search)
   const formRef = useRef(null)

@@ -1,12 +1,15 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
 const REQUESTS = ['Mi vida es mucho más corta que la tuya (vivo entre 10 y 15 años), pero aun así, ¡es intensa! Antes de llevarme contigo, piensa si podrás acompañarme hasta el final.', 'Ten paciencia conmigo. A veces no entiendo tus palabras, pero siempre intento entender tu corazón.', 'Dame confianza. Cuando me miras con cariño, mi mundo está en orden.', 'No me castigues con tu enfado ni me apartes de ti. Tú tienes muchas cosas y muchas personas. Yo solo te tengo a ti.', 'Háblame. Aunque no comprenda todo lo que dices, reconozco tu voz… y en ella encuentro calma.', 'Trátame con respeto. Cada gesto tuyo queda guardado para siempre en mi memoria.', 'Antes de levantar la mano contra mí, recuerda que podría defenderme… pero elijo quererte.', 'Si un día no obedezco o no tengo fuerzas, mírame con compasión. Tal vez me duele algo, tal vez estoy cansado, tal vez simplemente no me siento bien.', 'Cuídame cuando envejezca. Caminaré más despacio, dormiré más… pero mi amor por ti seguirá intacto.', 'Y cuando llegue mi último momento, quédate a mi lado. No me dejes ir solo. Si estás conmigo, incluso el adiós será más llevadero.']
 
 function DogRequests() {
-  usePageTitle('10 peticiones de un perro')
+  usePageSEO({
+    title: '10 peticiones de un perro',
+    description: 'Nuestra guía divulgativa «10 peticiones de un perro»: educación y bienestar canino.',
+  })
   return (
     <div>
       <Header />

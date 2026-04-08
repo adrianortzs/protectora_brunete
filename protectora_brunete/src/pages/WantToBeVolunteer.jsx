@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
 const HERO_PARAGRAPHS = ['Los voluntarios son imprescindibles para el funcionamiento del refugio. Únete y forma parte del equipo.']
@@ -20,7 +20,10 @@ const NOT_VOLUNTEERING = ['No es una actividad ocasional sin compromiso.', 'No e
 const START_PARAGRAPHS = ['Si consideras que puedes asumir un voluntariado con regularidad y responsabilidad, ponte en contacto con nosotros.', 'Te explicaremos el proceso de incorporación, las tareas disponibles y las condiciones de participación.', 'Valoramos el compromiso antes que la cantidad.']
 
 function WantToBeVolunteer() {
-  usePageTitle('Voluntariado')
+  usePageSEO({
+    title: 'Voluntariado',
+    description: 'Voluntariado en nuestro centro: tareas, formación y cómo colaborar con la protectora de animales.',
+  })
   return (
     <div>
       <Header />

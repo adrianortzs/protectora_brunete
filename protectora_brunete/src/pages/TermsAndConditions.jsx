@@ -1,20 +1,23 @@
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
 const LAST_UPDATED = 'Última actualización: 1 de enero de 2026'
 
 function TermsAndConditions() {
-  usePageTitle('Términos y condiciones')
+  usePageSEO({
+    title: 'Términos y condiciones',
+    description: 'Términos y condiciones de uso del sitio web de Arat Adopta.',
+  })
   return (
     <div>
       <Header />
       <main className="page page--legal page--legal-terms">
         <section className="page-hero">
           <div className="page-hero-content">
-            <h1 className="page-hero-title">Términos y Condiciones</h1>
+            <h1 className="page-hero-title">Términos y condiciones</h1>
             <p className="page-hero-text legal-page-updated">{LAST_UPDATED}</p>
           </div>
         </section>
@@ -23,7 +26,7 @@ function TermsAndConditions() {
           <section className="page-section">
             <h2 className="page-section-title">Aceptación de los términos</h2>
             <span className="page-text">
-              Al acceder y utilizar el sitio web de Arat Veterinarios Torrelodones S.L. (en adelante, "Arat Adopta"), el usuario acepta quedar vinculado por los presentes Términos y Condiciones, así como por la Política de Privacidad, la Política de Cookies y el Aviso Legal publicados en este sitio web.
+              Al acceder y utilizar el sitio web de ARAT VETERINARIOS TORRELODONES S.L. (en adelante, «Arat Adopta»), el usuario acepta quedar vinculado por los presentes términos y condiciones, así como por la política de privacidad, la política de cookies y el aviso legal publicados en este sitio web.
             </span>
             <span className="page-text">
               Si no estás de acuerdo con alguno de estos términos, te rogamos que no utilices este sitio web.
@@ -33,7 +36,7 @@ function TermsAndConditions() {
           <section className="page-section">
             <h2 className="page-section-title">Descripción del servicio</h2>
             <span className="page-text">
-              Arat Adopta es un sitio web gestionado por Arat Veterinarios Torrelodones S.L. cuya finalidad es facilitar información sobre los animales en acogida, promover la adopción responsable, coordinar la colaboración ciudadana (voluntariado, casas de acogida y donaciones materiales) y difundir actividades relacionadas con la protección y el bienestar animal.
+              Arat Adopta es un sitio web gestionado por ARAT VETERINARIOS TORRELODONES S.L. cuya finalidad es facilitar información sobre los animales en acogida, promover la adopción responsable, coordinar la colaboración ciudadana (voluntariado, casas de acogida y donaciones materiales) y difundir actividades relacionadas con la protección y el bienestar animal.
             </span>
             <span className="page-text">
               El sitio web no constituye una tienda en línea ni un servicio de comercio electrónico. No se realizan transacciones económicas a través de esta plataforma.
@@ -86,10 +89,10 @@ function TermsAndConditions() {
           <section className="page-section">
             <h2 className="page-section-title">Propiedad intelectual</h2>
             <span className="page-text">
-              Todos los contenidos del sitio web, incluyendo pero no limitándose a textos, fotografías, imágenes, diseño gráfico, logotipos, iconos y código fuente, son propiedad de Arat Veterinarios Torrelodones S.L. o de sus legítimos titulares, y están protegidos por las leyes nacionales e internacionales de propiedad intelectual e industrial.
+              Todos los contenidos del sitio web, incluyendo pero no limitándose a textos, fotografías, imágenes, diseño gráfico, logotipos, iconos y código fuente, son propiedad de ARAT VETERINARIOS TORRELODONES S.L. o de sus legítimos titulares, y están protegidos por las leyes nacionales e internacionales de propiedad intelectual e industrial.
             </span>
             <span className="page-text">
-              Queda expresamente prohibida la reproducción, distribución, comunicación pública o transformación, total o parcial, de los contenidos del sitio web sin la autorización previa y por escrito de Arat Veterinarios Torrelodones S.L., salvo en los supuestos legalmente permitidos.
+              Queda expresamente prohibida la reproducción, distribución, comunicación pública o transformación, total o parcial, de los contenidos del sitio web sin la autorización previa y por escrito de ARAT VETERINARIOS TORRELODONES S.L., salvo en los supuestos legalmente permitidos.
             </span>
           </section>
 
@@ -116,7 +119,7 @@ function TermsAndConditions() {
           <section className="page-section">
             <h2 className="page-section-title">Modificaciones</h2>
             <span className="page-text">
-              Arat Veterinarios Torrelodones S.L. se reserva el derecho de modificar los presentes Términos y Condiciones en cualquier momento, sin necesidad de previo aviso. Las modificaciones entrarán en vigor desde el momento de su publicación en el sitio web.
+              ARAT VETERINARIOS TORRELODONES S.L. se reserva el derecho de modificar los presentes Términos y Condiciones en cualquier momento, sin necesidad de previo aviso. Las modificaciones entrarán en vigor desde el momento de su publicación en el sitio web.
             </span>
             <span className="page-text">
               Se recomienda al usuario revisar periódicamente estos términos para estar informado de cualquier cambio. El uso continuado del sitio web tras la publicación de modificaciones implica la aceptación de las mismas.
@@ -133,7 +136,7 @@ function TermsAndConditions() {
           <section className="page-section">
             <h2 className="page-section-title">Contacto</h2>
             <span className="page-text">
-              Para cualquier consulta relacionada con estos Términos y Condiciones, puedes ponerte en contacto con nosotros a través del correo electrónico <a href="mailto:gestion@aratadopta.com">gestion@aratadopta.com</a>.
+              Para cualquier consulta relacionada con estos Términos y Condiciones, puedes ponerte en contacto con nosotros a través del correo electrónico <a href="mailto:administracion@aratadopta.com">administracion@aratadopta.com</a>.
             </span>
           </section>
         </div>

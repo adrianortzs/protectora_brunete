@@ -1,6 +1,6 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
 const INTRO_PARAGRAPHS = ['Es necesario valorar con honestidad si puedes asumir ese compromiso durante toda su vida. Un animal no se adapta a una etapa. Se integra en un proyecto de vida.']
@@ -37,7 +37,10 @@ const BASIC_REQUIREMENTS = ['Ser mayor de edad.', 'Presentar DNI o pasaporte en 
 const CONTRACT_INCLUDES = ['Información detallada sobre el estado sanitario.', 'Asunción de costes de identificación, esterilización y tratamientos.', 'Registro del animal en el censo municipal correspondiente.']
 
 function WantToAdopt() {
-  usePageTitle('En adopción')
+  usePageSEO({
+    title: 'En adopción',
+    description: 'Proceso de adopción en Arat Adopta: requisitos, entrevistas y compromiso con el bienestar animal.',
+  })
   return (
     <div>
       <Header />

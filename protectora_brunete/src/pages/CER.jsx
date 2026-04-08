@@ -1,10 +1,13 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
 function CER() {
-  usePageTitle('CER – Captura, esterilización y retorno')
+  usePageSEO({
+    title: 'CER – Captura, esterilización y retorno',
+    description: 'Programa CER (captura, esterilización y retorno): gestión ética de colonias felinas en Brunete y municipios colaboradores.',
+  })
   return (
     <div>
       <Header />

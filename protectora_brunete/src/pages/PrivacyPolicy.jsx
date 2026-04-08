@@ -1,19 +1,22 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
 const LAST_UPDATED = 'Última actualización: 1 de enero de 2026'
 
 function PrivacyPolicy() {
-  usePageTitle('Política de privacidad')
+  usePageSEO({
+    title: 'Política de privacidad',
+    description: 'Política de privacidad de Arat Adopta: tratamiento de datos personales y tus derechos.',
+  })
   return (
     <div>
       <Header />
       <main className="page page--legal page--legal-privacy">
         <section className="page-hero">
           <div className="page-hero-content">
-            <h1 className="page-hero-title">Política de Privacidad</h1>
+            <h1 className="page-hero-title">Política de privacidad</h1>
             <p className="page-hero-text legal-page-updated">{LAST_UPDATED}</p>
           </div>
         </section>
@@ -25,9 +28,9 @@ function PrivacyPolicy() {
               El responsable del tratamiento de los datos personales es:
             </span>
             <ul className="page-list">
-              <li><strong>Denominación social:</strong> Arat Veterinarios Torrelodones S.L.</li>
+              <li><strong>Denominación social:</strong> ARAT VETERINARIOS TORRELODONES S.L.</li>
               <li><strong>Domicilio:</strong> Paseo Joaquín Ruiz Giménez 30, 28250 Torrelodones, Madrid</li>
-              <li><strong>Correo electrónico:</strong> <a href="mailto:gestion@aratadopta.com">gestion@aratadopta.com</a></li>
+              <li><strong>Correo electrónico:</strong> <a href="mailto:adopciones@aratadopta.com">adopciones@aratadopta.com</a></li>
             </ul>
           </section>
 
@@ -53,7 +56,7 @@ function PrivacyPolicy() {
               <li><strong>Gestión de adopciones:</strong> tramitar solicitudes de adopción de animales y realizar el seguimiento posterior.</li>
               <li><strong>Gestión del voluntariado:</strong> procesar solicitudes de colaboración como voluntario o casa de acogida.</li>
               <li><strong>Gestión de donaciones:</strong> coordinar la recepción de donaciones materiales.</li>
-              <li><strong>Mejora del sitio web:</strong> analizar el uso del sitio para mejorar su funcionamiento y la experiencia del usuario.</li>
+              <li><strong>Registros técnicos y seguridad:</strong> conservar datos mínimos necesarios para el correcto funcionamiento del sitio y la prevención de abusos (p. ej. dirección IP en accesos a servidores), cuando proceda.</li>
             </ul>
           </section>
 
@@ -64,7 +67,7 @@ function PrivacyPolicy() {
             </span>
             <ul className="page-list">
               <li><strong>Consentimiento:</strong> al enviar el formulario de contacto o solicitar información sobre adopción, voluntariado o donaciones, prestas tu consentimiento para el tratamiento de los datos facilitados.</li>
-              <li><strong>Interés legítimo:</strong> para la mejora del sitio web y el análisis estadístico de su uso.</li>
+              <li><strong>Interés legítimo:</strong> para el mantenimiento, la seguridad del sitio web y la respuesta a incidencias técnicas, cuando proceda.</li>
               <li><strong>Cumplimiento legal:</strong> para atender obligaciones legales aplicables en materia de protección animal, conforme a la Ley 4/2016 de Protección de los Animales de Compañía de la Comunidad de Madrid.</li>
             </ul>
           </section>
@@ -110,7 +113,7 @@ function PrivacyPolicy() {
               <li><strong>Derecho de portabilidad:</strong> recibir tus datos en un formato estructurado y de uso común.</li>
             </ul>
             <span className="page-text">
-              Para ejercer cualquiera de estos derechos, puedes contactar con nosotros a través del correo electrónico <a href="mailto:gestion@aratadopta.com">gestion@aratadopta.com</a>, indicando tu solicitud y adjuntando copia de tu DNI o documento identificativo equivalente.
+              Para ejercer cualquiera de estos derechos, puedes contactar con nosotros a través del correo electrónico <a href="mailto:administracion@aratadopta.com">administracion@aratadopta.com</a>, indicando tu solicitud y adjuntando copia de tu DNI o documento identificativo equivalente.
             </span>
             <span className="page-text">
               Asimismo, tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (<a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer">www.aepd.es</a>) si consideras que el tratamiento de tus datos no se ajusta a la normativa vigente.

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
@@ -35,7 +35,7 @@ function validateLoginForm(values) {
 }
 
 function AdminLogin() {
-  usePageTitle('Iniciar sesión')
+  usePageSEO({ title: 'Iniciar sesión', description: 'Acceso interno Arat Adopta.', noRobots: true })
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')

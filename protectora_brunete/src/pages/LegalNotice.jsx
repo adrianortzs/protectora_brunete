@@ -1,19 +1,22 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
 const LAST_UPDATED = 'Última actualización: 1 de enero de 2026'
 
 function LegalNotice() {
-  usePageTitle('Aviso legal')
+  usePageSEO({
+    title: 'Aviso legal',
+    description: 'Aviso legal de Arat Adopta: datos identificativos y condiciones de uso del sitio web.',
+  })
   return (
     <div>
       <Header />
       <main className="page page--legal page--legal-notice">
         <section className="page-hero">
           <div className="page-hero-content">
-            <h1 className="page-hero-title">Aviso Legal</h1>
+            <h1 className="page-hero-title">Aviso legal</h1>
             <p className="page-hero-text legal-page-updated">{LAST_UPDATED}</p>
           </div>
         </section>
@@ -25,12 +28,12 @@ function LegalNotice() {
               En cumplimiento de lo dispuesto en la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), se informa de los siguientes datos del titular de este sitio web:
             </span>
             <ul className="page-list">
-              <li><strong>Denominación social:</strong> Arat Veterinarios Torrelodones S.L.</li>
+              <li><strong>Denominación social:</strong> ARAT VETERINARIOS TORRELODONES S.L.</li>
               <li><strong>Domicilio social:</strong> Paseo Joaquín Ruiz Giménez 30, 28250 Torrelodones, Madrid</li>
               <li><strong>Centro de acogida:</strong> Carretera M513 km 14.900, 28690 Brunete, Madrid</li>
-              <li><strong>Correo electrónico:</strong> <a href="mailto:gestion@aratadopta.com">gestion@aratadopta.com</a></li>
-              <li><strong>Teléfono Torrelodones:</strong> <a href="tel:+34918159294">918 15 92 94</a></li>
-              <li><strong>Teléfono Brunete:</strong> <a href="tel:+34918158673">918 15 86 73</a></li>
+              <li><strong>Correo electrónico:</strong> <a href="mailto:adopciones@aratadopta.com">adopciones@aratadopta.com</a></li>
+              <li><strong>Teléfono Torrelodones:</strong> <a href="tel:+34918159294">918 159 294</a></li>
+              <li><strong>Teléfono Brunete:</strong> <a href="tel:+34918158673">918 158 673</a></li>
               <li><strong>Número de registro del centro de acogida:</strong> ES280261000001</li>
             </ul>
           </section>
@@ -38,7 +41,7 @@ function LegalNotice() {
           <section className="page-section">
             <h2 className="page-section-title">Objeto del sitio web</h2>
             <span className="page-text">
-              Este sitio web tiene como finalidad informar sobre la actividad de Arat Veterinarios Torrelodones S.L. en materia de protección y bienestar animal, incluyendo los servicios de acogida, adopción responsable, voluntariado, casas de acogida y donaciones materiales.
+              Este sitio web tiene como finalidad informar sobre la actividad de ARAT VETERINARIOS TORRELODONES S.L. en materia de protección y bienestar animal, incluyendo los servicios de acogida, adopción responsable, voluntariado, casas de acogida y donaciones materiales.
             </span>
             <span className="page-text">
               Asimismo, facilita información de contacto y herramientas de comunicación para las personas interesadas en colaborar o adoptar.
@@ -48,7 +51,7 @@ function LegalNotice() {
           <section className="page-section">
             <h2 className="page-section-title">Condiciones de uso</h2>
             <span className="page-text">
-              El acceso y uso de este sitio web atribuye la condición de usuario e implica la aceptación plena y sin reservas de todas las disposiciones incluidas en este aviso legal, así como de la Política de Privacidad y la Política de Cookies.
+              El acceso y uso de este sitio web atribuye la condición de usuario e implica la aceptación plena y sin reservas de todas las disposiciones incluidas en este aviso legal, así como de la política de privacidad y la política de cookies.
             </span>
             <span className="page-text">
               El usuario se compromete a hacer un uso adecuado de los contenidos y servicios ofrecidos a través del sitio web, absteniéndose de:
@@ -65,10 +68,10 @@ function LegalNotice() {
           <section className="page-section">
             <h2 className="page-section-title">Propiedad intelectual e industrial</h2>
             <span className="page-text">
-              Todos los contenidos del sitio web, incluyendo textos, fotografías, gráficos, imágenes, iconos, tecnología, software, así como su diseño gráfico y códigos fuente, constituyen una obra cuya propiedad pertenece a Arat Veterinarios Torrelodones S.L., sin que puedan entenderse cedidos al usuario ninguno de los derechos de explotación sobre los mismos más allá de lo estrictamente necesario para el correcto uso del sitio web.
+              Todos los contenidos del sitio web, incluyendo textos, fotografías, gráficos, imágenes, iconos, tecnología, software, así como su diseño gráfico y códigos fuente, constituyen una obra cuya propiedad pertenece a ARAT VETERINARIOS TORRELODONES S.L., sin que puedan entenderse cedidos al usuario ninguno de los derechos de explotación sobre los mismos más allá de lo estrictamente necesario para el correcto uso del sitio web.
             </span>
             <span className="page-text">
-              Las fotografías de los animales publicadas en este sitio web son propiedad de Arat Veterinarios Torrelodones S.L. y no podrán ser reproducidas, distribuidas ni utilizadas con fines comerciales sin autorización expresa.
+              Las fotografías de los animales publicadas en este sitio web son propiedad de ARAT VETERINARIOS TORRELODONES S.L. y no podrán ser reproducidas, distribuidas ni utilizadas con fines comerciales sin autorización expresa.
             </span>
             <span className="page-text">
               Queda prohibida la reproducción total o parcial de los contenidos del sitio web sin la autorización previa y por escrito del titular, excepto en los casos permitidos por la legislación vigente.
@@ -78,7 +81,7 @@ function LegalNotice() {
           <section className="page-section">
             <h2 className="page-section-title">Exclusión de responsabilidad</h2>
             <span className="page-text">
-              Arat Veterinarios Torrelodones S.L. no se hace responsable de:
+              ARAT VETERINARIOS TORRELODONES S.L. no se hace responsable de:
             </span>
             <ul className="page-list">
               <li>La falta de disponibilidad, mantenimiento o continuidad del sitio web o de sus servicios.</li>
@@ -92,10 +95,10 @@ function LegalNotice() {
           <section className="page-section">
             <h2 className="page-section-title">Enlaces a terceros</h2>
             <span className="page-text">
-              Este sitio web puede contener enlaces a páginas externas (redes sociales, plataformas de vídeo u otros sitios). Estos enlaces se proporcionan únicamente a título informativo y no implican que Arat Veterinarios Torrelodones S.L. avale, patrocine o recomiende dichos sitios web ni sus contenidos.
+              Este sitio web puede contener enlaces a páginas externas (redes sociales, plataformas de vídeo u otros sitios). Estos enlaces se proporcionan únicamente a título informativo y no implican que ARAT VETERINARIOS TORRELODONES S.L. avale, patrocine o recomiende dichos sitios web ni sus contenidos.
             </span>
             <span className="page-text">
-              Arat Veterinarios Torrelodones S.L. no asume responsabilidad alguna por los contenidos, políticas de privacidad o prácticas de sitios web de terceros.
+              ARAT VETERINARIOS TORRELODONES S.L. no asume responsabilidad alguna por los contenidos, políticas de privacidad o prácticas de sitios web de terceros.
             </span>
           </section>
 
@@ -109,7 +112,7 @@ function LegalNotice() {
           <section className="page-section">
             <h2 className="page-section-title">Normativa de referencia</h2>
             <span className="page-text">
-              La actividad de Arat Veterinarios Torrelodones S.L. se rige, entre otras, por las siguientes normas:
+              La actividad de ARAT VETERINARIOS TORRELODONES S.L. se rige, entre otras, por las siguientes normas:
             </span>
             <ul className="page-list">
               <li>Ley 4/2016, de 22 de julio, de Protección de los Animales de Compañía de la Comunidad de Madrid.</li>
@@ -122,7 +125,7 @@ function LegalNotice() {
           <section className="page-section">
             <h2 className="page-section-title">Contacto</h2>
             <span className="page-text">
-              Para cualquier consulta relacionada con este aviso legal, puedes ponerte en contacto con nosotros a través del correo electrónico <a href="mailto:gestion@aratadopta.com">gestion@aratadopta.com</a>.
+              Para cualquier consulta relacionada con este aviso legal, puedes ponerte en contacto con nosotros a través del correo electrónico <a href="mailto:administracion@aratadopta.com">administracion@aratadopta.com</a>.
             </span>
           </section>
         </div>

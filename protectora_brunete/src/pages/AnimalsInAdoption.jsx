@@ -7,7 +7,7 @@ import AnimalFilter from '../components/AnimalFilter'
 import AnimalCard from '../components/AnimalCard'
 import { Pagination } from '../components/Pagination'
 import { paginate } from '../utils/pagination'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
 const ANIMAL_TYPE_FILTER = { perros: 'perro', gatos: 'gato' }
@@ -94,7 +94,14 @@ function AnimalsInAdoption() {
   const selectedAnimalImages = useMemo(() => getAnimalImages(selectedAnimal), [selectedAnimal])
 
   const filterValue = animalType ? ANIMAL_TYPE_FILTER[animalType] : null
-  usePageTitle(filterValue === 'perro' ? 'Perros en adopción' : filterValue === 'gato' ? 'Gatos en adopción' : 'Animales en adopción')
+  const seoTitle = filterValue === 'perro' ? 'Perros en adopción' : filterValue === 'gato' ? 'Gatos en adopción' : 'Animales en adopción'
+  const seoDescription =
+    filterValue === 'perro'
+      ? 'Perros en adopción en Brunete y alrededores.'
+      : filterValue === 'gato'
+        ? 'Gatos en adopción en Brunete y alrededores.'
+        : 'Consulta perros y gatos en adopción en Arat Adopta.'
+  usePageSEO({ title: seoTitle, description: seoDescription })
   const title = filterValue === 'perro' ? 'Todos los perros en adopción' : filterValue === 'gato' ? 'Todos los gatos en adopción' : 'Todos los animales en adopción'
   const subtitle = filterValue === 'perro' ? 'Estos son todos los perros que actualmente se encuentran en uno de nuestros centros de acogida y están buscando un hogar. Cada ficha se actualiza desde nuestro sistema en tiempo real para garantizar la información más actualizada.' : filterValue === 'gato' ? 'Estos son todos los gatos que actualmente se encuentran en uno de nuestros centros de acogida y están buscando un hogar. Cada ficha se actualiza desde nuestro sistema en tiempo real para garantizar la información más actualizada.' : 'Estos son todos los animales que actualmente se encuentran en uno de nuestros centros de acogida y están buscando un hogar. Cada ficha se actualiza desde nuestro sistema en tiempo real para garantizar la información más actualizada.'
 

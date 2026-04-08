@@ -324,8 +324,32 @@
   max-width: 95ch;
 }
 
+.page--legal .page-text + .page-list {
+  margin-top: clamp(0.75rem, 0.5rem + 0.5vw, 1.25rem);
+}
+
+.page--legal .page-section > .page-text + .page-card {
+  margin-top: clamp(0.75rem, 0.5rem + 0.5vw, 1.25rem);
+}
+
+.page--legal .page-section .page-text + .page-text {
+  margin-top: clamp(0.75rem, 0.5rem + 0.5vw, 1.25rem);
+}
+
 .page--cer .page-container > .page-section:first-child {
   padding-top: clamp(1.5rem, 0.5rem + 2.5vw, 3rem);
+}
+
+.page--castration-cats .page-container > .page-section:first-child {
+  padding-top: clamp(1.5rem, 0.5rem + 2.5vw, 3rem);
+}
+
+.page--cer .page-text + .page-list {
+  margin-top: clamp(1rem, 0.65rem + 0.75vw, 1.75rem);
+}
+
+.page--cer .page-section .page-text + .page-text {
+  margin-top: clamp(0.75rem, 0.5rem + 0.5vw, 1.25rem);
 }
 
 .page-icon-list {

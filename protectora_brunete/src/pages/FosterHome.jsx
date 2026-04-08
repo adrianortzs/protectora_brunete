@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
 const INTRO_PARAGRAPHS = ['Las casas de acogida son esenciales para ofrecer un entorno estable a los animales. Si cuentas con tiempo y compromiso, tu hogar puede ser esa transición segura.']
@@ -17,7 +17,10 @@ const NOT_A_FOSTER_HOME = ['No es una prueba antes de adoptar.', 'No es una solu
 const START_PARAGRAPHS = ['Si consideras que puedes asumir una acogida con compromiso real, ponte en contacto con nosotros.', 'Te explicaremos el proceso, resolveremos tus dudas y valoraremos contigo si encaja con tu situación actual.']
 
 function FosterHome() {
-  usePageTitle('Casa de acogida')
+  usePageSEO({
+    title: 'Casa de acogida',
+    description: 'Casa de acogida temporal: qué implica colaborar con nosotros acogiendo un animal hasta su adopción.',
+  })
   return (
     <div>
       <Header />

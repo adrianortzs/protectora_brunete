@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
 const HERO_PARAGRAPHS = ['Mantas, camas, pienso, material veterinario... Toda ayuda aporta.']
@@ -19,7 +19,10 @@ const DONATION_CONDITIONS = ['El material debe estar en buen estado.', 'No acept
 const HOW_TO_DONATE = ['Si quieres colaborar, ponte en contacto con nosotros antes de realizar la entrega.', 'Te indicaremos qué necesitamos en ese momento y cómo hacerlo llegar directamente al centro de acogida.', 'Valoramos las donaciones útiles, no acumulativas.']
 
 function MaterialDonations() {
-  usePageTitle('Donaciones materiales')
+  usePageSEO({
+    title: 'Donaciones materiales',
+    description: 'Donaciones de materiales: pienso, mantas, medicamentos y cómo ayudar a los animales rescatados.',
+  })
   return (
     <div>
       <Header />

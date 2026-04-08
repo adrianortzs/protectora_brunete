@@ -925,11 +925,14 @@ button.nav-link {
 .animal-content-top {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .animal-name {
   margin: 0;
+  flex: 1;
+  min-width: 0;
   font-size: 1.0625rem;
   font-weight: 400;
   letter-spacing: -0.01em;
@@ -959,6 +962,9 @@ button.nav-link {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  align-items: baseline;
+  column-gap: 1.25rem;
+  row-gap: 0.35rem;
 }
 
 .animal-age,
@@ -980,7 +986,7 @@ button.nav-link {
 
 .animal-card-btn {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 0.875rem;
   font-size: 0.9375rem;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -991,7 +997,7 @@ button.nav-link {
   cursor: pointer;
   transition: background-color var(--ease-base), border-color var(--ease-base), color var(--ease-base), transform var(--ease-fast);
   font-family: var(--font-body);
-  min-height: 3rem;
+  min-height: 2.75rem;
 }
 
 .animal-card-btn:hover {
@@ -1054,7 +1060,7 @@ button.nav-link {
   }
 
   .animal-card-btn {
-    padding: 0.75rem 1.5rem;
+    padding: 0.55rem 1.25rem;
     font-size: 1rem;
     min-height: auto;
   }
@@ -1186,6 +1192,19 @@ button.nav-link {
 
 .copyright-admin-link:hover {
   opacity: 0.7;
+}
+
+@media (max-width: 480px) {
+  .footer-social {
+    flex-direction: column;
+    gap: 1rem;
+    padding-left: max(1rem, env(safe-area-inset-left, 0));
+    padding-right: max(1rem, env(safe-area-inset-right, 0));
+  }
+
+  .footer-social-icons {
+    gap: 1.5rem;
+  }
 }
 
 @media (min-width: 481px) {

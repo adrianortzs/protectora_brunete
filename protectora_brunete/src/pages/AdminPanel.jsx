@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import AnimalFilter from '../components/AnimalFilter'
 import { Pagination } from '../components/Pagination'
 import { paginate } from '../utils/pagination'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
 const BUCKET = 'animals'
@@ -111,7 +111,7 @@ function validateAnimalForm(form, existingImages, pendingFiles) {
 }
 
 function AdminPanel() {
-  usePageTitle('Panel de administración')
+  usePageSEO({ title: 'Panel de administración', description: 'Acceso interno Arat Adopta.', noRobots: true })
   const [animals, setAnimals] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)

@@ -1,6 +1,6 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
 const HERO_PARAGRAPHS = ['Tenemos dos centros de acogida ubicados en la Comunidad de Madrid. Puedes visitarnos o contactarnos en cualquiera de nuestras ubicaciones.']
@@ -27,7 +27,10 @@ const LOCATIONS = [
 ]
 
 function WhereAreWe() {
-  usePageTitle('Dónde estamos')
+  usePageSEO({
+    title: 'Dónde estamos',
+    description: 'Ubicación y contacto de Arat Adopta: cómo llegar, horarios y visitas para la adopción de animales.',
+  })
   return (
     <div>
       <Header />

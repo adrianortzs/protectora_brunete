@@ -4,7 +4,7 @@ import { Pagination } from '../components/Pagination'
 import { paginate } from '../utils/pagination'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
 const PAGE_TITLE = 'Finales felices'
@@ -38,7 +38,10 @@ function capitalizeFirstLetter(value) {
 }
 
 function HappyEndings() {
-  usePageTitle(PAGE_TITLE)
+  usePageSEO({
+    title: PAGE_TITLE,
+    description: 'Historias de adopción en nuestros centros: animales que ya tienen hogar gracias a familias adoptantes.',
+  })
   const [animals, setAnimals] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
