@@ -1246,7 +1246,7 @@
 
 .home-adoption-image-wrap {
   width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
   background: linear-gradient(135deg, var(--alpha-6) 0%, var(--alpha-2) 100%);
 }
@@ -1255,6 +1255,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 28%;
   display: block;
   transition: transform var(--ease-slow);
 }
@@ -1365,7 +1366,7 @@
   }
 
   .home-adoption-card:hover .home-adoption-image {
-    transform: scale(1.03);
+    transform: scale(1.02);
   }
 }
 
@@ -1662,6 +1663,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 28%;
   display: block;
 }
 
@@ -2519,7 +2521,7 @@
 
 .admin-card-image-wrapper {
   position: relative;
-  padding-bottom: 65%;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
   background: linear-gradient(135deg, var(--alpha-6) 0%, var(--alpha-3) 100%);
 }
@@ -2530,6 +2532,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 28%;
   transition: transform var(--ease-slow);
 }
 
@@ -2841,6 +2844,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 28%;
   display: block;
 }
 
@@ -3140,7 +3144,7 @@
   }
 
   .admin-card:hover .admin-card-image {
-    transform: scale(1.03);
+    transform: scale(1.02);
   }
 
   .admin-card-body {
@@ -3507,7 +3511,7 @@
 
 .page--happy-endings .happy-card-img-wrapper {
   position: relative;
-  padding-bottom: 75%;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
   border-radius: var(--radius-md) var(--radius-md) 0 0;
   background: linear-gradient(135deg, var(--alpha-6) 0%, var(--alpha-2) 100%);
@@ -3519,6 +3523,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 28%;
   transition: transform var(--ease-slow);
 }
 
@@ -3592,7 +3597,7 @@
 
 @media (min-width: 769px) {
   .page--happy-endings .happy-card:hover .happy-card-img {
-    transform: scale(1.03);
+    transform: scale(1.02);
   }
 
   .page--happy-endings .animals-container {
