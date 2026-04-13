@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabase'
-import { useEffect, useState, useCallback, useMemo } from 'react'
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -26,6 +26,8 @@ function AnimalsInAdoption() {
   const [carouselIndex, setCarouselIndex] = useState(0)
   const [failedCarouselImages, setFailedCarouselImages] = useState({})
   const [currentPage, setCurrentPage] = useState(1)
+  const touchStartXRef = useRef(null)
+  const touchStartYRef = useRef(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -103,7 +105,7 @@ function AnimalsInAdoption() {
         : 'Consulta perros y gatos en adopción en Arat Adopta.'
   usePageSEO({ title: seoTitle, description: seoDescription })
   const title = filterValue === 'perro' ? 'Todos los perros en adopción' : filterValue === 'gato' ? 'Todos los gatos en adopción' : 'Todos los animales en adopción'
-  const subtitle = filterValue === 'perro' ? 'Estos son todos los perros que actualmente se encuentran en uno de nuestros centros de acogida y están buscando un hogar. Cada ficha se actualiza desde nuestro sistema en tiempo real para garantizar la información más actualizada.' : filterValue === 'gato' ? 'Estos son todos los gatos que actualmente se encuentran en uno de nuestros centros de acogida y están buscando un hogar. Cada ficha se actualiza desde nuestro sistema en tiempo real para garantizar la información más actualizada.' : 'Estos son todos los animales que actualmente se encuentran en uno de nuestros centros de acogida y están buscando un hogar. Cada ficha se actualiza desde nuestro sistema en tiempo real para garantizar la información más actualizada.'
+  const subtitle = filterValue === 'perro' ? 'Estos son todos los perros que actualmente se encuentran en uno de nuestros centros de acogida y están buscando un hogar.' : filterValue === 'gato' ? 'Estos son todos los gatos que actualmente se encuentran en uno de nuestros centros de acogida y están buscando un hogar.' : 'Estos son todos los animales que actualmente se encuentran en uno de nuestros centros de acogida y están buscando un hogar.'
 
   useEffect(() => {
     const fetchAnimals = async () => {
@@ -133,8 +135,8 @@ function AnimalsInAdoption() {
   const getAgeCategory = (ageMonths) => {
     const m = parseInt(ageMonths)
     if (isNaN(m)) return ''
-    if (m < 12) return 'cachorro'
-    if (m < 24) return 'adulto'
+    if (m < 14) return 'cachorro'
+    if (m < 84) return 'adulto'
     return 'senior'
   }
 
@@ -151,6 +153,40 @@ function AnimalsInAdoption() {
     if (value === false) return '✕'
     return '—'
   }
+
+  const goToPreviousCarouselImage = useCallback(() => {
+    setCarouselIndex((i) => (i <= 0 ? selectedAnimalImages.length - 1 : i - 1))
+  }, [selectedAnimalImages.length])
+
+  const goToNextCarouselImage = useCallback(() => {
+    setCarouselIndex((i) => (i >= selectedAnimalImages.length - 1 ? 0 : i + 1))
+  }, [selectedAnimalImages.length])
+
+  const handleCarouselTouchStart = useCallback((event) => {
+    if (selectedAnimalImages.length < 2) return
+    const touch = event.touches?.[0]
+    if (!touch) return
+    touchStartXRef.current = touch.clientX
+    touchStartYRef.current = touch.clientY
+  }, [selectedAnimalImages.length])
+
+  const handleCarouselTouchEnd = useCallback((event) => {
+    if (selectedAnimalImages.length < 2) return
+    const startX = touchStartXRef.current
+    const startY = touchStartYRef.current
+    const touch = event.changedTouches?.[0]
+    touchStartXRef.current = null
+    touchStartYRef.current = null
+    if (!touch || startX === null || startY === null) return
+
+    const deltaX = touch.clientX - startX
+    const deltaY = touch.clientY - startY
+    const SWIPE_THRESHOLD = 40
+
+    if (Math.abs(deltaX) < SWIPE_THRESHOLD || Math.abs(deltaX) <= Math.abs(deltaY)) return
+    if (deltaX > 0) goToPreviousCarouselImage()
+    else goToNextCarouselImage()
+  }, [goToNextCarouselImage, goToPreviousCarouselImage, selectedAnimalImages.length])
 
   const filteredAnimals = animals.filter((a) => {
     const typeOk = !filters.animal_type || normalized(a.animal_type) === normalized(filters.animal_type)
@@ -230,7 +266,11 @@ function AnimalsInAdoption() {
         <div className="animal-modal-backdrop" onClick={handleCloseModal}>
           <div className="animal-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="animal-modal-title">
             <button type="button" className="animal-modal-close" onClick={handleCloseModal} aria-label="Cerrar ficha">×</button>
-            <div className="animal-modal-carousel">
+            <div
+              className="animal-modal-carousel"
+              onTouchStart={handleCarouselTouchStart}
+              onTouchEnd={handleCarouselTouchEnd}
+            >
               <div className="animal-modal-carousel-track" style={{ transform: `translateX(-${carouselIndex * 100}%)` }}>
                 {selectedAnimalImages.length > 0 ? (
                   selectedAnimalImages.map((url, i) => (
@@ -261,8 +301,8 @@ function AnimalsInAdoption() {
               </div>
               {selectedAnimalImages.length > 1 && (
                 <>
-                  <button type="button" className="animal-modal-carousel-prev" onClick={() => setCarouselIndex((i) => (i <= 0 ? selectedAnimalImages.length - 1 : i - 1))} aria-label="Anterior">‹</button>
-                  <button type="button" className="animal-modal-carousel-next" onClick={() => setCarouselIndex((i) => (i >= selectedAnimalImages.length - 1 ? 0 : i + 1))} aria-label="Siguiente">›</button>
+                  <button type="button" className="animal-modal-carousel-prev" onClick={goToPreviousCarouselImage} aria-label="Anterior">‹</button>
+                  <button type="button" className="animal-modal-carousel-next" onClick={goToNextCarouselImage} aria-label="Siguiente">›</button>
                   <div className="animal-modal-carousel-dots">
                     {selectedAnimalImages.map((_, i) => (
                       <button key={i} type="button" className={`animal-modal-carousel-dot ${i === carouselIndex ? 'is-active' : ''}`} onClick={() => setCarouselIndex(i)} aria-label={`Ir a imagen ${i + 1}`} aria-current={i === carouselIndex ? 'true' : undefined} />

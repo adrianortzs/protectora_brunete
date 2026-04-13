@@ -8,8 +8,24 @@ function AnimalCard({ animal, onSelect, formatAge }) {
   const normalizedGender = animal?.gender ? String(animal.gender).trim().toLowerCase() : ''
   const [imageFailed, setImageFailed] = useState(false)
 
+  const handleOpen = () => onSelect(animal)
+
+  const handleCardKeyDown = (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      handleOpen()
+    }
+  }
+
   return (
-    <article className="animal-card">
+    <article
+      className="animal-card"
+      role="button"
+      tabIndex={0}
+      onClick={handleOpen}
+      onKeyDown={handleCardKeyDown}
+      aria-label={`Ver detalle de ${name}`}
+    >
       <div className="animal-image-wrapper">
         {firstImage && !imageFailed ? (
           <img
@@ -49,7 +65,14 @@ function AnimalCard({ animal, onSelect, formatAge }) {
           </span>
         </div>
         <div className="animal-card-action">
-          <button type="button" className="animal-card-btn" onClick={() => onSelect(animal)}>
+          <button
+            type="button"
+            className="animal-card-btn"
+            onClick={(event) => {
+              event.stopPropagation()
+              handleOpen()
+            }}
+          >
             Conóceme
           </button>
         </div>

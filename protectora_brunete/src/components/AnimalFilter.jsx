@@ -21,7 +21,8 @@ function AnimalFilter({
   nameSearch,
   onNameSearchChange,
   cityHallOptions = [],
-  showLocationFilters = false
+  showLocationFilters = false,
+  showGeneralFilters = true
 }) {
   const [openDropdown, setOpenDropdown] = useState(null)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
@@ -111,12 +112,12 @@ function AnimalFilter({
         </div>
       )}
 
-      {renderDropdown({ key: 'animal_type', label: 'Tipo de animal', options: ANIMAL_TYPE_OPTIONS })}
-      {renderDropdown({ key: 'gender', label: 'Sexo', options: GENDER_OPTIONS })}
-      {renderDropdown({ key: 'age', label: 'Edad', options: AGE_OPTIONS })}
-      {renderDropdown({ key: 'size', label: 'Tamaño', options: SIZE_OPTIONS })}
+      {showGeneralFilters && renderDropdown({ key: 'animal_type', label: 'Tipo de animal', options: ANIMAL_TYPE_OPTIONS })}
+      {showGeneralFilters && renderDropdown({ key: 'gender', label: 'Sexo', options: GENDER_OPTIONS })}
+      {showGeneralFilters && renderDropdown({ key: 'age', label: 'Edad', options: AGE_OPTIONS })}
+      {showGeneralFilters && renderDropdown({ key: 'size', label: 'Tamaño', options: SIZE_OPTIONS })}
       {showLocationFilters && renderDropdown({ key: 'city_hall', label: 'Ayuntamiento', options: cityHallDropdownOptions })}
-      {renderDropdown({ key: 'arrival_date', label: 'Fecha de llegada', options: ARRIVAL_OPTIONS, buttonLabelGetter: (value) => ARRIVAL_OPTIONS.find((opt) => opt.value === value)?.buttonLabel || 'Sin orden' })}
+      {showGeneralFilters && renderDropdown({ key: 'arrival_date', label: 'Fecha de llegada', options: ARRIVAL_OPTIONS, buttonLabelGetter: (value) => ARRIVAL_OPTIONS.find((opt) => opt.value === value)?.buttonLabel || 'Sin orden' })}
 
       <button type="button" className="animals-filter-reset" onClick={handleClear}>Limpiar filtros</button>
       </div>

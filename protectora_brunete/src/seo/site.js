@@ -1,7 +1,7 @@
 export const SITE_NAME = 'Arat Adopta'
 
 export const DEFAULT_DESCRIPTION =
-  'Arat Adopta: protectora en Brunete y Torrelodones. Animales en adopción; recogida de animales perdidos o abandonados las 24 horas. Protección y bienestar de animales domésticos.'
+  'Somos una protectora de animales domésticos en Brunete y Torrelodones. Animales en adopción; recogida de animales perdidos o abandonados las 24 horas. Protección y bienestar de animales domésticos.'
 
 export function getAbsoluteUrl(pathname = '/') {
   const path = pathname.startsWith('/') ? pathname : `/${pathname}`

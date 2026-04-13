@@ -11,6 +11,7 @@ const BUCKET = 'animals'
 const SORT_ARRIVAL = { none: '', newest: 'newest', oldest: 'oldest' }
 const TOAST_DURATION = 4000
 const WEBP_QUALITY = 0.82
+const INACTIVITY_TIMEOUT_MS = 30 * 60 * 1000
 const ALLOWED_UPLOAD_MIME_TYPES = ['image/jpeg', 'image/png']
 const ALLOWED_UPLOAD_EXTENSIONS = ['jpg', 'jpeg', 'png']
 const EMPTY_FORM = { name: '', animal_type: '', gender: '', age: '', size: '', sterilized: '', city_hall: '', chenil: '', description: '', arrival_date: '' }
@@ -137,6 +138,7 @@ function AdminPanel() {
   const fileInputRef = useRef(null)
   const toastIdRef = useRef(0)
   const confirmResolveRef = useRef(null)
+  const inactivityTimeoutRef = useRef(null)
   const navigate = useNavigate()
 
   const pushToast = useCallback((message, type = 'success') => {
@@ -177,6 +179,49 @@ function AdminPanel() {
         fetchAnimals()
       }
     })
+  }, [navigate])
+
+  useEffect(() => {
+    let isActive = true
+
+    const clearInactivityTimer = () => {
+      if (inactivityTimeoutRef.current) {
+        window.clearTimeout(inactivityTimeoutRef.current)
+        inactivityTimeoutRef.current = null
+      }
+    }
+
+    const handleInactivityLogout = async () => {
+      if (!isActive) return
+      clearInactivityTimer()
+      await supabase.auth.signOut()
+      navigate('/hsdkadmin/login', { replace: true })
+    }
+
+    const resetInactivityTimer = () => {
+      clearInactivityTimer()
+      inactivityTimeoutRef.current = window.setTimeout(handleInactivityLogout, INACTIVITY_TIMEOUT_MS)
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') resetInactivityTimer()
+    }
+
+    const ACTIVITY_EVENTS = ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart', 'click']
+    ACTIVITY_EVENTS.forEach((eventName) => {
+      window.addEventListener(eventName, resetInactivityTimer, { passive: true })
+    })
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    resetInactivityTimer()
+
+    return () => {
+      isActive = false
+      clearInactivityTimer()
+      ACTIVITY_EVENTS.forEach((eventName) => {
+        window.removeEventListener(eventName, resetInactivityTimer)
+      })
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
   }, [navigate])
 
   useEffect(() => {
@@ -576,6 +621,7 @@ function AdminPanel() {
             onClear={() => { setFilters({ animal_type: '', gender: '', age: '', size: '', city_hall: '', chenil: '', arrival_date: SORT_ARRIVAL.none }); setNameSearch(''); setCurrentPage(1) }}
             cityHallOptions={cityHallOptions}
             showLocationFilters
+            showGeneralFilters={false}
             showNameSearch
             nameSearch={nameSearch}
             onNameSearchChange={handleNameSearch}
