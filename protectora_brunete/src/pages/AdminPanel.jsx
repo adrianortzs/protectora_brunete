@@ -18,7 +18,7 @@ const EMPTY_FORM = { name: '', animal_type: '', gender: '', age: '', size: '', s
 const ANIMAL_TYPE_OPTIONS = [{ value: 'perro', label: 'Perro' }, { value: 'gato', label: 'Gato' }]
 const GENDER_OPTIONS = [{ value: 'Macho', label: 'Macho' }, { value: 'Hembra', label: 'Hembra' }]
 const SIZE_OPTIONS = [{ value: 'pequeño', label: 'Pequeño' }, { value: 'mediano', label: 'Mediano' }, { value: 'grande', label: 'Grande' }]
-const STERILIZED_OPTIONS = [{ value: 'si', label: '✓' }, { value: 'no', label: '✕' }]
+const STERILIZED_OPTIONS = [{ value: 'si', label: 'Sí' }, { value: 'no', label: 'No' }]
 
 function normalizeImageList(value) {
   const list = Array.isArray(value) ? value : value ? [value] : []
@@ -258,7 +258,11 @@ function AdminPanel() {
     navigate('/')
   }
 
-  const updateFilter = (key, value) => { setFilters(prev => ({ ...prev, [key]: value })); setCurrentPage(1) }
+  const applyFilters = ({ filters: next, nameSearch: nextName }) => {
+    setFilters(next)
+    setNameSearch(nextName ?? '')
+    setCurrentPage(1)
+  }
   const normalized = (v) => (v && String(v).trim().toLowerCase()) || ''
 
   const getAgeCategory = (ageMonths) => {
@@ -278,12 +282,10 @@ function AdminPanel() {
   }
 
   const formatSterilized = (value) => {
-    if (value === true) return '✓'
-    if (value === false) return '✕'
+    if (value === true) return 'Sí'
+    if (value === false) return 'No'
     return '—'
   }
-
-  const handleNameSearch = (value) => { setNameSearch(value); setCurrentPage(1) }
 
   const filteredAnimals = useMemo(() => (
     animals.filter((a) => {
@@ -617,14 +619,13 @@ function AdminPanel() {
         {!loading && !error && animals.length > 0 && (
           <AnimalFilter
             filters={filters}
-            onFilterChange={updateFilter}
+            onApply={applyFilters}
             onClear={() => { setFilters({ animal_type: '', gender: '', age: '', size: '', city_hall: '', chenil: '', arrival_date: SORT_ARRIVAL.none }); setNameSearch(''); setCurrentPage(1) }}
             cityHallOptions={cityHallOptions}
             showLocationFilters
             showGeneralFilters={false}
             showNameSearch
             nameSearch={nameSearch}
-            onNameSearchChange={handleNameSearch}
           />
         )}
 

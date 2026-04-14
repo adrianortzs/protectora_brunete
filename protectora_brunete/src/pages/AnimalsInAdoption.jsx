@@ -129,7 +129,7 @@ function AnimalsInAdoption() {
     setCurrentPage(1)
   }, [filterValue])
 
-  const updateFilter = (key, value) => { setFilters(prev => ({ ...prev, [key]: value })); setCurrentPage(1) }
+  const applyFilters = ({ filters: next }) => { setFilters(next); setCurrentPage(1) }
   const normalized = (v) => (v && String(v).trim().toLowerCase()) || ''
   
   const getAgeCategory = (ageMonths) => {
@@ -149,8 +149,8 @@ function AnimalsInAdoption() {
   }
 
   const formatSterilized = (value) => {
-    if (value === true) return '✓'
-    if (value === false) return '✕'
+    if (value === true) return 'Sí'
+    if (value === false) return 'No'
     return '—'
   }
 
@@ -238,7 +238,7 @@ function AnimalsInAdoption() {
           )}
           {!loading && error && (<div className="animals-status animals-status-error"><p>{error}</p></div>)}
           {!loading && !error && animals.length > 0 && (
-            <AnimalFilter filters={filters} onFilterChange={updateFilter} filterValue={filterValue} onClear={() => { setFilters({ animal_type: filterValue || '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none }); setCurrentPage(1) }} />
+            <AnimalFilter filters={filters} onApply={applyFilters} onClear={() => { setFilters({ animal_type: filterValue || '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none }); setCurrentPage(1) }} />
           )}
           {!loading && !error && animals.length === 0 && (
             <div className="animals-status">

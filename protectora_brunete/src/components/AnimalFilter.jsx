@@ -13,22 +13,36 @@ const SIZE_OPTIONS = [{ value: '', label: 'Cualquiera' }, { value: 'pequeño', l
 
 const ARRIVAL_OPTIONS = [{ value: SORT_ARRIVAL.none, label: 'Sin orden', buttonLabel: 'Sin orden' }, { value: SORT_ARRIVAL.oldest, label: 'Más antiguos primero', buttonLabel: 'Más antiguos' }, { value: SORT_ARRIVAL.newest, label: 'Más recientes primero', buttonLabel: 'Más recientes' }]
 
+function isMobileFilterLayout() {
+  return typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches
+}
+
 function AnimalFilter({
   filters,
-  onFilterChange,
+  onApply,
   onClear,
   showNameSearch,
   nameSearch,
-  onNameSearchChange,
   cityHallOptions = [],
   showLocationFilters = false,
   showGeneralFilters = true
 }) {
   const [openDropdown, setOpenDropdown] = useState(null)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [draftFilters, setDraftFilters] = useState(() => ({ ...filters }))
+  const [draftNameSearch, setDraftNameSearch] = useState(() => (nameSearch || ''))
+
+  useEffect(() => {
+    setDraftFilters({ ...filters })
+  }, [filters])
+
+  useEffect(() => {
+    if (showNameSearch) setDraftNameSearch(nameSearch || '')
+  }, [nameSearch, showNameSearch])
+
   const toggleDropdown = (name) => { setOpenDropdown(prev => prev === name ? null : name) }
   const closeDropdowns = () => { setOpenDropdown(null) }
-  const selectOption = (key, value) => { onFilterChange(key, value); closeDropdowns() }
+  const selectOption = (key, value) => { setDraftFilters(prev => ({ ...prev, [key]: value })); closeDropdowns() }
 
   const cityHallDropdownOptions = [
     { value: '', label: 'Cualquiera' },
@@ -43,23 +57,36 @@ function AnimalFilter({
     return () => document.removeEventListener('click', handleClickOutside)
   }, [openDropdown])
 
+  const closePanelIfMobile = () => {
+    if (isMobileFilterLayout()) setIsFilterOpen(false)
+  }
+
+  const handleApply = () => {
+    onApply({
+      filters: draftFilters,
+      ...(showNameSearch ? { nameSearch: draftNameSearch } : {})
+    })
+    closeDropdowns()
+    closePanelIfMobile()
+  }
+
   const handleClear = () => {
     onClear()
     closeDropdowns()
-    if (showNameSearch && onNameSearchChange) onNameSearchChange('')
+    closePanelIfMobile()
   }
 
   const renderDropdown = ({ key, label, options, buttonLabelGetter }) => (
     <div className={`filter-dropdown filter-dropdown--${key}`}>
       <span className="filter-dropdown-label">{label}</span>
       <button type="button" className={`filter-dropdown-btn ${openDropdown === key ? 'is-open' : ''}`} onClick={() => toggleDropdown(key)}>
-        <span>{buttonLabelGetter ? buttonLabelGetter(filters[key]) : (options.find((opt) => opt.value === filters[key])?.label || 'Cualquiera')}</span>
+        <span>{buttonLabelGetter ? buttonLabelGetter(draftFilters[key]) : (options.find((opt) => opt.value === draftFilters[key])?.label || 'Cualquiera')}</span>
         <i className="bi bi-chevron-down"></i>
       </button>
       {openDropdown === key && (
         <div className="filter-dropdown-menu">
           {options.map((opt) => (
-            <button key={opt.value || 'empty'} type="button" className={`filter-dropdown-item ${filters[key] === opt.value ? 'is-selected' : ''}`} onClick={() => selectOption(key, opt.value)}>
+            <button key={opt.value || 'empty'} type="button" className={`filter-dropdown-item ${draftFilters[key] === opt.value ? 'is-selected' : ''}`} onClick={() => selectOption(key, opt.value)}>
               {opt.label}
             </button>
           ))}
@@ -80,9 +107,9 @@ function AnimalFilter({
           <span className="filter-dropdown-label">Buscar por nombre</span>
           <div className="af-name-input-wrap">
             <i className="bi bi-search af-name-icon"></i>
-            <input type="text" value={nameSearch || ''} onChange={(e) => onNameSearchChange(e.target.value)} className="af-name-input" placeholder="Nombre del animal…" />
-            {nameSearch && (
-              <button type="button" className="af-name-clear" onClick={() => onNameSearchChange('')} aria-label="Limpiar búsqueda">
+            <input type="text" value={draftNameSearch} onChange={(e) => setDraftNameSearch(e.target.value)} className="af-name-input" placeholder="Nombre del animal…" />
+            {draftNameSearch && (
+              <button type="button" className="af-name-clear" onClick={() => setDraftNameSearch('')} aria-label="Limpiar búsqueda">
                 <i className="bi bi-x-lg"></i>
               </button>
             )}
@@ -97,14 +124,14 @@ function AnimalFilter({
             <i className="bi bi-hash af-name-icon"></i>
             <input
               type="number"
-              value={filters.chenil ?? ''}
-              onChange={(e) => onFilterChange('chenil', e.target.value)}
+              value={draftFilters.chenil ?? ''}
+              onChange={(e) => setDraftFilters(prev => ({ ...prev, chenil: e.target.value }))}
               className="af-name-input"
               placeholder="Ej: 12"
               min="0"
             />
-            {filters.chenil !== '' && (
-              <button type="button" className="af-name-clear" onClick={() => onFilterChange('chenil', '')} aria-label="Limpiar filtro">
+            {draftFilters.chenil !== '' && draftFilters.chenil !== undefined && (
+              <button type="button" className="af-name-clear" onClick={() => setDraftFilters(prev => ({ ...prev, chenil: '' }))} aria-label="Limpiar filtro">
                 <i className="bi bi-x-lg"></i>
               </button>
             )}
@@ -119,7 +146,10 @@ function AnimalFilter({
       {showLocationFilters && renderDropdown({ key: 'city_hall', label: 'Ayuntamiento', options: cityHallDropdownOptions })}
       {showGeneralFilters && renderDropdown({ key: 'arrival_date', label: 'Fecha de llegada', options: ARRIVAL_OPTIONS, buttonLabelGetter: (value) => ARRIVAL_OPTIONS.find((opt) => opt.value === value)?.buttonLabel || 'Sin orden' })}
 
-      <button type="button" className="animals-filter-reset" onClick={handleClear}>Limpiar filtros</button>
+      <div className="af-filter-actions">
+        <button type="button" className="animals-filter-reset" onClick={handleApply}>Aplicar filtros</button>
+        <button type="button" className="animals-filter-reset" onClick={handleClear}>Limpiar filtros</button>
+      </div>
       </div>
     </div>
   )

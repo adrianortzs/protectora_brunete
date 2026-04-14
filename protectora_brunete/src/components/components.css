@@ -723,6 +723,17 @@ button.nav-link {
   border-radius: 50%;
 }
 
+.af-filter-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.af-filter-actions .animals-filter-reset {
+  flex: 1 1 auto;
+}
+
 .animals-filter-reset {
   width: 100%;
   padding: 0.625rem 0.875rem;
@@ -778,6 +789,12 @@ button.nav-link {
     font-size: 0.9375rem;
   }
 
+  .af-filter-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
   .animals-filter-reset {
     padding: 0.75rem 1rem;
     font-size: 0.9375rem;
@@ -800,53 +817,79 @@ button.nav-link {
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-    width: max-content;
+    flex-wrap: nowrap;
+    width: 100%;
     max-width: 100%;
-    flex-wrap: wrap;
-    gap: 2rem;
+    box-sizing: border-box;
+    gap: 1rem;
     margin-top: 0;
-    padding: 2rem 2.5rem;
+    padding: 1.5rem 2rem;
     background: var(--white-soft);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-md);
     border: 2px solid var(--alpha-6);
+    overflow: visible;
   }
 
   .filter-dropdown {
-    gap: 0.75rem;
+    gap: 0.5rem;
+    flex: 1 1 0;
+    min-width: 8rem;
+  }
+
+  .filter-dropdown-label {
+    font-size: 0.6875rem;
+    letter-spacing: 0.055em;
   }
 
   .af-name-input {
-    min-width: 12rem;
+    min-width: 0;
+    width: 100%;
     min-height: auto;
+    padding: 0.625rem 2.25rem 0.625rem 2.5rem;
+    font-size: 0.875rem;
   }
 
   .filter-dropdown-btn {
-    min-width: 9.375rem;
-    width: auto;
-    padding: 0.75rem 1.25rem;
-    min-height: auto;
+    min-width: 0;
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    min-height: 2.625rem;
+    font-size: 0.875rem;
   }
 
   .filter-dropdown--arrival_date .filter-dropdown-btn {
-    min-width: 10.75rem;
+    min-width: 9.25rem;
+  }
+
+  .filter-dropdown-btn i {
+    font-size: 0.9375rem;
   }
 
   .filter-dropdown-menu {
-    min-width: 12.5rem;
+    min-width: max(100%, 11rem);
   }
 
   .filter-dropdown-item {
-    font-size: 1rem;
+    font-size: 0.9375rem;
     min-height: auto;
     display: block;
   }
 
+  .af-filter-actions {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: auto;
+    flex: 0 0 auto;
+    align-self: flex-end;
+    gap: 0.625rem;
+  }
+
   .animals-filter-reset {
     width: auto;
-    padding: 0.75rem 1.5rem;
-    font-size: 0.9375rem;
-    min-height: auto;
+    padding: 0.625rem 1.125rem;
+    font-size: 0.875rem;
+    min-height: 2.625rem;
   }
 }
 
@@ -858,7 +901,8 @@ button.nav-link {
   .filter-dropdown-btn i,
   .filter-dropdown-btn,
   .filter-dropdown-item,
-  .animals-filter-reset {
+  .animals-filter-reset,
+  .af-filter-actions {
     transition: none;
   }
 }

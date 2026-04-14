@@ -10,19 +10,12 @@ import './pages.css'
 
 const HOME_ADOPTION_SECTIONS = [
   {
-    key: 'all',
-    title: 'Animales en adopción',
-    description: 'Explora todos los animales disponibles y encuentra el compañero ideal para tu familia.',
-    to: '/animales-en-adopción',
-    ctaLabel: 'Ver animales',
-    staticImage: '/animales.webp',
-  },
-  {
     key: 'cats',
     title: 'Gatos en adopción',
     description: 'Conoce a los gatos que esperan un hogar con adopción responsable y seguimiento.',
     to: '/animales-en-adopción/gatos',
     ctaLabel: 'Ver gatos',
+    staticImage: '/gatos1.webp',
   },
   {
     key: 'dogs',
@@ -31,6 +24,14 @@ const HOME_ADOPTION_SECTIONS = [
     to: '/animales-en-adopción/perros',
     ctaLabel: 'Ver perros',
     staticImage: '/perro.webp',
+  },
+  {
+    key: 'all',
+    title: 'Animales en adopción',
+    description: 'Explora todos los animales disponibles y encuentra el compañero ideal para tu familia.',
+    to: '/animales-en-adopción',
+    ctaLabel: 'Ver animales',
+    staticImage: '/animales.webp',
   },
 ]
 
@@ -109,7 +110,11 @@ export default function Home() {
                   const previewImage = section.staticImage || getFirstImage(previewAnimal)
                   const imageFailed = Boolean(failedPreviewImages[section.key])
                   return (
-                    <article key={section.key} className="home-adoption-card">
+                    <Link
+                      key={section.key}
+                      to={section.to}
+                      className="home-adoption-card"
+                    >
                       <div className="home-adoption-image-wrap">
                         {previewImage && !imageFailed ? (
                           <img
@@ -130,9 +135,9 @@ export default function Home() {
                       <div className="home-adoption-body">
                         <h3 className="home-adoption-title">{section.title}</h3>
                         <p className="home-adoption-text">{section.description}</p>
-                        <Link to={section.to} className="home-adoption-link">{section.ctaLabel}</Link>
+                        <span className="home-adoption-link">{section.ctaLabel}</span>
                       </div>
-                    </article>
+                    </Link>
                   )
                 })}
               </div>

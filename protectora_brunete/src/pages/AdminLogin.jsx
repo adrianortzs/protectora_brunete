@@ -94,7 +94,7 @@ function AdminLogin() {
             <i className="bi bi-shield-lock"></i>
           </div>
           <h1 className="admin-login-title">Panel de Administración</h1>
-          <p className="admin-login-subtitle">Introduce tus credenciales para acceder</p>
+          <p className="admin-login-subtitle">Introduce las credenciales para acceder</p>
         </div>
 
         <form className="admin-login-form" onSubmit={handleSubmit} noValidate>
