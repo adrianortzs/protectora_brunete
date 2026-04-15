@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import aratLogo from '../assets/arat_logo.png'
+import aratLogo from '../assets/arat_logo.webp'
 import './components.css'
 
 const NAV_ITEMS = [

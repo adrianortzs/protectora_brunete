@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import Header from '../components/Header'
 import Hero from '../components/Hero'
 import Footer from '../components/Footer'
+import FadeInImage from '../components/FadeInImage'
 import usePageSEO from '../hooks/usePageSEO'
 import { DEFAULT_DESCRIPTION, getAbsoluteUrl, SITE_NAME } from '../seo/site'
 import './pages.css'
@@ -48,7 +49,7 @@ export default function Home() {
       '@type': 'Organization',
       name: SITE_NAME,
       url: getAbsoluteUrl('/'),
-      logo: getAbsoluteUrl('/arat_logo.svg'),
+      logo: getAbsoluteUrl('/arat_favicon_192.png'),
       description: DEFAULT_DESCRIPTION,
       sameAs: ['https://www.facebook.com/aratadopta', 'https://www.instagram.com/aratadopta'],
     }
@@ -117,7 +118,7 @@ export default function Home() {
                     >
                       <div className="home-adoption-image-wrap">
                         {previewImage && !imageFailed ? (
-                          <img
+                          <FadeInImage
                             src={previewImage}
                             alt={section.staticImage ? section.title : (previewAnimal?.name || section.title)}
                             className="home-adoption-image"

@@ -1,6 +1,7 @@
 import usePageSEO from '../hooks/usePageSEO'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import FadeInImage from '../components/FadeInImage'
 import './pages.css'
 
 const HERO_PARAGRAPHS = ['Arat Adopta nace en 2017 con el compromiso de luchar por los animales y su bienestar. Somos una protectora independiente con centros de acogida propios.']
@@ -84,6 +85,29 @@ function WhoAreWe() {
               Nuestro centro no es un depósito. Es un espacio de recuperación y preparación para una nueva etapa.
             </p>
           </section>
+
+          <div className="page-who-centro-photos">
+            <figure className="page-editorial-photo-figure">
+              <FadeInImage
+                src="/instalaciones3.webp"
+                alt="Espacios del centro de acogida autorizado"
+                loading="lazy"
+                decoding="async"
+                width="800"
+                height="600"
+              />
+            </figure>
+            <figure className="page-editorial-photo-figure">
+              <FadeInImage
+                src="/instalaciones2.webp"
+                alt="Instalaciones para el bienestar y la recuperación de los animales"
+                loading="lazy"
+                decoding="async"
+                width="800"
+                height="600"
+              />
+            </figure>
+          </div>
 
           <div className="page-grid-2col">
             <section className="page-section">

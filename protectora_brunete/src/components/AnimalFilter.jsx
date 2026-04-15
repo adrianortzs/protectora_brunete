@@ -32,6 +32,8 @@ function AnimalFilter({
   const [draftFilters, setDraftFilters] = useState(() => ({ ...filters }))
   const [draftNameSearch, setDraftNameSearch] = useState(() => (nameSearch || ''))
 
+  /* Sincronizar borradores cuando la URL / props cambian (p. ej. navegación o borrar filtros). */
+  /* eslint-disable react-hooks/set-state-in-effect -- actualización derivada de props controladas desde el padre */
   useEffect(() => {
     setDraftFilters({ ...filters })
   }, [filters])
@@ -39,6 +41,7 @@ function AnimalFilter({
   useEffect(() => {
     if (showNameSearch) setDraftNameSearch(nameSearch || '')
   }, [nameSearch, showNameSearch])
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const toggleDropdown = (name) => { setOpenDropdown(prev => prev === name ? null : name) }
   const closeDropdowns = () => { setOpenDropdown(null) }

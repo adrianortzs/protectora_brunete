@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import FadeInImage from '../components/FadeInImage'
 import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
@@ -44,6 +45,19 @@ function FosterHome() {
             </h2>
             {WHAT_IT_IMPLIES_PARAGRAPHS.map((paragraph) => (<p key={paragraph} className="page-text">{paragraph}</p>))}
           </section>
+
+          <div className="page-foster-after-implies">
+            <figure className="page-editorial-photo-figure">
+              <FadeInImage
+                src="/gatos.webp"
+                alt="Gato en un hogar tranquilo: la acogida ofrece estabilidad hasta la adopción definitiva"
+                loading="lazy"
+                decoding="async"
+                width="960"
+                height="600"
+              />
+            </figure>
+          </div>
 
           <section className="page-card">
             <h2 className="page-card-title">

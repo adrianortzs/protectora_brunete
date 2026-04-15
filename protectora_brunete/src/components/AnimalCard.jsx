@@ -1,5 +1,6 @@
 import './components.css'
 import { useState } from 'react'
+import FadeInImage from './FadeInImage'
 
 function AnimalCard({ animal, onSelect, formatAge }) {
   const name = animal?.name || 'Animal'
@@ -28,7 +29,7 @@ function AnimalCard({ animal, onSelect, formatAge }) {
     >
       <div className="animal-image-wrapper">
         {firstImage && !imageFailed ? (
-          <img
+          <FadeInImage
             src={firstImage}
             alt={name}
             className="animal-image"

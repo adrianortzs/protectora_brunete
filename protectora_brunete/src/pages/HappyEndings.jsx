@@ -4,7 +4,9 @@ import { Pagination } from '../components/Pagination'
 import { paginate } from '../utils/pagination'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import FadeInImage from '../components/FadeInImage'
 import usePageSEO from '../hooks/usePageSEO'
+import { useResponsiveItemsPerPage } from '../hooks/useResponsiveItemsPerPage'
 import './pages.css'
 
 const PAGE_TITLE = 'Finales felices'
@@ -46,6 +48,7 @@ function HappyEndings() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = useResponsiveItemsPerPage()
   const [failedImages, setFailedImages] = useState({})
 
   useEffect(() => {
@@ -64,7 +67,14 @@ function HappyEndings() {
     fetchAnimals()
   }, [])
 
-  const { paginated: paginatedAnimals, totalPages, safePage } = paginate(animals, currentPage)
+  useEffect(() => {
+    setCurrentPage((p) => {
+      const totalPages = Math.max(1, Math.ceil(animals.length / itemsPerPage))
+      return Math.min(p, totalPages)
+    })
+  }, [itemsPerPage, animals.length])
+
+  const { paginated: paginatedAnimals, totalPages, safePage } = paginate(animals, currentPage, itemsPerPage)
 
   return (
     <div>
@@ -101,7 +111,7 @@ function HappyEndings() {
                     <article key={animal.id} className="happy-card">
                       <div className="happy-card-img-wrapper">
                         {firstImage && !imageFailed ? (
-                          <img
+                          <FadeInImage
                             src={firstImage}
                             alt={displayName || 'Animal adoptado'}
                             className="happy-card-img"

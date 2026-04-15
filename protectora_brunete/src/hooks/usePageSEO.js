@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { DEFAULT_DESCRIPTION, SITE_NAME, getAbsoluteUrl } from '../seo/site'
 
-const OG_IMAGE_PATH = '/arat_logo.svg'
+const OG_IMAGE_PATH = '/arat_og.png'
 
 function setMetaName(name, content) {
   if (content === undefined || content === null) return

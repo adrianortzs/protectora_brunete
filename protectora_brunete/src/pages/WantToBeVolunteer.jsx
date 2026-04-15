@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import FadeInImage from '../components/FadeInImage'
 import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
@@ -53,6 +54,29 @@ function WantToBeVolunteer() {
             <p className="page-text">{ROLE_PARAGRAPHS[2]}</p>
             <p className="page-text">{ROLE_PARAGRAPHS[3]}</p>
           </section>
+
+          <div className="page-volunteer-after-role-photos">
+            <figure className="page-editorial-photo-figure">
+              <FadeInImage
+                src="/instalaciones4.webp"
+                alt="Zona interior del refugio donde los voluntarios apoyan el cuidado diario"
+                loading="lazy"
+                decoding="async"
+                width="800"
+                height="600"
+              />
+            </figure>
+            <figure className="page-editorial-photo-figure">
+              <FadeInImage
+                src="/instalaciones6.webp"
+                alt="Espacios del centro de acogida para visitas y trabajo con el equipo"
+                loading="lazy"
+                decoding="async"
+                width="800"
+                height="600"
+              />
+            </figure>
+          </div>
 
           <section className="page-card">
             <h2 className="page-card-title">

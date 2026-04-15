@@ -1,0 +1,28 @@
+.image-fade-in {
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.image-fade-in.image-fade-in--loaded {
+  opacity: 1;
+}
+
+.animal-image.image-fade-in,
+.home-adoption-image.image-fade-in,
+.page--happy-endings .happy-card-img.image-fade-in,
+.hero-video-poster.image-fade-in {
+  transition:
+    opacity 0.45s ease,
+    transform var(--ease-slow);
+}
+
+.animal-modal-carousel-image.image-fade-in {
+  transition: opacity 0.45s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-fade-in {
+    transition: none;
+    opacity: 1;
+  }
+}

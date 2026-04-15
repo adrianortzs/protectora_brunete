@@ -5,9 +5,11 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import AnimalFilter from '../components/AnimalFilter'
 import AnimalCard from '../components/AnimalCard'
+import FadeInImage from '../components/FadeInImage'
 import { Pagination } from '../components/Pagination'
 import { paginate } from '../utils/pagination'
 import usePageSEO from '../hooks/usePageSEO'
+import { useResponsiveItemsPerPage } from '../hooks/useResponsiveItemsPerPage'
 import './pages.css'
 
 const ANIMAL_TYPE_FILTER = { perros: 'perro', gatos: 'gato' }
@@ -26,6 +28,7 @@ function AnimalsInAdoption() {
   const [carouselIndex, setCarouselIndex] = useState(0)
   const [failedCarouselImages, setFailedCarouselImages] = useState({})
   const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = useResponsiveItemsPerPage()
   const touchStartXRef = useRef(null)
   const touchStartYRef = useRef(null)
   const navigate = useNavigate()
@@ -201,7 +204,14 @@ function AnimalsInAdoption() {
     return 0
   })
 
-  const { paginated: paginatedAnimals, totalPages, safePage } = paginate(sortedAnimals, currentPage)
+  useEffect(() => {
+    setCurrentPage((p) => {
+      const totalPages = Math.max(1, Math.ceil(sortedAnimals.length / itemsPerPage))
+      return Math.min(p, totalPages)
+    })
+  }, [itemsPerPage, sortedAnimals.length])
+
+  const { paginated: paginatedAnimals, totalPages, safePage } = paginate(sortedAnimals, currentPage, itemsPerPage)
 
   return (
     <div>
@@ -281,7 +291,7 @@ function AnimalsInAdoption() {
                           <span>Imagen no disponible</span>
                         </div>
                       ) : (
-                        <img
+                        <FadeInImage
                           src={url}
                           alt={`${selectedAnimal.name} ${i + 1}`}
                           className="animal-modal-carousel-image"

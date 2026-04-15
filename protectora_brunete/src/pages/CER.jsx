@@ -1,5 +1,6 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import FadeInImage from '../components/FadeInImage'
 import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
@@ -54,6 +55,29 @@ function CER() {
               </li>
             </ul>
           </section>
+
+          <div className="page-cer-method-photos">
+            <figure className="page-editorial-photo-figure">
+              <FadeInImage
+                src="/gatos4.webp"
+                alt="Gato comunitario en el entorno urbano, contexto del programa CER"
+                loading="lazy"
+                decoding="async"
+                width="800"
+                height="600"
+              />
+            </figure>
+            <figure className="page-editorial-photo-figure">
+              <FadeInImage
+                src="/gatos3.webp"
+                alt="Gatos en colonia felina gestionada con captura, esterilización y retorno"
+                loading="lazy"
+                decoding="async"
+                width="800"
+                height="600"
+              />
+            </figure>
+          </div>
 
           <section className="page-section">
             <h2 className="page-section-title">

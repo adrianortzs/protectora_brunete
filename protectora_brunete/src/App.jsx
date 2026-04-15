@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { CookieConsentProvider } from './context/CookieConsentContext'
+import CookieBanner from './components/CookieBanner'
 import Home from './pages/Home'
 import Contact from './pages/Contact'
 import WantToAdopt from './pages/WantToAdopt'
@@ -33,30 +35,33 @@ function ScrollToTop() {
 function App() {
   return (
     <Router>
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/en-adopción" element={<WantToAdopt />} />
-        <Route path="/animales-en-adopción" element={<AnimalsInAdoption />} />
-        <Route path="/animales-en-adopción/:animalType" element={<AnimalsInAdoption />} />
-        <Route path="/10-peticiones-de-un-perro" element={<DogRequests />} />
-        <Route path="/finales-felices" element={<HappyEndings />} />
-        <Route path="/quiénes-somos" element={<WhoAreWe />} />
-        <Route path="/dónde-estamos" element={<WhereAreWe />} />
-        <Route path="/colabora/casa-de-acogida" element={<FosterHome />} />
-        <Route path="/colabora/voluntariado" element={<WantToBeVolunteer />} />
-        <Route path="/colabora/donaciones" element={<MaterialDonations />} />
-        <Route path="/gestión-felina/cer" element={<CER />} />
-        <Route path="/gestión-felina/castración" element={<CastrationInCats />} />
-        <Route path="/contacto" element={<Contact />} />
-        <Route path="/términos-y-condiciones" element={<TermsAndConditions />} />
-        <Route path="/aviso-legal" element={<LegalNotice />} />
-        <Route path="/política-de-privacidad" element={<PrivacyPolicy />} />
-        <Route path="/política-de-cookies" element={<CookiesPolicy />} />
-        <Route path="/hsdkadmin/login" element={<AdminLogin />} />
-        <Route path="/hsdkadmin/panel" element={<AdminPanel />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <CookieConsentProvider>
+        <ScrollToTop />
+        <CookieBanner />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/en-adopción" element={<WantToAdopt />} />
+          <Route path="/animales-en-adopción" element={<AnimalsInAdoption />} />
+          <Route path="/animales-en-adopción/:animalType" element={<AnimalsInAdoption />} />
+          <Route path="/10-peticiones-de-un-perro" element={<DogRequests />} />
+          <Route path="/finales-felices" element={<HappyEndings />} />
+          <Route path="/quiénes-somos" element={<WhoAreWe />} />
+          <Route path="/dónde-estamos" element={<WhereAreWe />} />
+          <Route path="/colabora/casa-de-acogida" element={<FosterHome />} />
+          <Route path="/colabora/voluntariado" element={<WantToBeVolunteer />} />
+          <Route path="/colabora/donaciones" element={<MaterialDonations />} />
+          <Route path="/gestión-felina/cer" element={<CER />} />
+          <Route path="/gestión-felina/castración" element={<CastrationInCats />} />
+          <Route path="/contacto" element={<Contact />} />
+          <Route path="/términos-y-condiciones" element={<TermsAndConditions />} />
+          <Route path="/aviso-legal" element={<LegalNotice />} />
+          <Route path="/política-de-privacidad" element={<PrivacyPolicy />} />
+          <Route path="/política-de-cookies" element={<CookiesPolicy />} />
+          <Route path="/hsdkadmin/login" element={<AdminLogin />} />
+          <Route path="/hsdkadmin/panel" element={<AdminPanel />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </CookieConsentProvider>
     </Router>
   )
 }

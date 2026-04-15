@@ -24,3 +24,9 @@ dist-ssr
 *.sw?
 
 .env.local
+
+# Generados desde src/assets/arat_logo.webp (npm run build-public-images)
+public/arat_favicon_48.png
+public/arat_favicon_192.png
+public/arat_apple_touch.png
+public/arat_og.png
