@@ -1871,6 +1871,19 @@
   }
 }
 
+@media (max-width: 768px) {
+  .animal-modal-carousel-slide > .animal-modal-carousel-placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .animal-modal-carousel-slide.animal-modal-carousel-placeholder {
+    min-height: 100%;
+  }
+}
+
 @keyframes animal-modal-slide-in {
   from {
     opacity: 0;
@@ -1917,13 +1930,13 @@
   outline-offset: 2px;
 }
 
+/* Misma proporción y encuadre que .animal-image-wrapper / .animal-image (tarjeta principal). */
 .animal-modal-carousel {
   position: relative;
   width: 100%;
-  min-height: 200px;
-  max-height: 36vh;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
-  background-color: var(--alpha-4);
+  background: linear-gradient(135deg, var(--alpha-6) 0%, var(--alpha-2) 100%);
 }
 
 .animal-modal-carousel-track {
@@ -1941,6 +1954,8 @@
 }
 
 .animal-modal-carousel-image {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -2279,10 +2294,10 @@
   }
 
   .animal-modal-carousel {
-    min-height: 260px;
-    max-height: 45vh;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 4 / 5;
     height: auto;
+    max-height: none;
+    min-height: 0;
   }
 
   .animal-modal-content {
@@ -2417,6 +2432,10 @@
 
   .animal-modal-carousel-track {
     transition: none;
+  }
+
+  .animal-modal-carousel-image {
+    transform: none;
   }
 
   .animal-modal-cta {
