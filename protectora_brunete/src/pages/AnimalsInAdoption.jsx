@@ -8,6 +8,7 @@ import AnimalCard from '../components/AnimalCard'
 import FadeInImage from '../components/FadeInImage'
 import { Pagination } from '../components/Pagination'
 import { paginate } from '../utils/pagination'
+import { formatAnimalAge, animalAgeCategory, AGE_CATEGORY_THRESHOLDS_PUBLIC } from '../utils/animalAge'
 import usePageSEO from '../hooks/usePageSEO'
 import { useResponsiveItemsPerPage } from '../hooks/useResponsiveItemsPerPage'
 import './pages.css'
@@ -135,21 +136,9 @@ function AnimalsInAdoption() {
   const applyFilters = ({ filters: next }) => { setFilters(next); setCurrentPage(1) }
   const normalized = (v) => (v && String(v).trim().toLowerCase()) || ''
   
-  const getAgeCategory = (ageMonths) => {
-    const m = parseInt(ageMonths)
-    if (isNaN(m)) return ''
-    if (m < 14) return 'cachorro'
-    if (m < 84) return 'adulto'
-    return 'senior'
-  }
+  const getAgeCategory = (animal) => animalAgeCategory(animal, AGE_CATEGORY_THRESHOLDS_PUBLIC)
 
-  const formatAge = (ageMonths) => {
-    const m = parseInt(ageMonths)
-    if (isNaN(m)) return '—'
-    if (m < 12) return `${m} ${m === 1 ? 'mes' : 'meses'}`
-    const years = Math.floor(m / 12)
-    return `${years} ${years === 1 ? 'año' : 'años'}`
-  }
+  const formatAge = (animal) => formatAnimalAge(animal)
 
   const formatSterilized = (value) => {
     if (value === true) return 'Sí'
@@ -194,7 +183,7 @@ function AnimalsInAdoption() {
   const filteredAnimals = animals.filter((a) => {
     const typeOk = !filters.animal_type || normalized(a.animal_type) === normalized(filters.animal_type)
     const genderOk = !filters.gender || normalized(a.gender) === normalized(filters.gender)
-    const ageOk = !filters.age || getAgeCategory(a.age) === filters.age
+    const ageOk = !filters.age || getAgeCategory(a) === filters.age
     const sizeOk = !filters.size || normalized(a.size) === normalized(filters.size)
     return typeOk && genderOk && ageOk && sizeOk
   })
@@ -340,7 +329,7 @@ function AnimalsInAdoption() {
                 </div>
                 <div className="animal-modal-detail">
                   <dt>Edad</dt>
-                  <dd>{formatAge(selectedAnimal.age)}</dd>
+                  <dd>{formatAge(selectedAnimal)}</dd>
                 </div>
                 <div className="animal-modal-detail">
                   <dt>Tamaño</dt>

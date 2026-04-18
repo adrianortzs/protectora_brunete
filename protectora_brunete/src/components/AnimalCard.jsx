@@ -59,7 +59,7 @@ function AnimalCard({ animal, onSelect, formatAge }) {
         </div>
         <div className="animal-content-bottom">
           <span className="animal-age">
-            Edad: {formatAge(animal?.age)}
+            Edad: {formatAge(animal)}
           </span>
           <span className="animal-size">
             Tamaño: {animal?.size || '—'}

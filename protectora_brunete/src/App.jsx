@@ -1,5 +1,7 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import Lenis from 'lenis'
+import 'lenis/dist/lenis.css'
 import { CookieConsentProvider } from './context/CookieConsentContext'
 import CookieBanner from './components/CookieBanner'
 import Home from './pages/Home'
@@ -22,11 +24,49 @@ import PrivacyPolicy from './pages/PrivacyPolicy'
 import CookiesPolicy from './pages/CookiesPolicy'
 import TermsAndConditions from './pages/TermsAndConditions'
 
-function ScrollToTop() {
+function AppScrollBridge() {
   const { pathname } = useLocation()
+  const pathnameRef = useRef(pathname)
+  const lenisRef = useRef(null)
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    pathnameRef.current = pathname
+  }, [pathname])
+
+  const syncLenis = useCallback(() => {
+    lenisRef.current?.destroy()
+    lenisRef.current = null
+    const p = pathnameRef.current
+    const narrow = window.matchMedia('(max-width: 768px)').matches
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (p.startsWith('/hsdkadmin') || reduceMotion || !narrow) return
+    lenisRef.current = new Lenis({
+      autoRaf: true,
+      lerp: 0.078,
+      touchMultiplier: 0.64,
+      smoothWheel: false,
+      allowNestedScroll: true,
+    })
+  }, [])
+
+  useEffect(() => {
+    syncLenis()
+    const mq = window.matchMedia('(max-width: 768px)')
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const onChange = () => syncLenis()
+    mq.addEventListener('change', onChange)
+    reduceMotion.addEventListener('change', onChange)
+    return () => {
+      mq.removeEventListener('change', onChange)
+      reduceMotion.removeEventListener('change', onChange)
+      lenisRef.current?.destroy()
+      lenisRef.current = null
+    }
+  }, [pathname, syncLenis])
+
+  useEffect(() => {
+    if (lenisRef.current) lenisRef.current.scrollTo(0, { immediate: true })
+    else window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
   }, [pathname])
 
   return null
@@ -36,7 +76,7 @@ function App() {
   return (
     <Router>
       <CookieConsentProvider>
-        <ScrollToTop />
+        <AppScrollBridge />
         <CookieBanner />
         <Routes>
           <Route path="/" element={<Home />} />

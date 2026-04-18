@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import AnimalFilter from '../components/AnimalFilter'
 import { Pagination } from '../components/Pagination'
 import { paginate } from '../utils/pagination'
+import { formatAnimalAge, animalAgeCategory, AGE_CATEGORY_THRESHOLDS_ADMIN, validateBirthDateInput } from '../utils/animalAge'
 import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
@@ -14,7 +15,7 @@ const WEBP_QUALITY = 0.82
 const INACTIVITY_TIMEOUT_MS = 30 * 60 * 1000
 const ALLOWED_UPLOAD_MIME_TYPES = ['image/jpeg', 'image/png']
 const ALLOWED_UPLOAD_EXTENSIONS = ['jpg', 'jpeg', 'png']
-const EMPTY_FORM = { name: '', animal_type: '', gender: '', age: '', size: '', sterilized: '', city_hall: '', chenil: '', description: '', arrival_date: '' }
+const EMPTY_FORM = { name: '', animal_type: '', gender: '', birth_date: '', size: '', sterilized: '', city_hall: '', chenil: '', description: '', arrival_date: '' }
 const ANIMAL_TYPE_OPTIONS = [{ value: 'perro', label: 'Perro' }, { value: 'gato', label: 'Gato' }]
 const GENDER_OPTIONS = [{ value: 'Macho', label: 'Macho' }, { value: 'Hembra', label: 'Hembra' }]
 const SIZE_OPTIONS = [{ value: 'pequeño', label: 'Pequeño' }, { value: 'mediano', label: 'Mediano' }, { value: 'grande', label: 'Grande' }]
@@ -83,7 +84,6 @@ function validateAnimalForm(form, existingImages, pendingFiles) {
   const errors = {}
   const name = (form.name || '').trim()
   const description = (form.description || '').trim()
-  const ageValue = form.age === '' ? '' : Number(form.age)
   const chenilValue = form.chenil === '' || form.chenil === null || form.chenil === undefined ? '' : Number(form.chenil)
 
   if (!name) errors.name = 'El nombre es obligatorio.'
@@ -95,9 +95,8 @@ function validateAnimalForm(form, existingImages, pendingFiles) {
   if (!form.size) errors.size = 'Selecciona el tamaño.'
   if (!form.sterilized) errors.sterilized = 'Indica si está esterilizado.'
 
-  if (form.age === '') errors.age = 'La edad es obligatoria.'
-  else if (!Number.isInteger(ageValue) || ageValue < 0) errors.age = 'La edad debe ser un número mayor o igual que 0.'
-  else if (ageValue > 400) errors.age = 'La edad parece demasiado alta. Revísala.'
+  const birthErr = validateBirthDateInput(form.birth_date)
+  if (birthErr) errors.birth_date = birthErr
 
   if (form.chenil !== '' && form.chenil !== null && form.chenil !== undefined) {
     if (!Number.isInteger(chenilValue) || chenilValue < 0) errors.chenil = 'El Nº de chenil debe ser un número entero mayor o igual que 0.'
@@ -265,21 +264,7 @@ function AdminPanel() {
   }
   const normalized = (v) => (v && String(v).trim().toLowerCase()) || ''
 
-  const getAgeCategory = (ageMonths) => {
-    const m = parseInt(ageMonths)
-    if (isNaN(m)) return ''
-    if (m < 12) return 'cachorro'
-    if (m < 24) return 'adulto'
-    return 'senior'
-  }
-
-  const formatAge = (ageMonths) => {
-    const m = parseInt(ageMonths)
-    if (isNaN(m)) return '—'
-    if (m < 12) return `${m} ${m === 1 ? 'mes' : 'meses'}`
-    const years = Math.floor(m / 12)
-    return `${years} ${years === 1 ? 'año' : 'años'}`
-  }
+  const getAgeCategory = (animal) => animalAgeCategory(animal, AGE_CATEGORY_THRESHOLDS_ADMIN)
 
   const formatSterilized = (value) => {
     if (value === true) return 'Sí'
@@ -291,7 +276,7 @@ function AdminPanel() {
     animals.filter((a) => {
       const typeOk = !filters.animal_type || normalized(a.animal_type) === normalized(filters.animal_type)
       const genderOk = !filters.gender || normalized(a.gender) === normalized(filters.gender)
-      const ageOk = !filters.age || getAgeCategory(a.age) === filters.age
+      const ageOk = !filters.age || getAgeCategory(a) === filters.age
       const sizeOk = !filters.size || normalized(a.size) === normalized(filters.size)
       const cityOk = !filters.city_hall || normalized(a.city_hall) === normalized(filters.city_hall)
       const chenilOk = filters.chenil === '' || parseInt(a.chenil, 10) === parseInt(filters.chenil, 10)
@@ -358,7 +343,7 @@ function AdminPanel() {
       name: animal.name || '',
       animal_type: animal.animal_type || '',
       gender: animal.gender || '',
-      age: animal.age || '',
+      birth_date: animal.birth_date || '',
       size: animal.size || '',
       sterilized: animal.sterilized === true ? 'si' : animal.sterilized === false ? 'no' : '',
       city_hall: animal.city_hall || '',
@@ -451,7 +436,8 @@ function AdminPanel() {
         name: editForm.name.trim(),
         animal_type: editForm.animal_type.trim(),
         gender: editForm.gender.trim(),
-        age: editForm.age === '' ? null : parseInt(editForm.age),
+        birth_date: editForm.birth_date || null,
+        age: null,
         size: editForm.size.trim(),
         sterilized: editForm.sterilized === '' ? null : editForm.sterilized === 'si',
         city_hall: (editForm.city_hall || '').trim() || null,
@@ -779,9 +765,9 @@ function AdminPanel() {
               </div>
               <div className="admin-edit-row">
                 <div className="admin-edit-field">
-                  <label>Edad (meses) *</label>
-                  <input type="number" min="0" value={editForm.age} onChange={(e) => handleEditChange('age', e.target.value)} />
-                  {formErrors.age && <p className="admin-edit-error">{formErrors.age}</p>}
+                  <label>Fecha de nacimiento</label>
+                  <input type="date" value={editForm.birth_date} onChange={(e) => handleEditChange('birth_date', e.target.value)} />
+                  {formErrors.birth_date && <p className="admin-edit-error">{formErrors.birth_date}</p>}
                 </div>
                 <div className="admin-edit-field">
                   <label>Tamaño</label>
@@ -971,7 +957,7 @@ function AdminPanel() {
                 </div>
                 <div className="animal-modal-detail">
                   <dt>Edad</dt>
-                  <dd>{formatAge(detailAnimal.age)}</dd>
+                  <dd>{formatAnimalAge(detailAnimal)}</dd>
                 </div>
                 <div className="animal-modal-detail">
                   <dt>Tamaño</dt>

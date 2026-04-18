@@ -194,6 +194,7 @@ button.nav-link {
   opacity: 1;
   visibility: visible;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .nav-mobile .nav-link {
