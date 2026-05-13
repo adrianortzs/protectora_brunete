@@ -126,7 +126,7 @@ function AnimalsInAdoption() {
       }
     }
     fetchAnimals()
-  }, [filterValue])
+  }, [])
 
   useEffect(() => {
     setFilters({ animal_type: filterValue || '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none })

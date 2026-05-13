@@ -12,6 +12,7 @@ const BUCKET = 'animals'
 const SORT_ARRIVAL = { none: '', newest: 'newest', oldest: 'oldest' }
 const TOAST_DURATION = 4000
 const WEBP_QUALITY = 0.82
+const MAX_IMAGE_DIMENSION = 1920
 const INACTIVITY_TIMEOUT_MS = 30 * 60 * 1000
 const ALLOWED_UPLOAD_MIME_TYPES = ['image/jpeg', 'image/png']
 const ALLOWED_UPLOAD_EXTENSIONS = ['jpg', 'jpeg', 'png']
@@ -51,12 +52,24 @@ async function convertFileToWebp(file) {
       img.src = objectUrl
     })
 
+    let targetW = image.naturalWidth
+    let targetH = image.naturalHeight
+    if (targetW > MAX_IMAGE_DIMENSION || targetH > MAX_IMAGE_DIMENSION) {
+      if (targetW >= targetH) {
+        targetH = Math.round((targetH * MAX_IMAGE_DIMENSION) / targetW)
+        targetW = MAX_IMAGE_DIMENSION
+      } else {
+        targetW = Math.round((targetW * MAX_IMAGE_DIMENSION) / targetH)
+        targetH = MAX_IMAGE_DIMENSION
+      }
+    }
+
     const canvas = document.createElement('canvas')
-    canvas.width = image.naturalWidth
-    canvas.height = image.naturalHeight
+    canvas.width = targetW
+    canvas.height = targetH
     const context = canvas.getContext('2d')
     if (!context) return file
-    context.drawImage(image, 0, 0)
+    context.drawImage(image, 0, 0, targetW, targetH)
 
     const webpBlob = await new Promise((resolve) => {
       canvas.toBlob(resolve, 'image/webp', WEBP_QUALITY)

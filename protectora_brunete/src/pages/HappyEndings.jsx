@@ -54,7 +54,11 @@ function HappyEndings() {
   useEffect(() => {
     const fetchAnimals = async () => {
       try {
-        const { data, error: supabaseError } = await supabase.from('animals').select('*').eq('animal_state', 'adoptado').order('adoption_date', { ascending: false })
+        const { data, error: supabaseError } = await supabase
+          .from('animals')
+          .select('id, name, img_url, adoption_date')
+          .eq('animal_state', 'adoptado')
+          .order('adoption_date', { ascending: false })
         if (supabaseError) throw supabaseError
         setAnimals(data || [])
       } catch (err) {
