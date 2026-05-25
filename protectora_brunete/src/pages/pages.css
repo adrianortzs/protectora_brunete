@@ -1844,15 +1844,26 @@
   animation: animal-modal-slide-in 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* En pantallas estrechas el scroll es del modal completo (carrusel + texto); en ≥901px el panel derecho vuelve a tener scroll propio. */
+/* En pantallas estrechas: scroll único (foto + ficha) y CTA pegado abajo, siempre pulsable. */
 @media (max-width: 900px) {
+  .animal-modal-backdrop {
+    align-items: center;
+    padding-top: max(0.5rem, env(safe-area-inset-top, 0px));
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
+  }
+
   .animal-modal {
     display: flex;
     flex-direction: column;
-    max-height: 94vh;
+    max-height: min(94svh, calc(100svh - 1rem));
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    scroll-padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .animal-modal--adoption {
+    max-height: min(92svh, calc(100svh - max(0.75rem, env(safe-area-inset-bottom, 0px))));
   }
 
   .animal-modal--admin {
@@ -1864,10 +1875,37 @@
     flex-shrink: 0;
   }
 
+  /* Foto más baja en móvil: deja sitio al texto sin un scroll anidado incómodo. */
+  .animal-modal--adoption .animal-modal-carousel {
+    aspect-ratio: 3 / 2;
+    max-height: clamp(12rem, 40svh, 16rem);
+    width: 100%;
+  }
+
   .animal-modal-content {
     overflow-y: visible;
     min-height: 0;
     flex: 0 0 auto;
+  }
+
+  .animal-modal--adoption .animal-modal-content {
+    padding-bottom: 0.5rem;
+  }
+
+  .animal-modal-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 6;
+    flex-shrink: 0;
+    margin-top: auto;
+    padding: 0.625rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(180deg, rgba(248, 244, 239, 0.92) 0%, var(--white-soft) 28%);
+    border-top: 1px solid var(--alpha-6);
+    box-shadow: 0 -8px 20px rgba(14, 47, 79, 0.1);
+  }
+
+  .animal-modal--adoption .animal-modal-cta {
+    margin-top: 0;
   }
 }
 
@@ -2386,6 +2424,40 @@
     border-radius: var(--radius-2xl);
   }
 
+  .animal-modal--adoption {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr auto;
+    overflow: hidden;
+  }
+
+  .animal-modal--adoption .animal-modal-carousel {
+    grid-column: 1;
+    grid-row: 1 / -1;
+  }
+
+  .animal-modal--adoption .animal-modal-content {
+    grid-column: 2;
+    grid-row: 1;
+    overflow-y: auto;
+    min-height: 0;
+  }
+
+  .animal-modal--adoption .animal-modal-footer {
+    position: static;
+    margin-top: 0;
+    grid-column: 2;
+    grid-row: 2;
+    padding: 0 2.25rem 2.25rem;
+    background: transparent;
+    border-top: none;
+    box-shadow: none;
+  }
+
+  .animal-modal--adoption .animal-modal-carousel {
+    aspect-ratio: auto;
+    max-height: none;
+  }
+
   .animal-modal-carousel {
     min-height: 420px;
     max-height: none;
@@ -2395,6 +2467,10 @@
 
   .animal-modal-content {
     padding: 2.25rem 2.5rem;
+  }
+
+  .animal-modal--adoption .animal-modal-content {
+    padding-bottom: 1rem;
   }
 
   .animal-modal-name {

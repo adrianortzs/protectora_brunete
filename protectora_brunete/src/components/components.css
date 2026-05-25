@@ -1006,11 +1006,9 @@ button.nav-link {
 
 .animal-content-bottom {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: baseline;
-  column-gap: 1.25rem;
-  row-gap: 0.35rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
 }
 
 .animal-age,

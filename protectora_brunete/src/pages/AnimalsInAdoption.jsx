@@ -1,6 +1,6 @@
 import { supabase } from '../lib/supabase'
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
-import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import AnimalFilter from '../components/AnimalFilter'
@@ -8,6 +8,7 @@ import AnimalCard from '../components/AnimalCard'
 import FadeInImage from '../components/FadeInImage'
 import { Pagination } from '../components/Pagination'
 import { paginate } from '../utils/pagination'
+import { shuffleArray } from '../utils/shuffleArray'
 import { formatAnimalAge, animalAgeCategory, AGE_CATEGORY_THRESHOLDS_PUBLIC } from '../utils/animalAge'
 import usePageSEO from '../hooks/usePageSEO'
 import { useResponsiveItemsPerPage } from '../hooks/useResponsiveItemsPerPage'
@@ -33,6 +34,8 @@ function AnimalsInAdoption() {
   const touchStartXRef = useRef(null)
   const touchStartYRef = useRef(null)
   const navigate = useNavigate()
+  const location = useLocation()
+  const animalsCacheRef = useRef(null)
 
   useEffect(() => {
     setCarouselIndex(0)
@@ -112,21 +115,40 @@ function AnimalsInAdoption() {
   const subtitle = filterValue === 'perro' ? 'Estos son todos los perros que actualmente se encuentran en uno de nuestros centros de acogida y están buscando un hogar.' : filterValue === 'gato' ? 'Estos son todos los gatos que actualmente se encuentran en uno de nuestros centros de acogida y están buscando un hogar.' : 'Estos son todos los animales que actualmente se encuentran en uno de nuestros centros de acogida y están buscando un hogar.'
 
   useEffect(() => {
-    const fetchAnimals = async () => {
+    let cancelled = false
+
+    const loadAnimals = async () => {
+      const hasCache = animalsCacheRef.current !== null
       try {
-        const query = supabase.from('animals').select('*').eq('animal_state', 'en adopcion')
-        const { data, error: supabaseError } = await query
-        if (supabaseError) throw supabaseError
-        setAnimals(data || [])
+        if (!hasCache) {
+          setLoading(true)
+          setError(null)
+        }
+        if (!animalsCacheRef.current) {
+          const { data, error: supabaseError } = await supabase
+            .from('animals')
+            .select('*')
+            .eq('animal_state', 'en adopcion')
+          if (supabaseError) throw supabaseError
+          animalsCacheRef.current = data || []
+        }
+        if (!cancelled) {
+          setAnimals(shuffleArray(animalsCacheRef.current))
+          setCurrentPage(1)
+        }
       } catch (err) {
-        setError('Ha ocurrido un error al cargar los animales. Inténtalo de nuevo en unos minutos.')
-        console.error(err)
+        if (!cancelled) {
+          setError('Ha ocurrido un error al cargar los animales. Inténtalo de nuevo en unos minutos.')
+          console.error(err)
+        }
       } finally {
-        setLoading(false)
+        if (!cancelled && !hasCache) setLoading(false)
       }
     }
-    fetchAnimals()
-  }, [])
+
+    loadAnimals()
+    return () => { cancelled = true }
+  }, [location.pathname])
 
   useEffect(() => {
     setFilters({ animal_type: filterValue || '', gender: '', age: '', size: '', arrival_date: SORT_ARRIVAL.none })
@@ -263,7 +285,7 @@ function AnimalsInAdoption() {
       </main>
       {selectedAnimal && (
         <div className="animal-modal-backdrop" onClick={handleCloseModal}>
-          <div className="animal-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="animal-modal-title">
+          <div className="animal-modal animal-modal--adoption" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="animal-modal-title">
             <button type="button" className="animal-modal-close" onClick={handleCloseModal} aria-label="Cerrar ficha">×</button>
             <div
               className="animal-modal-carousel"
@@ -350,6 +372,8 @@ function AnimalsInAdoption() {
                   <p>{selectedAnimal.description}</p>
                 </div>
               )}
+            </div>
+            <div className="animal-modal-footer">
               <button type="button" className="animal-modal-cta" onClick={() => {
                 const name = selectedAnimal.name || 'animal'
                 const params = new URLSearchParams({
