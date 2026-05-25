@@ -46,18 +46,17 @@ function FosterHome() {
             {WHAT_IT_IMPLIES_PARAGRAPHS.map((paragraph) => (<p key={paragraph} className="page-text">{paragraph}</p>))}
           </section>
 
-          <div className="page-foster-after-implies">
-            <figure className="page-editorial-photo-figure">
-              <FadeInImage
-                src="/gatos.webp"
-                alt="Gato en un hogar tranquilo: la acogida ofrece estabilidad hasta la adopción definitiva"
-                loading="lazy"
-                decoding="async"
-                width="960"
-                height="600"
-              />
-            </figure>
-          </div>
+          <figure className="page-feature-photo">
+            <FadeInImage
+              src="/gatos.webp"
+              alt="Gato en un hogar tranquilo: la acogida ofrece estabilidad hasta la adopción definitiva"
+              className="page-feature-photo-img"
+              loading="lazy"
+              decoding="async"
+              width="960"
+              height="640"
+            />
+          </figure>
 
           <section className="page-card">
             <h2 className="page-card-title">

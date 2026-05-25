@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import FadeInImage from '../components/FadeInImage'
 import usePageSEO from '../hooks/usePageSEO'
 import './pages.css'
 
@@ -51,6 +52,18 @@ function MaterialDonations() {
             </ul>
             <p className="page-text">{WHY_RESOURCE_DONATIONS[2]}</p>
           </section>
+
+          <figure className="page-feature-photo">
+            <FadeInImage
+              src="/instalaciones2.webp"
+              alt="Material y cuidados en el centro de acogida de Arat Adopta"
+              className="page-feature-photo-img"
+              loading="lazy"
+              decoding="async"
+              width="960"
+              height="640"
+            />
+          </figure>
 
           <section className="page-card">
             <h2 className="page-card-title">

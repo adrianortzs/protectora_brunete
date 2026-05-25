@@ -80,33 +80,31 @@ function WantToAdopt() {
             </div>
           </section>
 
+          <figure className="page-feature-photo">
+            <FadeInImage
+              src="/gatos2.webp"
+              alt="Gato en el centro de acogida, a la espera de una familia"
+              className="page-feature-photo-img"
+              loading="lazy"
+              decoding="async"
+              width="960"
+              height="640"
+            />
+          </figure>
+
           <div className="page-grid-2col">
-            <div className="page-adopt-key-column">
-              <section className="page-section">
-                <h2 className="page-section-title">Cuestiones clave antes de decidir</h2>
-                <p className="page-text">
-                  Antes de adoptar, conviene considerar:
-                </p>
-                <ul className="page-list">
-                  {KEY_QUESTIONS.map((item) => (<li key={item}>{item}</li>))}
-                </ul>
-                <p className="page-text">
-                  Adoptar es asumir estabilidad para otro ser vivo.
-                </p>
-              </section>
-              <div className="page-foster-after-implies page-foster-after-implies--in-column">
-                <figure className="page-editorial-photo-figure page-editorial-photo-figure--compact-y">
-                  <FadeInImage
-                    src="/gatos2.webp"
-                    alt="Gato en el centro de acogida, a la espera de una familia"
-                    loading="lazy"
-                    decoding="async"
-                    width="800"
-                    height="600"
-                  />
-                </figure>
-              </div>
-            </div>
+            <section className="page-section">
+              <h2 className="page-section-title">Cuestiones clave antes de decidir</h2>
+              <p className="page-text">
+                Antes de adoptar, conviene considerar:
+              </p>
+              <ul className="page-list">
+                {KEY_QUESTIONS.map((item) => (<li key={item}>{item}</li>))}
+              </ul>
+              <p className="page-text">
+                Adoptar es asumir estabilidad para otro ser vivo.
+              </p>
+            </section>
 
             <section className="page-section">
               <h2 className="page-section-title">Requisitos para adoptar</h2>

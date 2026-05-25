@@ -55,21 +55,23 @@ function WantToBeVolunteer() {
             <p className="page-text">{ROLE_PARAGRAPHS[3]}</p>
           </section>
 
-          <div className="page-volunteer-after-role-photos">
-            <figure className="page-editorial-photo-figure">
+          <div className="page-feature-gallery" aria-label="Fotografías del centro de acogida">
+            <figure className="page-feature-photo">
               <FadeInImage
                 src="/instalaciones4.webp"
                 alt="Zona interior del refugio donde los voluntarios apoyan el cuidado diario"
+                className="page-feature-photo-img"
                 loading="lazy"
                 decoding="async"
                 width="800"
                 height="600"
               />
             </figure>
-            <figure className="page-editorial-photo-figure">
+            <figure className="page-feature-photo">
               <FadeInImage
                 src="/instalaciones6.webp"
                 alt="Espacios del centro de acogida para visitas y trabajo con el equipo"
+                className="page-feature-photo-img"
                 loading="lazy"
                 decoding="async"
                 width="800"

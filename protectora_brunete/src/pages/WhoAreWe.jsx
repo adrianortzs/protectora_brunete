@@ -31,6 +31,24 @@ const COMMITMENT_POINTS = ['Fomentar la tenencia responsable.', 'Prevenir el aba
 
 const TEAM_ROLES = ['Cuidadores de animales', 'Auxiliares veterinarios', 'Veterinarios especialistas en etología y medicina médico-quirúrgica', 'Personal administrativo']
 
+const CENTRO_PHOTOS = [
+  {
+    src: '/instalaciones3.webp',
+    alt: 'Espacios del centro de acogida autorizado',
+    variant: 'main',
+  },
+  {
+    src: '/instalaciones2.webp',
+    alt: 'Instalaciones para el bienestar y la recuperación de los animales',
+    variant: 'secondary',
+  },
+  {
+    src: '/instalaciones4.webp',
+    alt: 'Área del centro de acogida de Arat Adopta',
+    variant: 'tertiary',
+  },
+]
+
 function WhoAreWe() {
   usePageSEO({
     title: 'Quiénes somos',
@@ -48,8 +66,21 @@ function WhoAreWe() {
         </section>
 
         <div className="page-container">
-          <section className="page-intro">
-            {INTRO_PARAGRAPHS.map((paragraph, index) => (<p key={index} className="page-text">{paragraph}</p>))}
+          <section className="page-who-intro">
+            <div className="page-who-intro-copy">
+              {INTRO_PARAGRAPHS.map((paragraph, index) => (<p key={index} className="page-text">{paragraph}</p>))}
+            </div>
+            <figure className="page-who-photo page-who-photo--intro">
+              <FadeInImage
+                src="/instalaciones6.webp"
+                alt="Equipo y animales en el centro de acogida de Arat Adopta"
+                className="page-who-photo-img"
+                loading="lazy"
+                decoding="async"
+                width="960"
+                height="720"
+              />
+            </figure>
           </section>
 
           <section className="page-section">
@@ -64,50 +95,50 @@ function WhoAreWe() {
             </div>
           </section>
 
-          <section className="page-card page-card--accent">
-            <h2 className="page-card-title">Centro de acogida</h2>
-            <p className="page-text">
-              Contamos con un centro de acogida autorizado por la Comunidad de Madrid.
-            </p>
-            <p className="page-text">
-              Cada animal recibe:
-            </p>
-            <ul className="page-icon-list">
-              <li>Atención veterinaria completa.</li>
-              <li>Identificación y registro oficial.</li>
-              <li>Vacunación, desparasitación y esterilización.</li>
-              <li>Evaluación conductual y trabajo de adaptación para favorecer una convivencia equilibrada.</li>
-            </ul>
-            <p className="page-text">
-              Número de registro: ES280261000001
-            </p>
-            <p className="page-text">
-              Nuestro centro no es un depósito. Es un espacio de recuperación y preparación para una nueva etapa.
-            </p>
-          </section>
+          <section className="page-card page-card--accent page-who-centro" aria-labelledby="who-centro-heading">
+            <div className="page-who-centro-layout">
+              <div className="page-who-centro-copy">
+                <h2 id="who-centro-heading" className="page-card-title">Centro de acogida</h2>
+                <p className="page-text">
+                  Contamos con un centro de acogida autorizado por la Comunidad de Madrid.
+                </p>
+                <p className="page-text">
+                  Cada animal recibe:
+                </p>
+                <ul className="page-icon-list">
+                  <li>Atención veterinaria completa.</li>
+                  <li>Identificación y registro oficial.</li>
+                  <li>Vacunación, desparasitación y esterilización.</li>
+                  <li>Evaluación conductual y trabajo de adaptación para favorecer una convivencia equilibrada.</li>
+                </ul>
+                <p className="page-text">
+                  Número de registro: ES280261000001
+                </p>
+                <p className="page-text page-who-centro-closing">
+                  Nuestro centro no es un depósito. Es un espacio de recuperación y preparación para una nueva etapa.
+                </p>
+              </div>
 
-          <div className="page-who-centro-photos">
-            <figure className="page-editorial-photo-figure">
-              <FadeInImage
-                src="/instalaciones3.webp"
-                alt="Espacios del centro de acogida autorizado"
-                loading="lazy"
-                decoding="async"
-                width="800"
-                height="600"
-              />
-            </figure>
-            <figure className="page-editorial-photo-figure">
-              <FadeInImage
-                src="/instalaciones2.webp"
-                alt="Instalaciones para el bienestar y la recuperación de los animales"
-                loading="lazy"
-                decoding="async"
-                width="800"
-                height="600"
-              />
-            </figure>
-          </div>
+              <div className="page-who-centro-gallery" aria-label="Fotografías del centro de acogida">
+                {CENTRO_PHOTOS.map((photo) => (
+                  <figure
+                    key={photo.src}
+                    className={`page-who-photo page-who-photo--${photo.variant}`}
+                  >
+                    <FadeInImage
+                      src={photo.src}
+                      alt={photo.alt}
+                      className="page-who-photo-img"
+                      loading="lazy"
+                      decoding="async"
+                      width="800"
+                      height="600"
+                    />
+                  </figure>
+                ))}
+              </div>
+            </div>
+          </section>
 
           <div className="page-grid-2col">
             <section className="page-section">
