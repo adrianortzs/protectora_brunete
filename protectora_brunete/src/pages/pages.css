@@ -2059,13 +2059,6 @@
     flex-shrink: 0;
   }
 
-  /* Foto más baja en móvil: deja sitio al texto sin un scroll anidado incómodo. */
-  .animal-modal--adoption .animal-modal-carousel {
-    aspect-ratio: 3 / 2;
-    max-height: clamp(12rem, 40svh, 16rem);
-    width: 100%;
-  }
-
   .animal-modal-content {
     overflow-y: visible;
     min-height: 0;
@@ -2617,6 +2610,12 @@
   .animal-modal--adoption .animal-modal-carousel {
     grid-column: 1;
     grid-row: 1 / -1;
+    aspect-ratio: auto;
+    max-height: none;
+    min-height: 420px;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
   }
 
   .animal-modal--adoption .animal-modal-content {
@@ -2635,18 +2634,6 @@
     background: transparent;
     border-top: none;
     box-shadow: none;
-  }
-
-  .animal-modal--adoption .animal-modal-carousel {
-    aspect-ratio: auto;
-    max-height: none;
-  }
-
-  .animal-modal-carousel {
-    min-height: 420px;
-    max-height: none;
-    aspect-ratio: auto;
-    height: 100%;
   }
 
   .animal-modal-content {
